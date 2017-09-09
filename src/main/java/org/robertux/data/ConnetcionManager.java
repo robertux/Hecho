@@ -29,7 +29,12 @@ public class ConnetcionManager {
     }
 
     public static String getDatabasePath() throws IOException {
-        String dbPath = System.getProperty("java.io.tmpdir") + DATABASE_NAME;
+        String tmpDir = System.getProperty("java.io.tmpdir");
+        if (!tmpDir.endsWith(File.separator)) {
+            tmpDir += File.separator;
+        }
+
+        String dbPath = tmpDir + DATABASE_NAME;
         File fPath = new File(dbPath);
 
         if (!fPath.exists()) {
