@@ -10,11 +10,16 @@ import java.util.Date;
  */
 @Data
 public class Task implements Comparable<Task> {
+    public static final int PRIORITY_NORMAL = 0;
+    public static final int PRIORITY_HIGH = 1;
+    public static final int PRIORITY_LOW = -1;
+
     private long id;
     private String description;
     private Date time;
     private Category category;
     private Status status = Status.PENDING;
+    private int priority = PRIORITY_NORMAL;
 
     public int compareTo(Task o) {
         return new Long(this.id).compareTo(o.getId());
