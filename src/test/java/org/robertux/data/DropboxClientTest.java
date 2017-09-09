@@ -6,8 +6,8 @@ import org.apache.logging.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -26,17 +26,24 @@ public class DropboxClientTest {
 
     @Test
     public void getAccountInfo() throws Exception {
-        this.logger.info("==== AccountInfo: " + client.getAccountInfo());
+        this.logger.info("==== AccountInfo: {}", client.getAccountInfo());
     }
 
     @Test
     public void getFileNames() throws Exception {
-        this.logger.info("==== FileNames" + Arrays.toString(client.getFileNames("").toArray()));
+        this.logger.info("==== FileNames: {}", Arrays.toString(client.getFileNames("").toArray()));
     }
 
     @Test
     public void addFile() throws IOException, DbxException {
-        client.saveFile(new FileInputStream(new File("/Users/robertux/soapui-settings.xml")), "soapui-settings-2.xml");
+        client.saveFile(new ByteArrayInputStream("TEST".getBytes()), "testFile.txt");
+    }
+
+    @Test
+    public void getFile() throws IOException, DbxException {
+        ByteArrayOutputStream oStream = new ByteArrayOutputStream();
+        client.loadFile(oStream, "testFile.txt");
+        this.logger.info("==== Stream: {}", new String(oStream.toByteArray()));
     }
 
 }

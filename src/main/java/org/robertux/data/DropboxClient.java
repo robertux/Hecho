@@ -1,5 +1,6 @@
 package org.robertux.data;
 
+import com.dropbox.core.DbxDownloader;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.v2.DbxClientV2;
@@ -13,6 +14,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,14 +62,14 @@ public class DropboxClient {
         return fileNames;
     }
 
-    public InputStream loadFile(String fileName) {
-        //TODO: implementar
-        return null;
+    public void loadFile(OutputStream stream, String fileName) throws DbxException, IOException {
+        DbxDownloader<FileMetadata> downloader = client.files().download("/" + fileName);
+        downloader.download(stream);
     }
 
-    public void saveFile(InputStream fileStream, String fileName) throws IOException, DbxException {
+    public void saveFile(InputStream stream, String fileName) throws IOException, DbxException {
         FileMetadata metadata = client.files().uploadBuilder("/" + fileName)
                 .withMode(WriteMode.OVERWRITE)
-                .uploadAndFinish(fileStream);
+                .uploadAndFinish(stream);
     }
 }
