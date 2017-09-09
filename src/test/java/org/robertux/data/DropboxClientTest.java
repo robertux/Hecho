@@ -26,12 +26,12 @@ public class DropboxClientTest {
 
     @Test
     public void getAccountInfo() throws Exception {
-        this.logger.info("==== AccountInfo: {}", client.getAccountInfo());
+        this.logger.info("AccountInfo: {}", client.getAccountInfo());
     }
 
     @Test
     public void getFileNames() throws Exception {
-        this.logger.info("==== FileNames: {}", Arrays.toString(client.getFileNames("").toArray()));
+        this.logger.info("FileNames: {}", Arrays.toString(client.getFileNames("").toArray()));
     }
 
     @Test
@@ -43,7 +43,7 @@ public class DropboxClientTest {
     public void getFile() throws IOException, DbxException {
         ByteArrayOutputStream oStream = new ByteArrayOutputStream();
         client.loadFile(oStream, "testFile.txt");
-        this.logger.info("==== Stream: {}", new String(oStream.toByteArray()));
+        this.logger.info("Stream: {}", new String(oStream.toByteArray()));
     }
 
 }

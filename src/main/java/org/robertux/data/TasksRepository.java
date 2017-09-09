@@ -12,13 +12,13 @@ import java.util.List;
 public class TasksRepository {
 
     public List<Category> getCategories() {
-        List<Category> categories = new ArrayList<Category>(0);
+        List<Category> categories = new ArrayList<>(0);
 
         return categories;
     }
 
     public List<Task> getTasks() {
-        List<Task> tasks = new ArrayList<Task>(0);
+        List<Task> tasks = new ArrayList<>(0);
 
         return tasks;
     }

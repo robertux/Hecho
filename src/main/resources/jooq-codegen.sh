@@ -1,0 +1,1 @@
+java -classpath $HOME/.m2/repository/org/jooq/jooq-codegen/3.9.1/jooq-codegen-3.9.1.jar:$HOME/.m2/repository/org/jooq/jooq/3.9.1/jooq-3.9.1.jar:$HOME/.m2/repository/org/jooq/jooq-meta/3.9.1/jooq-meta-3.9.1.jar:$HOME/.m2/repository//org/xerial/sqlite-jdbc/3.20.0/sqlite-jdbc-3.20.0.jar:$HOME/Documents/Projects/Hecho/src/main/resources/ org.jooq.util.GenerationTool jooq-config.xml

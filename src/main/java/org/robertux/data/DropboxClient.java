@@ -45,7 +45,7 @@ public class DropboxClient {
 
     public List<String> getFileNames(String path) throws DbxException {
         ListFolderResult result = client.files().listFolder(path);
-        List<String> fileNames = new ArrayList<String>();
+        List<String> fileNames = new ArrayList<>();
 
         while (true) {
             for (Metadata metadata : result.getEntries()) {
