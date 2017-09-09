@@ -3,10 +3,10 @@ package org.robertux.data;
 import com.dropbox.core.DbxException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
@@ -26,24 +26,29 @@ public class DropboxClientTest {
 
     @Test
     public void getAccountInfo() throws Exception {
-        this.logger.info("AccountInfo: {}", client.getAccountInfo());
+        String accInfo = client.getAccountInfo();
+        this.logger.info("AccountInfo: {}", accInfo);
+        Assert.assertNotNull("Información de la cuenta no debe ser nula", accInfo);
     }
 
     @Test
     public void getFileNames() throws Exception {
         this.logger.info("FileNames: {}", Arrays.toString(client.getFileNames("").toArray()));
+        Assert.assertTrue("Archivo hecho.db debe estar cargado en Dropbox", client.getFileNames("").contains("hecho.db"));
     }
 
     @Test
     public void addFile() throws IOException, DbxException {
-        client.saveFile(new ByteArrayInputStream("TEST".getBytes()), "testFile.txt");
+        client.saveFile(ConnetcionManager.class.getResourceAsStream("/hecho.db"), "hecho.db");
+        Assert.assertTrue("Archivo hecho.db debe estar cargado en Dropbox", client.getFileNames("").contains("hecho.db"));
     }
 
     @Test
     public void getFile() throws IOException, DbxException {
         ByteArrayOutputStream oStream = new ByteArrayOutputStream();
-        client.loadFile(oStream, "testFile.txt");
-        this.logger.info("Stream: {}", new String(oStream.toByteArray()));
+        client.loadFile(oStream, "hecho.db");
+
+        Assert.assertNotEquals("Tamaño del stream debe ser mayor que cero", 0, oStream.size());
     }
 
 }
