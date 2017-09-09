@@ -2,6 +2,9 @@ package org.robertux.data;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jooq.DSLContext;
+import org.jooq.SQLDialect;
+import org.jooq.impl.DSL;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,5 +40,13 @@ public class ConnetcionManager {
 
         logger.debug("Devolviendo ruta {}", dbPath);
         return dbPath;
+    }
+
+    public static DSLContext getContext() throws SQLException, IOException, ClassNotFoundException {
+        return DSL.using(ConnetcionManager.getConnection(), SQLDialect.SQLITE);
+    }
+
+    public static DSLContext getContext(Connection cn) throws SQLException, IOException, ClassNotFoundException {
+        return DSL.using(cn, SQLDialect.SQLITE);
     }
 }
