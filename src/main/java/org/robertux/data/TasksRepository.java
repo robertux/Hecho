@@ -78,10 +78,33 @@ public class TasksRepository {
     }
 
     public int updateTask(TaskRecord task) {
-        return task.update();
+        try (Connection cn = ConnetcionManager.getConnection()) {
+            DSLContext context = ConnetcionManager.getContext(cn);
+            return context.update(Task.TASK)
+                    .set(Task.TASK.DESCRIPTION, task.getDescription())
+                    .set(Task.TASK.TIME, task.getTime())
+                    .set(Task.TASK.CATEGORYID, task.getCategoryid())
+                    .set(Task.TASK.STATUS, task.getStatus())
+                    .set(Task.TASK.PRIORITY, task.getPriority())
+                    .where(Task.TASK.ID.eq(task.getId())).execute();
+
+        } catch (IOException | SQLException | ClassNotFoundException e) {
+            this.logger.error("Error tratando de modificar la tarea: " + e.getMessage(), e);
+        }
+
+        return 0;
     }
 
     public int deleteTask(TaskRecord task) {
-        return task.delete();
+        try (Connection cn = ConnetcionManager.getConnection()) {
+            DSLContext context = ConnetcionManager.getContext(cn);
+            return context.deleteFrom(Task.TASK)
+                    .where(Task.TASK.ID.eq(task.getId())).execute();
+
+        } catch (IOException | SQLException | ClassNotFoundException e) {
+            this.logger.error("Error tratando de eliminar la tarea: " + e.getMessage(), e);
+        }
+
+        return 0;
     }
 }

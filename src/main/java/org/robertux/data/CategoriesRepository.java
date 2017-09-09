@@ -50,10 +50,29 @@ public class CategoriesRepository {
     }
 
     public int updateCategory(CategoryRecord cat) {
-        return cat.update();
+        try (Connection cn = ConnetcionManager.getConnection()) {
+            DSLContext context = ConnetcionManager.getContext(cn);
+            return context.update(Category.CATEGORY)
+                    .set(Category.CATEGORY.NAME, cat.getName())
+                    .where(Category.CATEGORY.ID.eq(cat.getId())).execute();
+
+        } catch (IOException | SQLException | ClassNotFoundException e) {
+            this.logger.error("Error tratando de modificar la categoría: " + e.getMessage(), e);
+        }
+
+        return 0;
     }
 
     public int deleteCategory(CategoryRecord cat) {
-        return cat.delete();
+        try (Connection cn = ConnetcionManager.getConnection()) {
+            DSLContext context = ConnetcionManager.getContext(cn);
+            return context.deleteFrom(Category.CATEGORY)
+                    .where(Category.CATEGORY.ID.eq(cat.getId())).execute();
+
+        } catch (IOException | SQLException | ClassNotFoundException e) {
+            this.logger.error("Error tratando de eliminar la categoría: " + e.getMessage(), e);
+        }
+
+        return 0;
     }
 }

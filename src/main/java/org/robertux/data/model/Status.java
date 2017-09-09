@@ -8,6 +8,7 @@ import lombok.Data;
 @Data
 public class Status implements Comparable<Status> {
     public static final Status PENDING = new Status("P");
+    public static final Status IN_PROGRESS = new Status("I");
     public static final Status DONE = new Status("D");
 
     private String value;
