@@ -43,6 +43,11 @@ public class DropboxClient {
         return "ID: " + account.getAccountId() + " name: " + account.getName() + " email: " + account.getEmail();
     }
 
+    public String getAccountName() throws DbxException {
+        FullAccount account = this.client.users().getCurrentAccount();
+        return account.getName().getDisplayName();
+    }
+
     public List<String> getFileNames(String path) throws DbxException {
         ListFolderResult result = client.files().listFolder(path);
         List<String> fileNames = new ArrayList<>();

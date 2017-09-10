@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>robertux</groupId>
     <artifactId>hecho</artifactId>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
     <name>hecho Maven Webapp</name>
     <url>http://maven.apache.org</url>
@@ -56,6 +56,21 @@
             <artifactId>jooq-codegen</artifactId>
             <version>3.9.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.sparkjava</groupId>
+            <artifactId>spark-core</artifactId>
+            <version>2.6.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.21</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sparkjava</groupId>
+            <artifactId>spark-template-thymeleaf</artifactId>
+            <version>2.5.5</version>
+        </dependency>
     </dependencies>
     <build>
         <finalName>hecho</finalName>
@@ -67,6 +82,7 @@
                     <source>1.8</source>
                     <target>1.8</target>
                 </configuration>
+                <version>LATEST</version>
             </plugin>
         </plugins>
     </build>
