@@ -26,7 +26,7 @@ public class DropboxClientTest {
 
     @Test
     public void getAccountInfo() throws Exception {
-        String accInfo = client.getAccountInfo();
+        String accInfo = client.getAccountInfo().toString();
         this.logger.info("AccountInfo: {}", accInfo);
         Assert.assertNotNull("Información de la cuenta no debe ser nula", accInfo);
     }

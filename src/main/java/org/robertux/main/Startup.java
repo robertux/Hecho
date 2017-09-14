@@ -1,14 +1,7 @@
 package org.robertux.main;
 
-import com.dropbox.core.DbxException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.robertux.data.DropboxClient;
-import spark.ModelAndView;
-import spark.template.thymeleaf.ThymeleafTemplateEngine;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static spark.Spark.*;
 
@@ -19,24 +12,15 @@ public class Startup {
     private static Logger logger;
 
     public static void main(String[] args) {
-        init();
-
-        DropboxClient dbClient = new DropboxClient();
-        Map<String, String> data = new HashMap<>();
-        try {
-            data.put("name", dbClient.getAccountInfo());
-        } catch (DbxException e) {
-            logger.error("Error obteniendo datos de la cuenta de dropbox: " + e.getMessage(), e);
-        }
-
-        get("/hello", (rq, rs) -> new ModelAndView(data, "hello"), new ThymeleafTemplateEngine());
+        configureServer();
     }
 
-    public static void init() {
+    public static void configureServer() {
         logger = LogManager.getLogger(Startup.class);
-        port(8080);
-        staticFileLocation("/web");
+        port(8082);
+        staticFiles.location("/web");
         staticFiles.expireTime(600L);
 
+        init();
     }
 }

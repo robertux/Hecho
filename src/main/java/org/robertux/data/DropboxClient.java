@@ -11,6 +11,7 @@ import com.dropbox.core.v2.files.WriteMode;
 import com.dropbox.core.v2.users.FullAccount;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.robertux.data.model.DropboxAccount;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,9 +39,9 @@ public class DropboxClient {
         this.client = new DbxClientV2(config, ACCESS_TOKEN);
     }
 
-    public String getAccountInfo() throws DbxException {
-        FullAccount account = this.client.users().getCurrentAccount();
-        return "ID: " + account.getAccountId() + " name: " + account.getName() + " email: " + account.getEmail();
+    public DropboxAccount getAccountInfo() throws DbxException {
+        FullAccount acc = this.client.users().getCurrentAccount();
+        return new DropboxAccount(acc.getAccountId(), acc.getName().getDisplayName(), acc.getEmail(), acc.getProfilePhotoUrl());
     }
 
     public String getAccountName() throws DbxException {
