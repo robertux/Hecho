@@ -3,17 +3,13 @@
     height: 55px;
 }
 
-input[type="text"].search-box {
-    /* width: 350px; */
-}
-
 div.dropdown-menu-align-right {
     left: inherit;
     right: 5px;
 }
 
 div#categoryList {
-    margin-top: 120px;
+    margin-top: 80px;
 }
 
 div#taskList {
