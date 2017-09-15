@@ -4,7 +4,7 @@
 }
 
 input[type="text"].search-box {
-    width: 350px;
+    /* width: 350px; */
 }
 
 div.dropdown-menu-align-right {
@@ -13,11 +13,22 @@ div.dropdown-menu-align-right {
 }
 
 div#categoryList {
-    margin-top: 100px;
+    margin-top: 120px;
 }
 
 div#taskList {
     margin-top: 30px;
+}
+
+div.list-group-item.new-task {
+    background-color: #f5f5f5;
+    padding: 0;
+}
+
+div.list-group-item.new-task div input[type="text"] {
+    background-color: #f5f5f5;
+    border: none;
+    padding: 20px;
 }
 
 div.list-group-item div.task-done {
@@ -29,7 +40,7 @@ div.list-group-item div.high-pr-task {
 }
 
 div.list-group-item div.low-pr-task {
-    color: gray;
+    color: #acacac;
 }
 
 div.list-group-item div p.task-name {

@@ -25,11 +25,19 @@
                 <a class="dropdown-item" href="/settings">
                     <img class="profile-image"
                          src="https://dl-web.dropbox.com/account_photo/get/dbid%3AAAAQUQG6HFeGFKyHZ0xhcwWmxoagkcqMufQ?size=128x128&vers=1504760275526"/>
-                    <p>robertux</p>
+                    <span>robertux</span>
+                </a>
+                <div role="separator" class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/sortBy/date">
+                    <span>Sort by Date</span>
+                </a>
+                <div role="separator" class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/sortBy/priority">
+                    <span>Sorb ty Priority</span>
                 </a>
                 <div role="separator" class="dropdown-divider"></div>
                 <a class="dropdown-item" href="/logout">
-                    <p>Logout</p>
+                    <span>Logout</span>
                 </a>
             </div>
         </form>
@@ -52,6 +60,12 @@
     </div>
 
     <div id="taskList" class="list-group">
+        <div class="list-group-item new-task">
+            <div>
+                <input id="newTask" class="form-control" placeholder="New Task" type="text"/>
+            </div>
+        </div>
+
         <div class="list-group-item">
             <div class="low-pr-task">
                 <p class="task-name">Realizar upgrade de la versión de Sublime Text</p>
