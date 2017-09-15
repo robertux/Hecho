@@ -11,3 +11,23 @@ div.dropdown-menu-align-right {
     left: inherit;
     right: 5px;
 }
+
+div#categoryList {
+    margin-top: 100px;
+}
+
+div#taskList {
+    margin-top: 30px;
+}
+
+div.list-group-item span.task-done {
+    text-decoration: line-through;
+}
+
+div.list-group-item span.high-pr-task {
+    font-size: 1.25rem;
+}
+
+div.list-group-item span.low-pr-task {
+    font-size: .9rem;
+}
