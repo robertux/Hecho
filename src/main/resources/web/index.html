@@ -9,7 +9,7 @@
     <title>Hecho</title>
 </head>
 <body>
-<div class="container-fluid">
+<div id="hecho-app" class="container-fluid">
     <nav class="navbar navbar-dark bg-dark fixed-top">
         <a class="navbar-brand" href="/">
             Hecho
@@ -50,11 +50,11 @@
     <div id="categoryList" class="list-group">
         <div class="list-group-item list-group-item-primary flex-column align-items-start">
             <div class="d-flex justify-content-between">
-                <a aria-label="previous" href="javascript:void(0);">
+                <a aria-label="previous" href="javascript:void(0);" v-on:click="prevCategory">
                     <span class="oi" data-glyph="chevron-left" title="Previous Category" aria-hidden="true"></span>
                 </a>
-                <h5>General</h5>
-                <a aria-label="next" href="javascript:void(0);">
+                <h5>{{categories[currentCategory]}}</h5>
+                <a aria-label="next" href="javascript:void(0);" v-on:click="nextCategory">
                     <span class="oi" data-glyph="chevron-right" title="Next Category" aria-hidden="true"></span>
                 </a>
             </div>
@@ -68,57 +68,27 @@
             </div>
         </div>
 
-        <div class="list-group-item">
+        <div v-for="task in tasks" class="list-group-item">
             <div class="d-flex w-100 justify-content-between">
-                <div class="task-data low-pr-task">
-                    <p class="task-name">Realizar upgrade de la versión de Sublime Text</p>
-                    <small class="text-muted">Mañana, 11:00 p.m.</small>
+                <div class="task-data"
+                     v-bind:class="{'high-pr-task': task.priority == 1, 'low-pr-task': task.priority==-1, 'task-done': task.done}">
+                    <p class="task-name">{{task.name}}</p>
+                    <small class="text-muted">{{task.due}}</small>
                 </div>
                 <div class="task-actions">
-                    <span class="oi" data-glyph="elevator" title="Normal Priority" aria-hidden="true"></span>
-                    <!--<span class="oi" data-glyph="caret-top" title="High Priority" aria-hidden="true"></span>-->
-                    <!--<span class="oi" data-glyph="caret-bottom" title="Low Priority" aria-hidden="true"></span>-->
+                    <span class="oi" data-glyph="elevator" title="Normal Priority" aria-hidden="true"
+                          v-show="task.priority==0" v:on-click="changePriority(task)"></span>
+                    <span class="oi" data-glyph="caret-top" title="High Priority" aria-hidden="true"
+                          v-show="task.priority==1" v:on-click="changePriority(task)"></span>
+                    <span class="oi" data-glyph="caret-bottom" title="Low Priority" aria-hidden="true"
+                          v-show="task.priority==-1" v:on-click="changePriority(task)"></span>
                     <span class="oi" data-glyph="pencil" title="Edit" aria-hidden="true"></span>
-                    <span class="oi" data-glyph="check" title="Mark as Done" aria-hidden="true"></span>
+                    <span class="oi" data-glyph="check" title="Mark as Done" aria-hidden="true"
+                          v-show="!task.done"></span>
                 </div>
             </div>
         </div>
-        <div class="list-group-item">
-            <div class="task-data">
-                <p class="task-name">Sacar la basura</p>
-                <small class="text-muted">18-sep 12:30 p.m.</small>
-            </div>
-        </div>
-        <div class="list-group-item">
-            <div class="task-data">
-                <p class="task-name">Lavar el carro</p>
-                <small class="text-muted">Hoy, 6:45 p.m.</small>
-            </div>
-        </div>
-        <div class="list-group-item">
-            <div class="task-data high-pr-task">
-                <p class="task-name">Programar reunión con los proveedores</p>
-                <small class="text-muted">Lunes, 9:00 p.m.</small>
-            </div>
-        </div>
-        <div class="list-group-item">
-            <div class="task-data high-pr-task">
-                <p class="task-name">Preparar plan de trabajo proyecto CMS</p>
-                <small class="text-muted">En cualquier momento</small>
-            </div>
-        </div>
-        <div class="list-group-item">
-            <div class="task-data">
-                <p class="task-name">Solicitar cierre en el ambiente de las pruebas espejo</p>
-                <small class="text-muted">Viernes, 3:30 p.m.</small>
-            </div>
-        </div>
-        <div class="list-group-item">
-            <div class="task-data task-done">
-                <p class="task-name">Atender issues con prioridad High en proyecto ABC</p>
-                <small class="text-muted">Mañana, 10:00 a.m.</small>
-            </div>
-        </div>
+
     </div>
 </div>
 <footer class="footer">
@@ -131,5 +101,6 @@
 <script type="text/javascript" src="js/bootstrap/popper.js"></script>
 <script type="text/javascript" src="js/bootstrap/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/vue/vue.min.js"></script>
+<script type="text/javascript" src="js/vue/hecho.app.js"></script>
 </body>
 </html>
