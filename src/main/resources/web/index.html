@@ -64,7 +64,8 @@
     <div id="taskList" class="list-group">
         <div class="list-group-item new-task">
             <div class="task">
-                <input id="newTask" class="form-control" placeholder="New Task" type="text"/>
+                <input id="newTask" class="form-control" placeholder="New Task" type="text" v-model="newTaskName"
+                       v-on:keyup.enter="addTask"/>
             </div>
         </div>
 
@@ -75,16 +76,26 @@
                     <p class="task-name">{{task.name}}</p>
                     <small class="text-muted">{{task.due}}</small>
                 </div>
-                <div class="task-actions">
-                    <span class="oi" data-glyph="elevator" title="Normal Priority" aria-hidden="true"
-                          v-show="task.priority==0" v:on-click="changePriority(task)"></span>
-                    <span class="oi" data-glyph="caret-top" title="High Priority" aria-hidden="true"
-                          v-show="task.priority==1" v:on-click="changePriority(task)"></span>
-                    <span class="oi" data-glyph="caret-bottom" title="Low Priority" aria-hidden="true"
-                          v-show="task.priority==-1" v:on-click="changePriority(task)"></span>
-                    <span class="oi" data-glyph="pencil" title="Edit" aria-hidden="true"></span>
-                    <span class="oi" data-glyph="check" title="Mark as Done" aria-hidden="true"
-                          v-show="!task.done"></span>
+                <div class="task-actions" v-show="!task.done">
+                    <a href="javascript:void(0)" v-on:click="changePriority(task, 1)">
+                        <span class="oi" data-glyph="elevator" title="Normal Priority" aria-hidden="true"
+                              v-show="task.priority==0"></span>
+                    </a>
+                    <a href="javascript:void(0)" v-on:click="changePriority(task, -1)">
+                        <span class="oi" data-glyph="caret-top" title="High Priority" aria-hidden="true"
+                              v-show="task.priority==1"></span>
+                    </a>
+                    <a href="javascript:void(0)" v-on:click="changePriority(task, 0)">
+                        <span class="oi" data-glyph="caret-bottom" title="Low Priority" aria-hidden="true"
+                              v-show="task.priority==-1"></span>
+                    </a>
+                    <a href="javascript:void(0)">
+                        <span class="oi" data-glyph="pencil" title="Edit" aria-hidden="true"></span>
+                    </a>
+                    <a href="javascript:void(0)">
+                        <span class="oi" data-glyph="check" title="Mark as Done" aria-hidden="true"
+                              v-show="!task.done" v-on:click="markAsDone(task)"></span>
+                    </a>
                 </div>
             </div>
         </div>

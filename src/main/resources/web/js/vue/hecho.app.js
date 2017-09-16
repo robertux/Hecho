@@ -4,6 +4,7 @@ var vueApp = new Vue({
         categories: [],
         tasks: [],
         currentCategory: 0,
+        newTaskName: '',
         currentTask: {}
     },
     methods: {
@@ -34,11 +35,17 @@ var vueApp = new Vue({
             this.tasks.push({name: 'Lavar el carro', due: 'Hoy, 6:45 p.m.', priority: 0, done: false});
             this.tasks.push({name: 'Programar reunión con los proveedores', due: 'El próximo lunes, 9:00 p.m.', priority: 1, done: true});
         },
-        changePriority: function(task) {
-            task.priority = (task.priority == 1? -1: (task.priority == 0? 1: 0));
+        changePriority: function(task, priority) {
+            task.priority = priority;
         },
         addTask: function() {
-
+            if (this.newTaskName.trim()) {
+                this.tasks.push({name: this.newTaskName, due: 'En algún momento', priority: 0, done: false});
+                this.newTaskName = '';
+            }
+        },
+        markAsDone: function(task) {
+            task.done = true;
         },
         editTask: function() {
 
