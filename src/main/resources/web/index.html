@@ -16,7 +16,8 @@
         </a>
 
         <form class="form-inline search-form">
-            <input class="form-control search-box" type="text" placeholder="Search" aria-label="search"/>
+            <input class="form-control search-box" type="text" placeholder="Search" aria-label="search"
+                   v-model="filterText"/>
         </form>
 
         <form clas="form-linline">
@@ -31,15 +32,25 @@
                     <span>robertux</span>
                 </a>
                 <div role="separator" class="dropdown-divider"></div>
-                <a class="dropdown-item" href="/sortBy/date">
+                <a class="dropdown-item" href="javascript:void(0)"
+                   v-bind:class="{'selected': sortMethod == SORT_BY_DATE}" v-on:click="sortBy(SORT_BY_DATE)">
+                    <span class="oi" data-glyph="clock" title="Sort by Date" aria-hidden="true"></span>
                     <span>Sort by Date</span>
                 </a>
                 <div role="separator" class="dropdown-divider"></div>
-                <a class="dropdown-item" href="/sortBy/priority">
-                    <span>Sorb ty Priority</span>
+                <a class="dropdown-item" href="javascript:void(0)"
+                   v-bind:class="{selected: sortMethod == SORT_BY_PRIORITY}" v-on:click="sortBy(SORT_BY_PRIORITY)">
+                    <span class="oi" data-glyph="elevator" title="Sort by Priority" aria-hidden="true"></span>
+                    <span>Sort by Priority</span>
                 </a>
                 <div role="separator" class="dropdown-divider"></div>
-                <a class="dropdown-item" href="/logout">
+                <a class="dropdown-item" href="javascript:void(0)" v-on:click="deleteCompletedTasks">
+                    <span class="oi" data-glyph="trash" title="Delete Completed" aria-hidden="true"></span>
+                    <span>Delete Completed Tasks</span>
+                </a>
+                <div role="separator" class="dropdown-divider"></div>
+                <a class="dropdown-item" href="javascript:void(0)">
+                    <span class="oi" data-glyph="account-logout" title="Logout" aria-hidden="true"></span>
                     <span>Logout</span>
                 </a>
             </div>
@@ -69,7 +80,7 @@
             </div>
         </div>
 
-        <div v-for="task in tasks" class="list-group-item">
+        <div v-for="task in computedTasks" class="list-group-item">
             <div class="d-flex w-100 justify-content-between">
                 <div class="task-data"
                      v-bind:class="{'high-pr-task': task.priority == 1, 'low-pr-task': task.priority==-1, 'task-done': task.done}">
@@ -112,6 +123,7 @@
 <script type="text/javascript" src="js/bootstrap/popper.js"></script>
 <script type="text/javascript" src="js/bootstrap/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/vue/vue.min.js"></script>
+<script type="text/javascript" src="js/moment/moment.js"></script>
 <script type="text/javascript" src="js/vue/hecho.app.js"></script>
 </body>
 </html>

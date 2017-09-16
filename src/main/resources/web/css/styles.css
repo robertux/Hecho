@@ -9,6 +9,10 @@ div.dropdown-menu-align-right {
     right: 5px;
 }
 
+div.dropdown-menu a.dropdown-item.selected {
+    background-color: #b8daff;
+}
+
 div#categoryList {
     margin-top: 80px;
 }
