@@ -1,6 +1,7 @@
 var DATE_FORMAT = 'YYYY-MM-DD hh:mm:ss a';
 var SORT_BY_DATE = 1;
 var SORT_BY_PRIORITY = 2;
+moment.locale('es');
 
 var vueApp = new Vue({
     el: '#hecho-app',
@@ -45,6 +46,9 @@ var vueApp = new Vue({
             this.tasks.push({name: 'Sacar la basura', due: '2017-09-18 12:30:00 PM', priority: 0, done: false});
             this.tasks.push({name: 'Lavar el carro', due: '2017-09-16 06:45:00 PM', priority: 0, done: false});
             this.tasks.push({name: 'Programar reunión con los proveedores', due: '2017-09-18 09:00:00 AM', priority: 1, done: true});
+        },
+        getRelativeDate(task) {
+            return moment(task.due, DATE_FORMAT).calendar();
         },
         sortBy: function(sortMethod) {
             this.sortMethod = sortMethod;

@@ -85,7 +85,7 @@
                 <div class="task-data"
                      v-bind:class="{'high-pr-task': task.priority == 1, 'low-pr-task': task.priority==-1, 'task-done': task.done}">
                     <p class="task-name">{{task.name}}</p>
-                    <small class="text-muted">{{task.due}}</small>
+                    <small class="text-muted">{{getRelativeDate(task)}}</small>
                 </div>
                 <div class="task-actions" v-show="!task.done">
                     <a href="javascript:void(0)" v-on:click="changePriority(task, 1)">
