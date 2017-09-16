@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="css/open-iconic.min.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/styles.css">
     <title>Hecho</title>
@@ -15,7 +16,7 @@
         </a>
 
         <form class="form-inline search-form">
-            <input class="form-control mr-sm-2 search-box" type="text" placeholder="Search" aria-label="search"/>
+            <input class="form-control search-box" type="text" placeholder="Search" aria-label="search"/>
         </form>
 
         <form clas="form-linline">
@@ -43,19 +44,18 @@
                 </a>
             </div>
         </form>
+
     </nav>
 
     <div id="categoryList" class="list-group">
         <div class="list-group-item list-group-item-primary flex-column align-items-start">
             <div class="d-flex justify-content-between">
                 <a aria-label="previous" href="javascript:void(0);">
-                    <span aria-hidden="true">&laquo;</span>
-                    <span class="sr-only">Previous</span>
+                    <span class="oi" data-glyph="chevron-left" title="Previous Category" aria-hidden="true"></span>
                 </a>
                 <h5>General</h5>
                 <a aria-label="next" href="javascript:void(0);">
-                    <span aria-hidden="true">&raquo;</span>
-                    <span class="sr-only">Next</span>
+                    <span class="oi" data-glyph="chevron-right" title="Next Category" aria-hidden="true"></span>
                 </a>
             </div>
         </div>
@@ -63,49 +63,58 @@
 
     <div id="taskList" class="list-group">
         <div class="list-group-item new-task">
-            <div>
+            <div class="task">
                 <input id="newTask" class="form-control" placeholder="New Task" type="text"/>
             </div>
         </div>
 
         <div class="list-group-item">
-            <div class="low-pr-task">
-                <p class="task-name">Realizar upgrade de la versión de Sublime Text</p>
-                <small class="text-muted">Mañana, 11:00 p.m.</small>
+            <div class="d-flex w-100 justify-content-between">
+                <div class="task-data low-pr-task">
+                    <p class="task-name">Realizar upgrade de la versión de Sublime Text</p>
+                    <small class="text-muted">Mañana, 11:00 p.m.</small>
+                </div>
+                <div class="task-actions">
+                    <span class="oi" data-glyph="elevator" title="Normal Priority" aria-hidden="true"></span>
+                    <!--<span class="oi" data-glyph="caret-top" title="High Priority" aria-hidden="true"></span>-->
+                    <!--<span class="oi" data-glyph="caret-bottom" title="Low Priority" aria-hidden="true"></span>-->
+                    <span class="oi" data-glyph="pencil" title="Edit" aria-hidden="true"></span>
+                    <span class="oi" data-glyph="check" title="Mark as Done" aria-hidden="true"></span>
+                </div>
             </div>
         </div>
         <div class="list-group-item">
-            <div>
+            <div class="task-data">
                 <p class="task-name">Sacar la basura</p>
                 <small class="text-muted">18-sep 12:30 p.m.</small>
             </div>
         </div>
         <div class="list-group-item">
-            <div>
+            <div class="task-data">
                 <p class="task-name">Lavar el carro</p>
                 <small class="text-muted">Hoy, 6:45 p.m.</small>
             </div>
         </div>
         <div class="list-group-item">
-            <div class="high-pr-task">
+            <div class="task-data high-pr-task">
                 <p class="task-name">Programar reunión con los proveedores</p>
                 <small class="text-muted">Lunes, 9:00 p.m.</small>
             </div>
         </div>
         <div class="list-group-item">
-            <div class="high-pr-task">
+            <div class="task-data high-pr-task">
                 <p class="task-name">Preparar plan de trabajo proyecto CMS</p>
                 <small class="text-muted">En cualquier momento</small>
             </div>
         </div>
         <div class="list-group-item">
-            <div>
+            <div class="task-data">
                 <p class="task-name">Solicitar cierre en el ambiente de las pruebas espejo</p>
                 <small class="text-muted">Viernes, 3:30 p.m.</small>
             </div>
         </div>
         <div class="list-group-item">
-            <div class="task-done">
+            <div class="task-data task-done">
                 <p class="task-name">Atender issues con prioridad High en proyecto ABC</p>
                 <small class="text-muted">Mañana, 10:00 a.m.</small>
             </div>
@@ -114,7 +123,8 @@
 </div>
 <footer class="footer">
     <div class="container">
-        <span class="text-mutd">Copyright Robertux - 2017</span>
+        <span class="text-mutd">Hecho v1.1 Copyright &copy; Robertux 2017 <a target="_blank" class="footer-link"
+                                                                             href="http://www.robertux.info">About</a></span>
     </div>
 </footer>
 <script type="text/javascript" src="js/bootstrap/jquery-2.2.4.min.js"></script>

@@ -1,3 +1,4 @@
+
 .profile-image {
     border: 4px solid lightblue;
     height: 55px;
@@ -47,6 +48,20 @@ div.list-group-item div small {
     font-size: 75%;
 }
 
+span.oi {
+    font-size: 24px;
+    color: #868e96;
+    padding: 10px 20px;
+}
+
+span.oi:hover {
+    color: black;
+}
+
+div.list-group-item div.task-actions span.oi {
+    border-left: 1px solid lightgray;
+    cursor: pointer;
+}
 
 .footer {
 	margin-top: 50px;
@@ -59,4 +74,8 @@ div.list-group-item div small {
 	font-size: 10pt;
 	color: #8c8c8c;
 
+}
+
+.footer-link {
+    color: #8c8c8c;
 }
