@@ -2,6 +2,8 @@ package org.robertux.main;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.robertux.web.controllers.CategoriesController;
+import org.robertux.web.controllers.TasksController;
 
 import static spark.Spark.*;
 
@@ -13,6 +15,7 @@ public class Startup {
 
     public static void main(String[] args) {
         configureServer();
+        configureRoutes();
     }
 
     public static void configureServer() {
@@ -22,5 +25,17 @@ public class Startup {
         staticFiles.expireTime(600L);
 
         init();
+    }
+
+    public static void configureRoutes() {
+        get("/categories", (req, resp) -> {
+            resp.type("application/json");
+            return new CategoriesController().getCategories().toJson();
+        });
+
+        get("/categories/:categoryId/tasks", (req, resp) -> {
+            resp.type("application/json");
+            return new TasksController().getTasks(Integer.parseInt(req.params(":categoryId"))).toJson();
+        });
     }
 }

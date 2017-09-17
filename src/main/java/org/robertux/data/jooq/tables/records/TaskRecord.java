@@ -4,6 +4,7 @@
 package org.robertux.data.jooq.tables.records;
 
 
+import com.google.gson.JsonObject;
 import org.jooq.Field;
 import org.jooq.Record1;
 import org.jooq.Record6;
@@ -333,5 +334,17 @@ public class TaskRecord extends UpdatableRecordImpl<TaskRecord> implements Recor
         value5(value5);
         value6(value6);
         return this;
+    }
+
+    public JsonObject toJson() {
+        JsonObject obj = new JsonObject();
+        obj.addProperty("id", this.getId());
+        obj.addProperty("description", this.getDescription());
+        obj.addProperty("date", this.getTime().longValue());
+        obj.addProperty("priority", this.getPriority());
+        obj.addProperty("status", this.getStatus());
+        obj.addProperty("categoryId", this.getCategoryid());
+
+        return obj;
     }
 }

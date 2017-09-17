@@ -4,6 +4,7 @@
 package org.robertux.data.jooq.tables.records;
 
 
+import com.google.gson.JsonObject;
 import org.jooq.Field;
 import org.jooq.Record1;
 import org.jooq.Record2;
@@ -168,5 +169,13 @@ public class CategoryRecord extends UpdatableRecordImpl<CategoryRecord> implemen
         value1(value1);
         value2(value2);
         return this;
+    }
+
+    public JsonObject toJson() {
+        JsonObject obj = new JsonObject();
+        obj.addProperty("id", this.getId());
+        obj.addProperty("name", this.getName());
+
+        return obj;
     }
 }
