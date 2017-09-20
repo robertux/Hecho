@@ -2,6 +2,7 @@ package org.robertux.main;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.robertux.data.jooq.tables.records.CategoryRecord;
 import org.robertux.web.controllers.CategoriesController;
 import org.robertux.web.controllers.TasksController;
 
@@ -28,14 +29,30 @@ public class Startup {
     }
 
     public static void configureRoutes() {
-        get("/categories", (req, resp) -> {
+        after((req, resp) -> {
             resp.type("application/json");
-            return new CategoriesController().getCategories().toJson();
+        });
+
+        get("/categories", (req, resp) -> {
+            return new CategoriesController().get().toJson();
+        });
+
+        post("/categories/:categoryName", (req, resp) -> {
+            return new CategoriesController().add(new CategoryRecord(-1, req.params(":categoryName")));
+        });
+
+        put("/categories/:categoryId/:categoryName", (req, resp) -> {
+            return new CategoriesController().edit(new CategoryRecord(Integer.parseInt(req.params(":categoryId")), req.params(":categoryName")));
+        });
+
+        delete("/categories/:categoryId", (req, resp) -> {
+            return new CategoriesController().delete(new CategoryRecord(Integer.parseInt(req.params(":categoryId")), ""));
         });
 
         get("/categories/:categoryId/tasks", (req, resp) -> {
-            resp.type("application/json");
             return new TasksController().getTasks(Integer.parseInt(req.params(":categoryId"))).toJson();
         });
+
+
     }
 }

@@ -1,26 +1,67 @@
 package org.robertux.web.controllers;
 
 import com.google.gson.JsonArray;
+import org.robertux.data.CategoriesRepository;
 import org.robertux.data.jooq.tables.records.CategoryRecord;
 import org.robertux.data.model.JsonResponse;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by robertux on 9/16/17.
  */
 public class CategoriesController {
+    private CategoriesRepository repo;
 
-    public JsonResponse getCategories() {
-        List<CategoryRecord> categories = new ArrayList<>(0);
+    public CategoriesController() {
+        this.repo = new CategoriesRepository();
+    }
+
+    public JsonResponse get() {
+        List<CategoryRecord> categories = this.repo.getCategories();
         JsonArray arr = new JsonArray();
         JsonResponse jresp = new JsonResponse();
 
+        if (categories.size() == 0) {
+            CategoryRecord cat = new CategoryRecord(1, "General");
+            this.repo.addCategory(cat);
+            categories.add(cat);
+        }
+
         for (CategoryRecord cat : categories) {
-            arr.add(cat.toString());
+            arr.add(cat.toJson());
         }
         jresp.getContent().add("categories", arr);
         return jresp;
+    }
+
+    public JsonResponse add(CategoryRecord cat) {
+        JsonResponse resp = new JsonResponse();
+
+        if (this.repo.addCategory(cat) == 0) {
+            resp = JsonResponse.fromError(1001);
+        }
+
+        return resp;
+    }
+
+    public JsonResponse edit(CategoryRecord cat) {
+        JsonResponse resp = new JsonResponse();
+
+        if (this.repo.updateCategory(cat) == 0) {
+            resp = JsonResponse.fromError(1002);
+        }
+
+        return resp;
+    }
+
+    public JsonResponse delete(CategoryRecord cat) {
+        JsonResponse resp = new JsonResponse();
+
+        if (this.repo.deleteCategory(cat) == 0) {
+            resp = JsonResponse.fromError(1003);
+        }
+
+        return resp;
     }
 }
