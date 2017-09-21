@@ -32,6 +32,11 @@
                     <span>robertux</span>
                 </a>
                 <div role="separator" class="dropdown-divider"></div>
+                <a class="dropdown-item" href="javascript:void(0)" v-on:click="manageCategories">
+                    <span class="oi" data-glyph="list" title="Delete Completed" aria-hidden="true"></span>
+                    <span>Manage Categories</span>
+                </a>
+                <div role="separator" class="dropdown-divider"></div>
                 <a class="dropdown-item" href="javascript:void(0)"
                    v-bind:class="{'selected': sortMethod == SORT_BY_DATE}" v-on:click="sortBy(SORT_BY_DATE)">
                     <span class="oi" data-glyph="clock" title="Sort by Date" aria-hidden="true"></span>
@@ -58,7 +63,7 @@
 
     </nav>
 
-    <div id="categoryList" class="list-group">
+    <div id="categorySelect" class="list-group" v-show="!editCategoriesMode">
         <div class="list-group-item list-group-item-primary flex-column align-items-start">
             <div class="d-flex justify-content-between">
                 <a aria-label="previous" href="javascript:void(0);" v-on:click="prevCategory">
@@ -72,8 +77,45 @@
         </div>
     </div>
 
-    <div id="taskList" class="list-group">
-        <div class="list-group-item new-task">
+    <div id="categoryList" class="list-group" v-show="editCategoriesMode">
+        <div class="list-group-item new-item">
+            <div class="category">
+                <input id="newCategory" class="form-control" placeholder="Add New Category" type="text"
+                       v-model="newCategoryName"
+                       v-on:keyup.enter="addCategory"/>
+            </div>
+        </div>
+
+        <div v-for="cat in categories" class="list-group-item list-group-item-primary flex-column align-items-start">
+            <div class="d-flex w-100 justify-content-between">
+                <div class="item-data d-flex w-100 justify-content-between">
+                    <p v-show="!cat.beingEdited" class="category-name">{{cat.name}}</p>
+                    <input type="text" class="form-control" v-show="cat.beingEdited" v-model="cat.name"/>
+                </div>
+                <div class="item-actions">
+                    <a href="javascript:void(0)" v-show="!cat.beingEdited">
+                        <span class="oi" data-glyph="pencil" title="Edit" aria-hidden="true"
+                              v-on:click="editCategory(cat)"></span>
+                    </a>
+                    <a href="javascript:void(0)" v-show="cat.beingEdited">
+                        <span class="oi" data-glyph="circle-check" title="Save" aria-hidden="true"
+                              v-on:click="saveCategory(cat)"></span>
+                    </a>
+                    <a href="javascript:void(0)" v-show="cat.beingEdited">
+                        <span class="oi" data-glyph="circle-x" title="Discard" aria-hidden="true"
+                              v-on:click="discardCategory(cat)"></span>
+                    </a>
+                    <a href="javascript:void(0)" v-show="!cat.beingEdited">
+                        <span class="oi" data-glyph="trash" title="Delete" aria-hidden="true"
+                              v-on:click="deleteCategory(cat)"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="taskList" class="list-group" v-show="!editCategoriesMode">
+        <div class="list-group-item new-item">
             <div class="task">
                 <input id="newTask" class="form-control" placeholder="Add New Task" type="text" v-model="newTaskName"
                        v-on:keyup.enter="addTask"/>
@@ -82,12 +124,12 @@
 
         <div v-for="task in computedTasks" class="list-group-item">
             <div class="d-flex w-100 justify-content-between">
-                <div class="task-data"
+                <div class="item-data"
                      v-bind:class="{'high-pr-task': task.priority == 1, 'low-pr-task': task.priority==-1, 'task-done': task.done}">
                     <p class="task-name">{{task.name}}</p>
                     <small class="text-muted">{{getRelativeDate(task)}}</small>
                 </div>
-                <div class="task-actions" v-show="!task.done">
+                <div class="item-actions" v-show="!task.done">
                     <a href="javascript:void(0)" v-on:click="changePriority(task, 1)">
                         <span class="oi" data-glyph="elevator" title="Normal Priority" aria-hidden="true"
                               v-show="task.priority==0"></span>

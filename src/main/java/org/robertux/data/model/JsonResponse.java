@@ -40,7 +40,7 @@ public class JsonResponse {
         Properties props = new Properties();
 
         try {
-            props.load(JsonResponse.class.getResourceAsStream("errorMessages.properties"));
+            props.load(JsonResponse.class.getResourceAsStream("/errorMessages.properties"));
             if (props.getProperty(String.valueOf(errorCode)) != null) {
                 r.setCode(errorCode);
                 r.setReason(props.getProperty(String.valueOf(errorCode)));
@@ -48,7 +48,7 @@ public class JsonResponse {
                 r.setCode(999);
                 r.setReason("Error desconocido");
             }
-        } catch (IOException e) {
+        } catch (NullPointerException | IOException e) {
             logger.error("Error tratando de cargar los mensajes de error: " + e.getMessage(), e);
         }
 

@@ -10,9 +10,11 @@ var vueApp = new Vue({
         tasks: [],
         currentCategory: 0,
         newTaskName: '',
+        newCategoryName: '',
         currentTask: {},
         filterText: '',
-        sortMethod: SORT_BY_DATE
+        sortMethod: SORT_BY_DATE,
+        editCategoriesMode: false
     },
     computed: {
         computedTasks: function() {
@@ -22,7 +24,7 @@ var vueApp = new Vue({
     methods: {
         loadCategories: function() {
             var self = this;
-            $.get("/categories", function(data) {
+            $.get("/categories", {}, function(data) {
                 if (data.code === 0) {
                     self.categories = data.content.categories;
                 }
@@ -30,7 +32,11 @@ var vueApp = new Vue({
                 if (self.categories.length > 0) {
                     self.loadTasks(self.categories[0]);
                 }
-            });
+
+                for (var i=0; i<self.categories.length; i++) {
+                    self.categories["beingEdited"] = false;
+                }
+            }, "json");
         },
         nextCategory: function() {
             if (this.currentCategory == (this.categories.length - 1)) {
@@ -45,6 +51,40 @@ var vueApp = new Vue({
             } else {
                 this.currentCategory--;
             }
+        },
+        manageCategories: function() {
+            this.editCategoriesMode = !this.editCategoriesMode;
+        },
+        addCategory: function() {
+            var self = this;
+            $.post("/categories/" + this.newCategoryName, {}, function(data) {
+                if (data.code === 0) {
+                    self.newCategoryName = '';
+                    self.loadCategories();
+                }
+            }, "json");
+        },
+        editCategory: function(cat) {
+            cat.beingEdited = true;
+        },
+        saveCategory: function(cat) {
+            var self = this;
+            $.put("/categories/" + cat.id + "/" + cat.name, {}, function(data) {
+                if (data.code === 0) {
+                    self.loadCategories();
+                }
+            }, "json");
+        },
+        discardCategory: function(cat) {
+            this.loadCategories();
+        },
+        deleteCategory: function(cat) {
+            var self = this;
+            $.ajax({url: "/categories/" + cat.id, method: "DELETE", dataType: "json"}).success(function(data) {
+                if (data.code === 0) {
+                    self.loadCategories();
+                }
+            });
         },
         loadTasks: function(categoryIndex) {
             var self = this;

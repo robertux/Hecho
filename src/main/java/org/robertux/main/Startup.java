@@ -28,10 +28,25 @@ public class Startup {
         init();
     }
 
-    public static void configureRoutes() {
-        after((req, resp) -> {
+    public static void configureFilters() {
+        before("/categories/*", (req, resp) -> {
+
+        });
+
+        before("/tasks/*", (req, resp) -> {
+
+        });
+
+        after("/categories/*", (req, resp) -> {
             resp.type("application/json");
         });
+
+        after("/tasks/*", (req, resp) -> {
+            resp.type("application/json");
+        });
+    }
+
+    public static void configureRoutes() {
 
         get("/categories", (req, resp) -> {
             return new CategoriesController().get().toJson();
