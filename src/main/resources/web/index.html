@@ -88,26 +88,22 @@
 
         <div v-for="cat in categories" class="list-group-item list-group-item-primary flex-column align-items-start">
             <div class="d-flex w-100 justify-content-between">
-                <div class="item-data d-flex w-100 justify-content-between">
+                <div class="item-data">
                     <p v-show="!cat.beingEdited" class="category-name">{{cat.name}}</p>
                     <input type="text" class="form-control" v-show="cat.beingEdited" v-model="cat.name"/>
                 </div>
                 <div class="item-actions">
-                    <a href="javascript:void(0)" v-show="!cat.beingEdited">
-                        <span class="oi" data-glyph="pencil" title="Edit" aria-hidden="true"
-                              v-on:click="editCategory(cat)"></span>
+                    <a href="javascript:void(0)" v-show="!cat.beingEdited" v-on:click="editCategory(cat)">
+                        <span class="oi" data-glyph="pencil" title="Edit" aria-hidden="true"></span>
                     </a>
-                    <a href="javascript:void(0)" v-show="cat.beingEdited">
-                        <span class="oi" data-glyph="circle-check" title="Save" aria-hidden="true"
-                              v-on:click="saveCategory(cat)"></span>
+                    <a href="javascript:void(0)" v-show="cat.beingEdited" v-on:click="saveCategory(cat)">
+                        <span class="oi" data-glyph="circle-check" title="Save" aria-hidden="true"></span>
                     </a>
-                    <a href="javascript:void(0)" v-show="cat.beingEdited">
-                        <span class="oi" data-glyph="circle-x" title="Discard" aria-hidden="true"
-                              v-on:click="discardCategory(cat)"></span>
+                    <a href="javascript:void(0)" v-show="cat.beingEdited" v-on:click="discardCategory(cat)">
+                        <span class="oi" data-glyph="circle-x" title="Discard" aria-hidden="true"></span>
                     </a>
-                    <a href="javascript:void(0)" v-show="!cat.beingEdited">
-                        <span class="oi" data-glyph="trash" title="Delete" aria-hidden="true"
-                              v-on:click="deleteCategory(cat)"></span>
+                    <a href="javascript:void(0)" v-show="!cat.beingEdited" v-on:click="deleteCategory(cat)">
+                        <span class="oi" data-glyph="trash" title="Delete" aria-hidden="true"></span>
                     </a>
                 </div>
             </div>

@@ -24,7 +24,7 @@ var vueApp = new Vue({
     methods: {
         loadCategories: function() {
             var self = this;
-            $.get("/categories", {}, function(data) {
+            $.get("/api/categories", {}, function(data) {
                 if (data.code === 0) {
                     self.categories = data.content.categories;
                 }
@@ -57,7 +57,7 @@ var vueApp = new Vue({
         },
         addCategory: function() {
             var self = this;
-            $.post("/categories/" + this.newCategoryName, {}, function(data) {
+            $.post("/api/categories/" + this.newCategoryName, {}, function(data) {
                 if (data.code === 0) {
                     self.newCategoryName = '';
                     self.loadCategories();
@@ -69,7 +69,7 @@ var vueApp = new Vue({
         },
         saveCategory: function(cat) {
             var self = this;
-            $.put("/categories/" + cat.id + "/" + cat.name, {}, function(data) {
+            $.put("/api/categories/" + cat.id + "/" + cat.name, {}, function(data) {
                 if (data.code === 0) {
                     self.loadCategories();
                 }
@@ -80,7 +80,7 @@ var vueApp = new Vue({
         },
         deleteCategory: function(cat) {
             var self = this;
-            $.ajax({url: "/categories/" + cat.id, method: "DELETE", dataType: "json"}).success(function(data) {
+            $.ajax({url: "/api/categories/" + cat.id, method: "DELETE", dataType: "json"}).done(function(data, textStatus, jqXHR) {
                 if (data.code === 0) {
                     self.loadCategories();
                 }
@@ -88,7 +88,7 @@ var vueApp = new Vue({
         },
         loadTasks: function(categoryIndex) {
             var self = this;
-            $.get("/categories/" + self.categories[self.currentCategory].id + "/tasks", {}, function(data) {
+            $.get("/api/categories/" + self.categories[self.currentCategory].id + "/tasks", {}, function(data) {
                 if (data.code === 0) {
                     self.tasks = data.content.tasks;
                 }

@@ -5,6 +5,8 @@ import org.apache.logging.log4j.Logger;
 import org.robertux.data.jooq.tables.records.CategoryRecord;
 import org.robertux.web.controllers.CategoriesController;
 import org.robertux.web.controllers.TasksController;
+import spark.Request;
+import spark.Response;
 
 import static spark.Spark.*;
 
@@ -16,6 +18,7 @@ public class Startup {
 
     public static void main(String[] args) {
         configureServer();
+        configureFilters();
         configureRoutes();
     }
 
@@ -29,45 +32,46 @@ public class Startup {
     }
 
     public static void configureFilters() {
-        before("/categories/*", (req, resp) -> {
-
+        before("/api/*", (req, resp) -> {
+            logRequest(req);
         });
 
-        before("/tasks/*", (req, resp) -> {
-
-        });
-
-        after("/categories/*", (req, resp) -> {
+        after("/api/*", (req, resp) -> {
             resp.type("application/json");
-        });
-
-        after("/tasks/*", (req, resp) -> {
-            resp.type("application/json");
+            logResponse(resp);
         });
     }
 
     public static void configureRoutes() {
 
-        get("/categories", (req, resp) -> {
+        get("/api/categories", (req, resp) -> {
             return new CategoriesController().get().toJson();
         });
 
-        post("/categories/:categoryName", (req, resp) -> {
-            return new CategoriesController().add(new CategoryRecord(-1, req.params(":categoryName")));
+        post("/api/categories/:categoryName", (req, resp) -> {
+            return new CategoriesController().add(new CategoryRecord(-1, req.params(":categoryName"))).toJson();
         });
 
-        put("/categories/:categoryId/:categoryName", (req, resp) -> {
-            return new CategoriesController().edit(new CategoryRecord(Integer.parseInt(req.params(":categoryId")), req.params(":categoryName")));
+        put("/api/categories/:categoryId/:categoryName", (req, resp) -> {
+            return new CategoriesController().edit(new CategoryRecord(Integer.parseInt(req.params(":categoryId")), req.params(":categoryName"))).toJson();
         });
 
-        delete("/categories/:categoryId", (req, resp) -> {
-            return new CategoriesController().delete(new CategoryRecord(Integer.parseInt(req.params(":categoryId")), ""));
+        delete("/api/categories/:categoryId", (req, resp) -> {
+            return new CategoriesController().delete(new CategoryRecord(Integer.parseInt(req.params(":categoryId")), "")).toJson();
         });
 
-        get("/categories/:categoryId/tasks", (req, resp) -> {
+        get("/api/categories/:categoryId/tasks", (req, resp) -> {
             return new TasksController().getTasks(Integer.parseInt(req.params(":categoryId"))).toJson();
         });
 
 
+    }
+
+    protected static void logRequest(Request req) {
+        logger.debug("Request received: " + req.requestMethod() + " " + req.url() + " - " + req.body());
+    }
+
+    protected static void logResponse(Response resp) {
+        logger.debug("Response sent: " + resp.status() + " " + resp.type() + " " + resp.body());
     }
 }
