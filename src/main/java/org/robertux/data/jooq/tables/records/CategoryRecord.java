@@ -175,6 +175,7 @@ public class CategoryRecord extends UpdatableRecordImpl<CategoryRecord> implemen
         JsonObject obj = new JsonObject();
         obj.addProperty("id", this.getId());
         obj.addProperty("name", this.getName());
+        obj.addProperty("beingEdited", false);
 
         return obj;
     }

@@ -32,10 +32,6 @@ var vueApp = new Vue({
                 if (self.categories.length > 0) {
                     self.loadTasks(self.categories[0]);
                 }
-
-                for (var i=0; i<self.categories.length; i++) {
-                    self.categories["beingEdited"] = false;
-                }
             }, "json");
         },
         nextCategory: function() {
@@ -65,26 +61,32 @@ var vueApp = new Vue({
             }, "json");
         },
         editCategory: function(cat) {
+            cat.originalName = cat.name;
             cat.beingEdited = true;
         },
         saveCategory: function(cat) {
             var self = this;
-            $.put("/api/categories/" + cat.id + "/" + cat.name, {}, function(data) {
+            $.ajax({url: "/api/categories/" + cat.id + "/" + cat.name, method: "PUT", dataType: "json"}).done(function(data) {
                 if (data.code === 0) {
+                    cat.beingEdited = false;
                     self.loadCategories();
                 }
-            }, "json");
+            });
         },
         discardCategory: function(cat) {
-            this.loadCategories();
+            cat.name = cat.originalName;
+            cat.beingEdited = false;
         },
         deleteCategory: function(cat) {
             var self = this;
-            $.ajax({url: "/api/categories/" + cat.id, method: "DELETE", dataType: "json"}).done(function(data, textStatus, jqXHR) {
+            $.ajax({url: "/api/categories/" + cat.id, method: "DELETE", dataType: "json"}).done(function(data) {
                 if (data.code === 0) {
                     self.loadCategories();
                 }
             });
+        },
+        editingOtherCategory: function(cat) {
+            return (!cat.beingEdited && this.categories.filter(cat => cat.beingEdited).length > 0);
         },
         loadTasks: function(categoryIndex) {
             var self = this;

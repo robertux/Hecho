@@ -86,13 +86,14 @@
             </div>
         </div>
 
-        <div v-for="cat in categories" class="list-group-item list-group-item-primary flex-column align-items-start">
+        <div v-for="cat in categories" v-bind:class="{'category-edit': cat.beingEdited}"
+             class="list-group-item list-group-item-primary flex-column align-items-start">
             <div class="d-flex w-100 justify-content-between">
                 <div class="item-data">
-                    <p v-show="!cat.beingEdited" class="category-name">{{cat.name}}</p>
-                    <input type="text" class="form-control" v-show="cat.beingEdited" v-model="cat.name"/>
+                    <p class="category-name" v-show="!cat.beingEdited">{{cat.name}}</p>
+                    <input class="form-control" type="text" v-model="cat.name" v-show="cat.beingEdited"/>
                 </div>
-                <div class="item-actions">
+                <div class="item-actions" v-show="!editingOtherCategory(cat)">
                     <a href="javascript:void(0)" v-show="!cat.beingEdited" v-on:click="editCategory(cat)">
                         <span class="oi" data-glyph="pencil" title="Edit" aria-hidden="true"></span>
                     </a>

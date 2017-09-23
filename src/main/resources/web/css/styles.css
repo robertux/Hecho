@@ -21,20 +21,26 @@ div#taskList {
     margin-top: 30px;
 }
 
-div.list-group-item.new-item {
+.new-item {
     background-color: #f5f5f5;
     padding: 0;
 }
 
-div.list-group-item.new-item div input[type="text"] {
+.new-item div input[type="text"] {
     background-color: #f5f5f5;
     border: none;
     padding: 20px;
     border-radius: 0;
 }
 
-input#newCategory {
+input#newCategory, div.category-edit {
     background-color: #A8CAEF;
+}
+
+div.category-edit div div input {
+    border: 0;
+    background-color: #A8CAEF;
+    width: 100%;
 }
 
 div.list-group-item div.task-done {
@@ -65,6 +71,10 @@ span.oi {
 
 span.oi:hover {
     color: black;
+}
+
+div.list-group-item div.item-data {
+    width: 80%;
 }
 
 div.list-group-item div.item-actions span.oi {
