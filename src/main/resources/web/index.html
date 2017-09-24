@@ -91,7 +91,8 @@
             <div class="d-flex w-100 justify-content-between">
                 <div class="item-data">
                     <p class="category-name" v-show="!cat.beingEdited">{{cat.name}}</p>
-                    <input class="form-control" type="text" v-model="cat.name" v-show="cat.beingEdited"/>
+                    <input class="form-control" type="text" v-model="cat.name" ref="editTaskInput"
+                           v-show="cat.beingEdited" v-focus/>
                 </div>
                 <div class="item-actions" v-show="!editingOtherCategory(cat)">
                     <a href="javascript:void(0)" v-show="!cat.beingEdited" v-on:click="editCategory(cat)">
@@ -122,11 +123,11 @@
         <div v-for="task in computedTasks" class="list-group-item">
             <div class="d-flex w-100 justify-content-between">
                 <div class="item-data"
-                     v-bind:class="{'high-pr-task': task.priority == 1, 'low-pr-task': task.priority==-1, 'task-done': task.done}">
-                    <p class="task-name">{{task.name}}</p>
-                    <small class="text-muted">{{getRelativeDate(task)}}</small>
+                     v-bind:class="{'high-pr-task': task.priority == 1, 'low-pr-task': task.priority==-1, 'task-done': task.status == 'D'}">
+                    <p class="task-name">{{task.description}}</p>
+                    <small class="text-muted">{{task.date}}</small>
                 </div>
-                <div class="item-actions" v-show="!task.done">
+                <div class="item-actions" v-show="!isDone(task)">
                     <a href="javascript:void(0)" v-on:click="changePriority(task, 1)">
                         <span class="oi" data-glyph="elevator" title="Normal Priority" aria-hidden="true"
                               v-show="task.priority==0"></span>
@@ -144,7 +145,7 @@
                     </a>
                     <a href="javascript:void(0)">
                         <span class="oi" data-glyph="check" title="Mark as Done" aria-hidden="true"
-                              v-show="!task.done" v-on:click="markAsDone(task)"></span>
+                              v-show="!isDone(task)" v-on:click="markAsDone(task)"></span>
                     </a>
                 </div>
             </div>
@@ -162,7 +163,6 @@
 <script type="text/javascript" src="js/bootstrap/popper.js"></script>
 <script type="text/javascript" src="js/bootstrap/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/vue/vue.min.js"></script>
-<script type="text/javascript" src="js/moment/moment.js"></script>
 <script type="text/javascript" src="js/vue/hecho.app.js"></script>
 </body>
 </html>

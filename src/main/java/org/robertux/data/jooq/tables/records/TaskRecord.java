@@ -11,9 +11,15 @@ import org.jooq.Record6;
 import org.jooq.Row6;
 import org.jooq.impl.UpdatableRecordImpl;
 import org.robertux.data.jooq.tables.Task;
+import org.robertux.data.model.Priority;
+import org.robertux.data.model.Status;
 
 import javax.annotation.Generated;
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 
 /**
@@ -29,6 +35,7 @@ import java.math.BigDecimal;
 @SuppressWarnings({"all", "unchecked", "rawtypes"})
 public class TaskRecord extends UpdatableRecordImpl<TaskRecord> implements Record6<Integer, String, BigDecimal, Integer, String, Integer> {
 
+    public static final DateFormat dFmt = new SimpleDateFormat("EEE, MMM dd kk:mm:ss a", new Locale("ES"));
     private static final long serialVersionUID = 1241988124;
 
     /**
@@ -50,6 +57,14 @@ public class TaskRecord extends UpdatableRecordImpl<TaskRecord> implements Recor
         set(3, categoryid);
         set(4, status);
         set(5, priority);
+    }
+
+    public TaskRecord(String description, Integer categoryId) {
+        this(-1, description, null, categoryId, Status.PENDING.getValue(), Priority.NORMAL.getValue());
+    }
+
+    public TaskRecord(Integer id) {
+        this(id, "", null, 0, Status.PENDING.getValue(), Priority.NORMAL.getValue());
     }
 
     /**
@@ -340,7 +355,7 @@ public class TaskRecord extends UpdatableRecordImpl<TaskRecord> implements Recor
         JsonObject obj = new JsonObject();
         obj.addProperty("id", this.getId());
         obj.addProperty("description", this.getDescription());
-        obj.addProperty("date", this.getTime().longValue());
+        obj.addProperty("date", (this.getTime() != null ? dFmt.format(new Date(this.getTime().longValue())) : "En algún momento"));
         obj.addProperty("priority", this.getPriority());
         obj.addProperty("status", this.getStatus());
         obj.addProperty("categoryId", this.getCategoryid());

@@ -1,7 +1,6 @@
 var DATE_FORMAT = 'YYYY-MM-DD hh:mm:ss a';
 var SORT_BY_DATE = 1;
 var SORT_BY_PRIORITY = 2;
-moment.locale('es');
 
 var vueApp = new Vue({
     el: '#hecho-app',
@@ -40,6 +39,7 @@ var vueApp = new Vue({
             } else {
                 this.currentCategory++;
             }
+            this.loadTasks();
         },
         prevCategory: function() {
             if (this.currentCategory == 0) {
@@ -47,6 +47,7 @@ var vueApp = new Vue({
             } else {
                 this.currentCategory--;
             }
+            this.loadTasks();
         },
         manageCategories: function() {
             this.editCategoriesMode = !this.editCategoriesMode;
@@ -88,23 +89,17 @@ var vueApp = new Vue({
         editingOtherCategory: function(cat) {
             return (!cat.beingEdited && this.categories.filter(cat => cat.beingEdited).length > 0);
         },
-        loadTasks: function(categoryIndex) {
+        loadTasks: function() {
             var self = this;
-            $.get("/api/categories/" + self.categories[self.currentCategory].id + "/tasks", {}, function(data) {
+            $.get("/api/categories/" + self.categories[self.currentCategory].id + "/tasks/" + self.sortMethod, {}, function(data) {
                 if (data.code === 0) {
                     self.tasks = data.content.tasks;
                 }
             });
         },
-        getRelativeDate(task) {
-            if (task.due.trim()) {
-                return moment(task.due, DATE_FORMAT).calendar();
-            } else {
-                return 'En algún momento';
-            }
-        },
         sortBy: function(sortMethod) {
             this.sortMethod = sortMethod;
+            this.loadTasks();
         },
         filterTasks: function(taskList, text) {
             if (this.filterText.trim()) {
@@ -117,22 +112,47 @@ var vueApp = new Vue({
             this.tasks = this.tasks.filter(task => !task.done);
         },
         changePriority: function(task, priority) {
-            task.priority = priority;
+            var self = this;
+            $.ajax({url: "/api/categories/" + self.categories[self.currentCategory].id + "/tasks/" + task.id, method: "PUT", data: {"priority": priority}, dataType: "json"}).done(function(data) {
+                if (data.code === 0) {
+                    self.loadTasks();
+                }
+            });
         },
         addTask: function() {
+        var self = this;
             if (this.newTaskName.trim()) {
-                this.tasks.push({name: this.newTaskName, due: '', priority: 0, done: false});
-                this.newTaskName = '';
+                $.post("/api/categories/" + self.categories[self.currentCategory].id + "/tasks/" + self.newTaskName, {}, function(data) {
+                    if (data.code === 0) {
+                        self.newTaskName = '';
+                        self.loadTasks();
+                    }
+                })
             }
         },
+        isDone: function(task) {
+            return task.status == 'D';
+        },
         markAsDone: function(task) {
-            task.done = true;
+            var self = this;
+            $.ajax({url: "/api/categories/" + self.categories[self.currentCategory].id + "/tasks/" + task.id, method: "PUT", data: {status: "D"}, dataType: "json"}).done(function(data) {
+                if (data.code === 0) {
+                    self.loadTasks();
+                }
+            });
         },
         editTask: function() {
 
         },
         saveTask: function() {
 
+        }
+    },
+    directives: {
+        focus: {
+          inserted: function (el) {
+            el.focus()
+          }
         }
     }
 });

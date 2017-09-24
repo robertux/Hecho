@@ -1,12 +1,21 @@
 package org.robertux.main;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.robertux.data.jooq.tables.Task;
 import org.robertux.data.jooq.tables.records.CategoryRecord;
+import org.robertux.data.jooq.tables.records.TaskRecord;
 import org.robertux.web.controllers.CategoriesController;
 import org.robertux.web.controllers.TasksController;
 import spark.Request;
 import spark.Response;
+
+import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static spark.Spark.*;
 
@@ -60,11 +69,29 @@ public class Startup {
             return new CategoriesController().delete(new CategoryRecord(Integer.parseInt(req.params(":categoryId")), "")).toJson();
         });
 
-        get("/api/categories/:categoryId/tasks", (req, resp) -> {
-            return new TasksController().getTasks(Integer.parseInt(req.params(":categoryId"))).toJson();
+        get("/api/categories/:categoryId/tasks/:sortBy", (req, resp) -> {
+            return new TasksController().getTasks(Integer.parseInt(req.params(":categoryId")), Integer.parseInt(req.params(":sortBy"))).toJson();
         });
 
+        post("/api/categories/:categoryId/tasks/:taskName", (req, resp) -> {
+            return new TasksController().add(new TaskRecord(req.params(":taskName"), Integer.parseInt(req.params(":categoryId")))).toJson();
+        });
 
+        put("/api/categories/:categoryId/tasks/:taskId", (req, resp) -> {
+            TasksController controller = new TasksController();
+            TaskRecord task = controller.getRepo().getTask(Integer.parseInt(req.params(":taskId")));
+            Map<String, String> params = getBodyParams(req.body());
+
+            task.set(Task.TASK.DESCRIPTION, params.getOrDefault("description", task.getDescription()));
+            task.set(Task.TASK.PRIORITY, Integer.parseInt(params.getOrDefault("priority", String.valueOf(task.getPriority()))));
+            task.set(Task.TASK.STATUS, params.getOrDefault("status", task.getStatus()));
+
+            return controller.edit(task).toJson();
+        });
+
+        delete("/api/categories/:categoryId/tasks/:taskId", (req, resp) -> {
+            return new TasksController().delete(new TaskRecord(Integer.parseInt(req.params(":taskId")))).toJson();
+        });
     }
 
     protected static void logRequest(Request req) {
@@ -73,5 +100,15 @@ public class Startup {
 
     protected static void logResponse(Response resp) {
         logger.debug("Response sent: " + resp.status() + " " + resp.type() + " " + resp.body());
+    }
+
+    protected static Map<String, String> getBodyParams(String requestBody) {
+        List<NameValuePair> URLparams = URLEncodedUtils.parse(requestBody, Charset.forName("UTF-8"));
+        Map<String, String> params = new HashMap<>(0);
+        for (NameValuePair param : URLparams) {
+            params.put(param.getName(), param.getValue());
+        }
+
+        return params;
     }
 }

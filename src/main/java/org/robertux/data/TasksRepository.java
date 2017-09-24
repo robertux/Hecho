@@ -5,7 +5,6 @@ import org.apache.logging.log4j.Logger;
 import org.jooq.DSLContext;
 import org.jooq.TableField;
 import org.robertux.data.jooq.tables.Task;
-import org.robertux.data.jooq.tables.records.CategoryRecord;
 import org.robertux.data.jooq.tables.records.TaskRecord;
 
 import java.io.IOException;
@@ -32,7 +31,7 @@ public class TasksRepository {
             tasks.addAll(context.selectFrom(Task.TASK).orderBy(orderBy).fetch());
 
         } catch (SQLException | IOException | ClassNotFoundException ex) {
-            this.logger.error("Error tratando de obtener las categorías: " + ex.getMessage(), ex);
+            this.logger.error("Error tratando de obtener las tareas: " + ex.getMessage(), ex);
         }
 
         return tasks;
@@ -42,22 +41,35 @@ public class TasksRepository {
         return getTasks(Task.TASK.ID);
     }
 
-    public List<TaskRecord> getTasks(TableField<TaskRecord, ?> orderBy, CategoryRecord cat) {
+    public List<TaskRecord> getTasks(TableField<TaskRecord, ?> orderBy, int categoryId) {
         List<TaskRecord> tasks = new ArrayList<>(0);
 
         try (Connection cn = ConnetcionManager.getConnection()) {
             DSLContext context = ConnetcionManager.getContext(cn);
-            tasks.addAll(context.selectFrom(Task.TASK).where(Task.TASK.CATEGORYID.eq(cat.getId())).orderBy(orderBy).fetch());
+            tasks.addAll(context.selectFrom(Task.TASK).where(Task.TASK.CATEGORYID.eq(categoryId)).orderBy(Task.TASK.STATUS.desc(), orderBy.desc()).fetch());
 
         } catch (SQLException | IOException | ClassNotFoundException ex) {
-            this.logger.error("Error tratando de obtener las categorías: " + ex.getMessage(), ex);
+            this.logger.error("Error tratando de obtener las tareas: " + ex.getMessage(), ex);
         }
 
         return tasks;
     }
 
-    public List<TaskRecord> getTasks(CategoryRecord cat) {
-        return getTasks(Task.TASK.ID, cat);
+    public List<TaskRecord> getTasks(int categoryId) {
+        return getTasks(Task.TASK.ID, categoryId);
+    }
+
+    public TaskRecord getTask(int taskId) {
+        TaskRecord task = null;
+
+        try (Connection cn = ConnetcionManager.getConnection()) {
+            DSLContext context = ConnetcionManager.getContext(cn);
+            task = context.selectFrom(Task.TASK).where(Task.TASK.ID.eq(taskId)).fetchOne();
+        } catch (SQLException | IOException | ClassNotFoundException ex) {
+            this.logger.error("Error tratando de obtener la tarea con ID " + taskId + " +: " + ex.getMessage(), ex);
+        }
+
+        return task;
     }
 
     public int addTask(TaskRecord task) {

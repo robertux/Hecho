@@ -1,6 +1,8 @@
 package org.robertux.web.controllers;
 
 import com.google.gson.JsonArray;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.robertux.data.CategoriesRepository;
 import org.robertux.data.jooq.tables.records.CategoryRecord;
 import org.robertux.data.model.JsonResponse;
@@ -12,8 +14,10 @@ import java.util.List;
  */
 public class CategoriesController {
     private CategoriesRepository repo;
+    private Logger logger;
 
     public CategoriesController() {
+        this.logger = LogManager.getLogger(this.getClass());
         this.repo = new CategoriesRepository();
     }
 
@@ -32,11 +36,13 @@ public class CategoriesController {
             arr.add(cat.toJson());
         }
         jresp.getContent().add("categories", arr);
+        this.logger.debug("Retornando categorías " + jresp.toString());
         return jresp;
     }
 
     public JsonResponse add(CategoryRecord cat) {
         JsonResponse resp = new JsonResponse();
+        this.logger.debug("Agregando categoría " + cat);
 
         if (this.repo.addCategory(cat) == 0) {
             resp = JsonResponse.fromError(1001);
@@ -47,6 +53,7 @@ public class CategoriesController {
 
     public JsonResponse edit(CategoryRecord cat) {
         JsonResponse resp = new JsonResponse();
+        this.logger.debug("Actualizando categoría " + cat);
 
         if (this.repo.updateCategory(cat) == 0) {
             resp = JsonResponse.fromError(1002);
@@ -57,6 +64,7 @@ public class CategoriesController {
 
     public JsonResponse delete(CategoryRecord cat) {
         JsonResponse resp = new JsonResponse();
+        this.logger.debug("Eliminando categoría " + cat);
 
         if (this.repo.deleteCategory(cat) == 0) {
             resp = JsonResponse.fromError(1003);
