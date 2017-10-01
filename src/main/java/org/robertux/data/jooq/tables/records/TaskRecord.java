@@ -359,6 +359,7 @@ public class TaskRecord extends UpdatableRecordImpl<TaskRecord> implements Recor
         obj.addProperty("priority", this.getPriority());
         obj.addProperty("status", this.getStatus());
         obj.addProperty("categoryId", this.getCategoryid());
+        obj.addProperty("beingEdited", false);
 
         return obj;
     }

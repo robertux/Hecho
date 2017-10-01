@@ -176,6 +176,7 @@ public class CategoryRecord extends UpdatableRecordImpl<CategoryRecord> implemen
         obj.addProperty("id", this.getId());
         obj.addProperty("name", this.getName());
         obj.addProperty("beingEdited", false);
+        obj.addProperty("editable", !"General".equalsIgnoreCase(this.getName()));
 
         return obj;
     }

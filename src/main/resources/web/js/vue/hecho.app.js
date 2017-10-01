@@ -141,12 +141,23 @@ var vueApp = new Vue({
                 }
             });
         },
-        editTask: function() {
-
+        editTask: function(task) {
+            task.beingEdited = true;
         },
-        saveTask: function() {
-
-        }
+        saveTask: function(task) {
+            var self = this;
+            $.ajax({url: "/api/categories/" + self.categories[self.currentCategory].id + "/tasks/" + task.id, method: "PUT", data: {description: task.description}, dataType: "json"}).done(function(data) {
+                if (data.code === 0) {
+                    self.loadTasks();
+                }
+            });
+        },
+        discardTask: function(task) {
+            task.beingEdited = false;
+        },
+        editingATask: function() {
+            return (this.tasks.filter(t => t.beingEdited).length > 0);
+        },
     },
     directives: {
         focus: {

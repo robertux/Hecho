@@ -43,6 +43,16 @@ div.category-edit div div input {
     width: 100%;
 }
 
+div.task-edit div div input {
+    border: 0;
+    background-color: #f5f5f5;
+    width: 100%;
+}
+
+input#newTask, div.task-edit {
+    background-color: #f5f5f5;
+}
+
 div.list-group-item div.task-done {
     text-decoration: line-through;
 }

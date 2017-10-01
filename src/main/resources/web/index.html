@@ -94,7 +94,7 @@
                     <input class="form-control" type="text" v-model="cat.name" ref="editTaskInput"
                            v-show="cat.beingEdited" v-focus/>
                 </div>
-                <div class="item-actions" v-show="!editingOtherCategory(cat)">
+                <div class="item-actions" v-show="!editingOtherCategory(cat) && cat.editable">
                     <a href="javascript:void(0)" v-show="!cat.beingEdited" v-on:click="editCategory(cat)">
                         <span class="oi" data-glyph="pencil" title="Edit" aria-hidden="true"></span>
                     </a>
@@ -120,14 +120,16 @@
             </div>
         </div>
 
-        <div v-for="task in computedTasks" class="list-group-item">
+        <div v-for="task in computedTasks" class="list-group-item" v-bind:class="{'task-edit': task.beingEdited}">
             <div class="d-flex w-100 justify-content-between">
                 <div class="item-data"
                      v-bind:class="{'high-pr-task': task.priority == 1, 'low-pr-task': task.priority==-1, 'task-done': task.status == 'D'}">
-                    <p class="task-name">{{task.description}}</p>
-                    <small class="text-muted">{{task.date}}</small>
+                    <p class="task-name" v-show="!task.beingEdited">{{task.description}}</p>
+                    <small class="text-muted" v-show="!task.beingEdited">{{task.date}}</small>
+                    <input class="form-control" type="text" v-model="task.description" ref="editTaskInput"
+                           v-show="task.beingEdited" v-focus/>
                 </div>
-                <div class="item-actions" v-show="!isDone(task)">
+                <div class="item-actions" v-show="!isDone(task) && !editingATask()">
                     <a href="javascript:void(0)" v-on:click="changePriority(task, 1)">
                         <span class="oi" data-glyph="elevator" title="Normal Priority" aria-hidden="true"
                               v-show="task.priority==0"></span>
@@ -140,12 +142,20 @@
                         <span class="oi" data-glyph="caret-bottom" title="Low Priority" aria-hidden="true"
                               v-show="task.priority==-1"></span>
                     </a>
-                    <a href="javascript:void(0)">
+                    <a href="javascript:void(0)" v-on:click="editTask(task)">
                         <span class="oi" data-glyph="pencil" title="Edit" aria-hidden="true"></span>
                     </a>
                     <a href="javascript:void(0)">
                         <span class="oi" data-glyph="check" title="Mark as Done" aria-hidden="true"
                               v-show="!isDone(task)" v-on:click="markAsDone(task)"></span>
+                    </a>
+                </div>
+                <div class="item-actions" v-show="task.beingEdited">
+                    <a href="javascript:void(0)" v-on:click="saveTask(task)">
+                        <span class="oi" data-glyph="circle-check" title="Save" aria-hidden="true"></span>
+                    </a>
+                    <a href="javascript:void(0)" v-on:click="discardTask(task)">
+                        <span class="oi" data-glyph="circle-x" title="Discard" aria-hidden="true"></span>
                     </a>
                 </div>
             </div>
@@ -155,8 +165,11 @@
 </div>
 <footer class="footer">
     <div class="container">
-        <span class="text-mutd">Hecho v1.1 Copyright &copy; Robertux 2017 <a target="_blank" class="footer-link"
-                                                                             href="http://www.robertux.info">About</a></span>
+        <div class="text-muted d-flex w-100 justify-content-between">
+            <span>Hecho v1.1</span>
+            <span>Copyright &copy; Robertux 2017</span>
+            <a target="_blank" class="footer-link" href="http://www.robertux.info">About</a>
+        </div>
     </div>
 </footer>
 <script type="text/javascript" src="js/bootstrap/jquery-2.2.4.min.js"></script>
