@@ -103,7 +103,7 @@ var vueApp = new Vue({
         },
         filterTasks: function(taskList, text) {
             if (this.filterText.trim()) {
-                return taskList.filter(task => task.name.toUpperCase().indexOf(text.trim().toUpperCase()) !== -1);
+                return taskList.filter(task => task.description.toUpperCase().indexOf(text.trim().toUpperCase()) !== -1);
             } else {
                 return taskList;
             }
