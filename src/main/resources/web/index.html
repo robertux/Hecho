@@ -130,6 +130,9 @@
                            v-show="task.beingEdited" v-focus/>
                 </div>
                 <div class="item-actions" v-show="!isDone(task) && !editingATask()">
+                    <a href="javascript:void(0)">
+                        <span class="oi" data-glyph="calendar" title="Change date" aria-hidden="true"></span>
+                    </a>
                     <a href="javascript:void(0)" v-on:click="changePriority(task, 1)">
                         <span class="oi" data-glyph="elevator" title="Normal Priority" aria-hidden="true"
                               v-show="task.priority==0"></span>

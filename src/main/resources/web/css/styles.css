@@ -37,13 +37,13 @@ input#newCategory, div.category-edit {
     background-color: #A8CAEF;
 }
 
-div.category-edit div div input {
+div.category-edit div div input, div.category-edit div div input:focus {
     border: 0;
     background-color: #A8CAEF;
     width: 100%;
 }
 
-div.task-edit div div input {
+div.task-edit div div input, div.task-edit div div input:focus {
     border: 0;
     background-color: #f5f5f5;
     width: 100%;
@@ -84,7 +84,7 @@ span.oi:hover {
 }
 
 div.list-group-item div.item-data {
-    width: 80%;
+    width: 70%;
 }
 
 div.list-group-item div.item-actions span.oi {
