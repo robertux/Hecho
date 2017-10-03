@@ -92,6 +92,11 @@ div.list-group-item div.item-actions span.oi {
     cursor: pointer;
 }
 
+.date-picker {
+    opacity: 0;
+    width: 0;
+}
+
 .footer {
 	margin-top: 50px;
 	bottom: 0;

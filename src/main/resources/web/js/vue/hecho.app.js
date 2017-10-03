@@ -94,8 +94,12 @@ var vueApp = new Vue({
             $.get("/api/categories/" + self.categories[self.currentCategory].id + "/tasks/" + self.sortMethod, {}, function(data) {
                 if (data.code === 0) {
                     self.tasks = data.content.tasks;
+                    $(".date-picker").flatpickr();
                 }
             });
+        },
+        selectDate: function(task) {
+            $("#date-picker-" + task.id).flatpickr().open();
         },
         sortBy: function(sortMethod) {
             this.sortMethod = sortMethod;

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="css/open-iconic.min.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/flatpickr.min.css">
     <link rel="stylesheet" href="css/styles.css">
     <title>Hecho</title>
 </head>
@@ -130,7 +131,9 @@
                            v-show="task.beingEdited" v-focus/>
                 </div>
                 <div class="item-actions" v-show="!isDone(task) && !editingATask()">
-                    <a href="javascript:void(0)">
+                    <a href="javascript:void(0)" v-on:click="selectDate(task)">
+                        <input type="text" v-bind:id="'date-picker-' + task.id" v-model="task.date"
+                               class="date-picker"/>
                         <span class="oi" data-glyph="calendar" title="Change date" aria-hidden="true"></span>
                     </a>
                     <a href="javascript:void(0)" v-on:click="changePriority(task, 1)">
@@ -175,9 +178,11 @@
         </div>
     </div>
 </footer>
+<script type="text/javascript" src="js/moment/moment.min.js"></script>
 <script type="text/javascript" src="js/bootstrap/jquery-2.2.4.min.js"></script>
 <script type="text/javascript" src="js/bootstrap/popper.js"></script>
 <script type="text/javascript" src="js/bootstrap/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/flatpickr/flatpickr.js"></script>
 <script type="text/javascript" src="js/vue/vue.min.js"></script>
 <script type="text/javascript" src="js/vue/hecho.app.js"></script>
 </body>
