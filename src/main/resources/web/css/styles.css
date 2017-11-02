@@ -12,112 +12,26 @@ body {
     height: 55px;
 }
 
-div.dropdown-menu-align-right {
-    left: inherit;
-    right: 5px;
+
+/* Para hacer que la opción del menú que muestra la imagen sea más alta que las otras opciones del menú: */
+.el-menu .el-submenu .el-menu .el-menu-item:first-child {
+    height: 70px;
 }
 
-div.dropdown-menu a.dropdown-item.selected {
-    background-color: #b8daff;
+/*  Para que los elementos del menú abarquen el ancho completo de la página: */
+.el-menu.el-menu--horizontal {
+    display: flex;
+    justify-content: space-between;
 }
 
-div#categorySelect, div#categoryList {
-    margin-top: 80px;
+.el-menu.el-menu--horizontal li {
+    display: inline-block;
+    float: none;
 }
 
-div#taskList {
-    margin-top: 30px;
-}
-
-.new-item {
-    background-color: #f5f5f5;
-    padding: 0;
-}
-
-.new-item div input[type="text"] {
-    background-color: #f5f5f5;
-    border: none;
-    padding: 20px;
-    border-radius: 0;
-}
-
-input#newCategory, div.category-edit {
+.el-carousel__item {
     background-color: #A8CAEF;
-}
-
-div.category-edit div div input, div.category-edit div div input:focus {
-    border: 0;
-    background-color: #A8CAEF;
-    width: 100%;
-}
-
-div.task-edit div div input, div.task-edit div div input:focus {
-    border: 0;
-    background-color: #f5f5f5;
-    width: 100%;
-}
-
-input#newTask, div.task-edit {
-    background-color: #f5f5f5;
-}
-
-div.list-group-item div.task-done {
-    text-decoration: line-through;
-}
-
-div.list-group-item div.high-pr-task {
-    font-weight: bold;
-}
-
-div.list-group-item div.low-pr-task {
-    color: #acacac;
-}
-
-div.list-group-item div p.task-name {
-    margin-bottom: -5px;
-}
-
-div.list-group-item div small {
-    font-size: 75%;
-}
-
-span.oi {
-    font-size: 24px;
-    color: #868e96;
-    padding: 10px 20px;
-}
-
-span.oi:hover {
-    color: black;
-}
-
-div.list-group-item div.item-data {
-    width: 70%;
-}
-
-div.list-group-item div.item-actions span.oi {
-    border-left: 1px solid lightgray;
-    cursor: pointer;
-}
-
-.date-picker {
-    opacity: 0;
-    width: 0;
-}
-
-.footer {
-	margin-top: 50px;
-	bottom: 0;
-	width: 100%;
-	height: 60px;
-	line-height: 60px;
-	background-color: #f5f5f5;
-	text-align: center;
-	font-size: 10pt;
-	color: #8c8c8c;
-
-}
-
-.footer-link {
-    color: #8c8c8c;
+    line-height: 50px;
+    text-align: center;
+    border-radius: 5px;
 }

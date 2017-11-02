@@ -23,31 +23,20 @@
                     </el-menu-item>
                     <el-menu-item index="3-2"><i class="el-icon-setting"></i>Manage Categories</el-menu-item>
                     <el-menu-item index="3-3"><i class="el-icon-date"></i>Sort by Date</el-menu-item>
-                    <el-menu-item index="3-4"><i class="el-icon-star-on"></i>Sort by Priority</el-menu-item>
+                    <el-menu-item index="3-4"><i class="el-icon-star-off"></i>Sort by Priority</el-menu-item>
                     <el-menu-item index="3-5"><i class="el-icon-delete"></i>Delete Completed Tasks</el-menu-item>
                     <el-menu-item index="3-6"><i class="el-icon-circle-close-outline"></i>Logout</el-menu-item>
                 </el-submenu>
             </el-menu>
-
-            <!--<span>Hecho</span>
-            <el-dropdown>
-                <i class="el-icon-setting"></i>
-                <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item>
-                        <img class="profile-image"
-                             src="https://dl-web.dropbox.com/account_photo/get/dbid%3AAAAQUQG6HFeGFKyHZ0xhcwWmxoagkcqMufQ?size=128x128&vers=1504760275526"/>
-                        <span>robertux</span>
-                    </el-dropdown-item>
-                    <el-dropdown-item divided>Manage Categories</el-dropdown-item>
-                    <el-dropdown-item>Sort by Date</el-dropdown-item>
-                    <el-dropdown-item>Sort by Priority</el-dropdown-item>
-                    <el-dropdown-item>Delete Completed Tasks</el-dropdown-item>
-                    <el-dropdown-item divided>Logout</el-dropdown-item>
-                </el-dropdown-menu>
-            </el-dropdown>-->
         </el-header>
         <el-main>
             <h2>Main content</h2>
+
+            <el-carousel :autoplay="false" interval="0" arrow="always" indicator-position="none" height="50px">
+                <el-carousel-item v-for="cat in categories" :key="cat">
+                    <span>{{cat.name}}</span>
+                </el-carousel-item>
+            </el-carousel>
         </el-main>
     </el-container>
 </div>
@@ -223,6 +212,7 @@
 -->
 <script type="text/javascript" src="js/vue/vue.min.js"></script>
 <script type="text/javascript" src="js/element/element-ui-2.0.2.js"></script>
+<script type="text/javascript" src="js/jquery/jquery-2.2.4.min.js"></script>
 <script type="text/javascript" src="js/vue/hecho.app.js"></script>
 </body>
 </html>

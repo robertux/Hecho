@@ -1,21 +1,11 @@
-var Main = {
-  data() {
-    return {
-      visible: false
-    }
-  }
-}
-var Ctor = Vue.extend(Main);
-new Ctor().$mount('#hecho-app');
-
-/*var DATE_FORMAT = 'YYYY-MM-DD hh:mm:ss a';
+var DATE_FORMAT = 'YYYY-MM-DD hh:mm:ss a';
 var SORT_BY_DATE = 1;
 var SORT_BY_PRIORITY = 2;
 
 var vueApp = new Vue({
     el: '#hecho-app',
     data: {
-        categories: [{id: 0, name: "General"}],
+        categories: [{id: 0, name: "General"}, {id: 1, name: "Work"}, {id: 2, name: "Shopping"}],
         tasks: [],
         currentCategory: 0,
         newTaskName: '',
@@ -182,5 +172,4 @@ var vueApp = new Vue({
     }
 });
 
-vueApp.loadCategories();
-*/
+//vueApp.loadCategories();
