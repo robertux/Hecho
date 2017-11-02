@@ -1,4 +1,14 @@
-var DATE_FORMAT = 'YYYY-MM-DD hh:mm:ss a';
+var Main = {
+  data() {
+    return {
+      visible: false
+    }
+  }
+}
+var Ctor = Vue.extend(Main);
+new Ctor().$mount('#hecho-app');
+
+/*var DATE_FORMAT = 'YYYY-MM-DD hh:mm:ss a';
 var SORT_BY_DATE = 1;
 var SORT_BY_PRIORITY = 2;
 
@@ -94,12 +104,12 @@ var vueApp = new Vue({
             $.get("/api/categories/" + self.categories[self.currentCategory].id + "/tasks/" + self.sortMethod, {}, function(data) {
                 if (data.code === 0) {
                     self.tasks = data.content.tasks;
-                    $(".date-picker").flatpickr();
+                    //$(".date-picker").flatpickr();
                 }
             });
         },
         selectDate: function(task) {
-            $("#date-picker-" + task.id).flatpickr().open();
+            $("#date-picker-" + task.id).flatpickr({enableTime: true, dateFormat: "M J"}).open();
         },
         sortBy: function(sortMethod) {
             this.sortMethod = sortMethod;
@@ -173,3 +183,4 @@ var vueApp = new Vue({
 });
 
 vueApp.loadCategories();
+*/

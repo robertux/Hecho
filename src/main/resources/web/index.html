@@ -3,14 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="css/open-iconic.min.css">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/flatpickr.min.css">
+    <link rel="stylesheet" href="css/element-ui-2.0.2.css">
     <link rel="stylesheet" href="css/styles.css">
     <title>Hecho</title>
 </head>
 <body>
-<div id="hecho-app" class="container-fluid">
+<div id="hecho-app">
+    <el-container>
+        <el-header>
+            <el-menu mode="horizontal" default-active="2">
+                <el-menu-item index="1"><i class="el-icon-search"></i></el-menu-item>
+                <el-menu-item index="2">Hecho</el-menu-item>
+                <el-submenu index="3">
+                    <template slot="title"><i class="el-icon-menu"></i></template>
+                    <el-menu-item index="3-1">
+                        <img class="profile-image"
+                             src="https://dl-web.dropbox.com/account_photo/get/dbid%3AAAAQUQG6HFeGFKyHZ0xhcwWmxoagkcqMufQ?size=128x128&vers=1504760275526"/>
+                        <span>robertux</span>
+                    </el-menu-item>
+                    <el-menu-item index="3-2"><i class="el-icon-setting"></i>Manage Categories</el-menu-item>
+                    <el-menu-item index="3-3"><i class="el-icon-date"></i>Sort by Date</el-menu-item>
+                    <el-menu-item index="3-4"><i class="el-icon-star-on"></i>Sort by Priority</el-menu-item>
+                    <el-menu-item index="3-5"><i class="el-icon-delete"></i>Delete Completed Tasks</el-menu-item>
+                    <el-menu-item index="3-6"><i class="el-icon-circle-close-outline"></i>Logout</el-menu-item>
+                </el-submenu>
+            </el-menu>
+
+            <!--<span>Hecho</span>
+            <el-dropdown>
+                <i class="el-icon-setting"></i>
+                <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item>
+                        <img class="profile-image"
+                             src="https://dl-web.dropbox.com/account_photo/get/dbid%3AAAAQUQG6HFeGFKyHZ0xhcwWmxoagkcqMufQ?size=128x128&vers=1504760275526"/>
+                        <span>robertux</span>
+                    </el-dropdown-item>
+                    <el-dropdown-item divided>Manage Categories</el-dropdown-item>
+                    <el-dropdown-item>Sort by Date</el-dropdown-item>
+                    <el-dropdown-item>Sort by Priority</el-dropdown-item>
+                    <el-dropdown-item>Delete Completed Tasks</el-dropdown-item>
+                    <el-dropdown-item divided>Logout</el-dropdown-item>
+                </el-dropdown-menu>
+            </el-dropdown>-->
+        </el-header>
+        <el-main>
+            <h2>Main content</h2>
+        </el-main>
+    </el-container>
+</div>
+
+<!-- <div id="hecho-app">
     <nav class="navbar navbar-dark bg-dark fixed-top">
         <a class="navbar-brand" href="/">
             Hecho
@@ -178,12 +220,9 @@
         </div>
     </div>
 </footer>
-<script type="text/javascript" src="js/moment/moment.min.js"></script>
-<script type="text/javascript" src="js/bootstrap/jquery-2.2.4.min.js"></script>
-<script type="text/javascript" src="js/bootstrap/popper.js"></script>
-<script type="text/javascript" src="js/bootstrap/bootstrap.min.js"></script>
-<script type="text/javascript" src="js/flatpickr/flatpickr.js"></script>
+-->
 <script type="text/javascript" src="js/vue/vue.min.js"></script>
+<script type="text/javascript" src="js/element/element-ui-2.0.2.js"></script>
 <script type="text/javascript" src="js/vue/hecho.app.js"></script>
 </body>
 </html>
