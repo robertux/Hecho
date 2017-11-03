@@ -30,13 +30,33 @@
             </el-menu>
         </el-header>
         <el-main>
-            <h2>Main content</h2>
-
             <el-carousel :autoplay="false" interval="0" arrow="always" indicator-position="none" height="50px">
                 <el-carousel-item v-for="cat in categories" :key="cat">
                     <span>{{cat.name}}</span>
                 </el-carousel-item>
             </el-carousel>
+
+            <el-table :data="tasks" :row-class-name="taskStyle">
+                <el-table-column prop="description"></el-table-column>
+                <el-table-column>
+                    <template slot-scope="scope">
+                        <i class="el-icon-time"></i>
+                        <span style="margin-left: 10px">{{scope.row.date}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column>
+                    <template slot-scope="scope">
+                        <el-button-group>
+                            <el-button :disabled="isDone(scope.row)" icon="el-icon-edit-outline"></el-button>
+                            <el-button :disabled="isDone(scope.row)" icon="el-icon-date"></el-button>
+                            <el-button :disabled="isDone(scope.row)" :icon="priorityIcon(scope.row)"
+                                       @click="changePriority(scope.row)"></el-button>
+                            <el-button :disabled="isDone(scope.row)" icon="el-icon-circle-check-outline"
+                                       @click="markAsDone(scope.row)"></el-button>
+                        </el-button-group>
+                    </template>
+                </el-table-column>
+            </el-table>
         </el-main>
     </el-container>
 </div>

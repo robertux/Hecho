@@ -5,7 +5,7 @@ var SORT_BY_PRIORITY = 2;
 var vueApp = new Vue({
     el: '#hecho-app',
     data: {
-        categories: [{id: 0, name: "General"}, {id: 1, name: "Work"}, {id: 2, name: "Shopping"}],
+        categories: [],
         tasks: [],
         currentCategory: 0,
         newTaskName: '',
@@ -21,6 +21,7 @@ var vueApp = new Vue({
         }
     },
     methods: {
+        /** Categories **/
         loadCategories: function() {
             var self = this;
             $.get("/api/categories", {}, function(data) {
@@ -89,17 +90,24 @@ var vueApp = new Vue({
         editingOtherCategory: function(cat) {
             return (!cat.beingEdited && this.categories.filter(cat => cat.beingEdited).length > 0);
         },
+
+        /** Tasks **/
         loadTasks: function() {
             var self = this;
             $.get("/api/categories/" + self.categories[self.currentCategory].id + "/tasks/" + self.sortMethod, {}, function(data) {
                 if (data.code === 0) {
                     self.tasks = data.content.tasks;
-                    //$(".date-picker").flatpickr();
                 }
             });
         },
-        selectDate: function(task) {
-            $("#date-picker-" + task.id).flatpickr({enableTime: true, dateFormat: "M J"}).open();
+        taskStyle: function({row, rowIndex}) {
+            if (this.tasks[rowIndex].status == 'D') {
+                return 'done-row';
+            } else if (this.tasks[rowIndex].priority > 0) {
+                return 'high-priority-row';
+            } else if (this.tasks[rowIndex].priority < 0) {
+                return 'low-priority-row';
+            }
         },
         sortBy: function(sortMethod) {
             this.sortMethod = sortMethod;
@@ -115,8 +123,12 @@ var vueApp = new Vue({
         deleteCompletedTasks: function() {
             this.tasks = this.tasks.filter(task => !task.done);
         },
-        changePriority: function(task, priority) {
+        priorityIcon: function(task) {
+            return (task.priority == 1? "el-icon-star-on": "el-icon-star-off");
+        },
+        changePriority: function(task) {
             var self = this;
+            var priority = (task.priority == 1? 0: 1);
             $.ajax({url: "/api/categories/" + self.categories[self.currentCategory].id + "/tasks/" + task.id, method: "PUT", data: {"priority": priority}, dataType: "json"}).done(function(data) {
                 if (data.code === 0) {
                     self.loadTasks();
@@ -124,7 +136,7 @@ var vueApp = new Vue({
             });
         },
         addTask: function() {
-        var self = this;
+            var self = this;
             if (this.newTaskName.trim()) {
                 $.post("/api/categories/" + self.categories[self.currentCategory].id + "/tasks/" + self.newTaskName, {}, function(data) {
                     if (data.code === 0) {
@@ -134,9 +146,6 @@ var vueApp = new Vue({
                 })
             }
         },
-        isDone: function(task) {
-            return task.status == 'D';
-        },
         markAsDone: function(task) {
             var self = this;
             $.ajax({url: "/api/categories/" + self.categories[self.currentCategory].id + "/tasks/" + task.id, method: "PUT", data: {status: "D"}, dataType: "json"}).done(function(data) {
@@ -144,6 +153,9 @@ var vueApp = new Vue({
                     self.loadTasks();
                 }
             });
+        },
+        isDone: function(task) {
+            return task.status == 'D';
         },
         editTask: function(task) {
             task.beingEdited = true;
@@ -172,4 +184,4 @@ var vueApp = new Vue({
     }
 });
 
-//vueApp.loadCategories();
+vueApp.loadCategories();

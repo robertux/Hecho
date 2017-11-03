@@ -30,8 +30,20 @@ body {
 }
 
 .el-carousel__item {
-    background-color: #A8CAEF;
+    background-color: #95C3F2;
     line-height: 50px;
     text-align: center;
     border-radius: 5px;
+}
+
+.el-table .done-row {
+    text-decoration: line-through;
+}
+
+.el-table .high-priority-row {
+    font-weight: bold;
+}
+
+.el-table .low-priority-row {
+    color: #c6c6c6;
 }
