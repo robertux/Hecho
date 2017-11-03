@@ -47,3 +47,12 @@ body {
 .el-table .low-priority-row {
     color: #c6c6c6;
 }
+
+.el-table .cell p.taskName {
+    margin: 0;
+}
+
+.el-table .cell p.taskTime {
+    margin: 0;
+    font-size: 8pt;
+}

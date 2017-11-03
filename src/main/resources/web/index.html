@@ -38,11 +38,13 @@
             </el-carousel>
 
             <el-table :data="tasks" :row-class-name="taskStyle">
-                <el-table-column prop="description"></el-table-column>
                 <el-table-column>
                     <template slot-scope="scope">
-                        <i class="el-icon-time"></i>
-                        <span style="margin-left: 10px">{{scope.row.date}}</span>
+                        <p class="taskName">{{scope.row.description}}</p>
+                        <p class="taskTime">
+                            <i class="el-icon-time"></i>
+                            <span>{{scope.row.date}}</span>
+                        </p>
                     </template>
                 </el-table-column>
                 <el-table-column>
