@@ -89,6 +89,10 @@ public class Startup {
             return controller.edit(task).toJson();
         });
 
+        delete("/api/categories/:categoryId/doneTasks/", (req, resp) -> {
+            return new TasksController().deleteDoneTasks().toJson();
+        });
+
         delete("/api/categories/:categoryId/tasks/:taskId", (req, resp) -> {
             return new TasksController().delete(new TaskRecord(Integer.parseInt(req.params(":taskId")))).toJson();
         });

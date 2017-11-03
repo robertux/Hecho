@@ -97,4 +97,15 @@ public class TasksController {
 
         return resp;
     }
+
+    public JsonResponse deleteDoneTasks() {
+        JsonResponse resp = new JsonResponse();
+        this.logger.debug("Eliminando tareas finalizadas");
+
+        if (this.repo.deleteDoneTasks() == 0) {
+            resp = JsonResponse.fromError(1105);
+        }
+
+        return resp;
+    }
 }

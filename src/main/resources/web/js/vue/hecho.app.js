@@ -18,7 +18,7 @@ var vueApp = new Vue({
     },
     computed: {
         computedTasks: function() {
-            return this.filterTasks(this.tasks, this.filterText);
+            return this.sortTasks(this.filterTasks(this.tasks, this.filterText), this.sortMethod);
         }
     },
     methods: {
@@ -113,13 +113,25 @@ var vueApp = new Vue({
                 return taskList;
             }
         },
+        sortTasks: function(taskList, sortMethod) {
+            if (sortMethod == SORT_BY_PRIORITY) {
+                return taskList.sort(function(a, b) { return b.priority - a.priority; });
+            } else if (sortMethod == SORT_BY_DATE) {
+                return taskList.sort(function(a, b) { return b.date - a.date; });
+            }
+        },
         focusSearch: function(key, keyPath) {
             if (key == 1) {
                 setTimeout("$('li.el-menu-item div.el-input input').focus()", 300);
             }
         },
         deleteCompletedTasks: function() {
-            this.tasks = this.tasks.filter(task => !task.done);
+            var self = this;
+            $.ajax({url: "/api/categories/" + self.categories[self.currentCategory].id + "/doneTasks/", method: "DELETE", dataType: "json"}).done(function(data) {
+                if (data.code === 0) {
+                    self.loadTasks();
+                }
+            });
         },
         priorityIcon: function(task) {
             return (task.priority == 1? "el-icon-star-on": "el-icon-star-off");

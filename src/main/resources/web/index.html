@@ -28,9 +28,14 @@
                         <span>robertux</span>
                     </el-menu-item>
                     <el-menu-item index="3-2"><i class="el-icon-setting"></i>Manage Categories</el-menu-item>
-                    <el-menu-item index="3-3"><i class="el-icon-date"></i>Sort by Date</el-menu-item>
-                    <el-menu-item index="3-4"><i class="el-icon-star-off"></i>Sort by Priority</el-menu-item>
-                    <el-menu-item index="3-5"><i class="el-icon-delete"></i>Delete Completed Tasks</el-menu-item>
+                    <el-menu-item index="3-3" @click="sortBy(SORT_BY_DATE)"><i class="el-icon-date"></i>Sort by Date
+                    </el-menu-item>
+                    <el-menu-item index="3-4" @click="sortBy(SORT_BY_PRIORITY)"><i class="el-icon-star-off"></i>Sort by
+                        Priority
+                    </el-menu-item>
+                    <el-menu-item index="3-5" @click="deleteCompletedTasks()"><i class="el-icon-delete"></i>Delete
+                        Completed Tasks
+                    </el-menu-item>
                     <el-menu-item index="3-6"><i class="el-icon-circle-close-outline"></i>Logout</el-menu-item>
                 </el-submenu>
             </el-menu>

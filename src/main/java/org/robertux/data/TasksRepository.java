@@ -6,6 +6,7 @@ import org.jooq.DSLContext;
 import org.jooq.TableField;
 import org.robertux.data.jooq.tables.Task;
 import org.robertux.data.jooq.tables.records.TaskRecord;
+import org.robertux.data.model.Status;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -112,6 +113,19 @@ public class TasksRepository {
             DSLContext context = ConnetcionManager.getContext(cn);
             return context.deleteFrom(Task.TASK)
                     .where(Task.TASK.ID.eq(task.getId())).execute();
+
+        } catch (IOException | SQLException | ClassNotFoundException e) {
+            this.logger.error("Error tratando de eliminar la tarea: " + e.getMessage(), e);
+        }
+
+        return 0;
+    }
+
+    public int deleteDoneTasks() {
+        try (Connection cn = ConnetcionManager.getConnection()) {
+            DSLContext context = ConnetcionManager.getContext(cn);
+            return context.deleteFrom(Task.TASK)
+                    .where(Task.TASK.STATUS.eq(Status.DONE.getValue())).execute();
 
         } catch (IOException | SQLException | ClassNotFoundException e) {
             this.logger.error("Error tratando de eliminar la tarea: " + e.getMessage(), e);
