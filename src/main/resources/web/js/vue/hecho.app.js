@@ -42,7 +42,10 @@ var vueApp = new Vue({
             this.loadTasks();
         },
         manageCategories: function() {
-            this.editCategoriesMode = !this.editCategoriesMode;
+            this.editCategoriesMode = true;
+        },
+        doneCategories: function() {
+            this.editCategoriesMode = false;
         },
         addCategory: function() {
             var self = this;
@@ -54,8 +57,16 @@ var vueApp = new Vue({
             }, "json");
         },
         editCategory: function(cat) {
+            var self = this;
             cat.originalName = cat.name;
             cat.beingEdited = true;
+            this.$prompt('Enter new name for category' + cat.name, 'Edit Category Name', {
+                    confirmButtonText: 'OK',
+                    cancelButtonText: 'Cancel',
+                }).then(value => {
+                    cat.name = value;
+                    self.saveCategory(cat);
+            });
         },
         saveCategory: function(cat) {
             var self = this;
@@ -184,13 +195,6 @@ var vueApp = new Vue({
         editingATask: function() {
             return (this.tasks.filter(t => t.beingEdited).length > 0);
         },
-    },
-    directives: {
-        focus: {
-          inserted: function (el) {
-            el.focus()
-          }
-        }
     }
 });
 
