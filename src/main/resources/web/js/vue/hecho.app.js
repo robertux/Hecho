@@ -34,20 +34,8 @@ var vueApp = new Vue({
                 }
             }, "json");
         },
-        nextCategory: function() {
-            if (this.currentCategory == (this.categories.length - 1)) {
-                this.currentCategory = 0;
-            } else {
-                this.currentCategory++;
-            }
-            this.loadTasks();
-        },
-        prevCategory: function() {
-            if (this.currentCategory == 0) {
-                this.currentCategory = this.categories.length - 1;
-            } else {
-                this.currentCategory--;
-            }
+        selectCategory: function(newIndex, oldIndex) {
+            this.currentCategory = newIndex;
             this.loadTasks();
         },
         manageCategories: function() {
