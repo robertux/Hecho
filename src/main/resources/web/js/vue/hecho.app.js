@@ -5,6 +5,7 @@ var SORT_BY_PRIORITY = 2;
 var vueApp = new Vue({
     el: '#hecho-app',
     data: {
+        loading: false,
         categories: [],
         tasks: [],
         currentCategory: 0,
@@ -24,6 +25,7 @@ var vueApp = new Vue({
         /** Categories **/
         loadCategories: function() {
             var self = this;
+            self.loading = true;
             $.get("/api/categories", {}, function(data) {
                 if (data.code === 0) {
                     self.categories = data.content.categories;
@@ -32,6 +34,7 @@ var vueApp = new Vue({
                 if (self.categories.length > 0) {
                     self.loadTasks(self.categories[0]);
                 }
+                self.loading = false;
             }, "json");
         },
         selectCategory: function(newIndex, oldIndex) {
@@ -82,10 +85,12 @@ var vueApp = new Vue({
         /** Tasks **/
         loadTasks: function() {
             var self = this;
+            self.loading = true;
             $.get("/api/categories/" + self.categories[self.currentCategory].id + "/tasks/" + self.sortMethod, {}, function(data) {
                 if (data.code === 0) {
                     self.tasks = data.content.tasks;
                 }
+                self.loading = false;
             });
         },
         taskStyle: function({row, rowIndex}) {
@@ -106,6 +111,11 @@ var vueApp = new Vue({
                 return taskList.filter(task => task.description.toUpperCase().indexOf(text.trim().toUpperCase()) !== -1);
             } else {
                 return taskList;
+            }
+        },
+        focusSearch: function(key, keyPath) {
+            if (key == 1) {
+                setTimeout("$('li.el-menu-item div.el-input input').focus()", 300);
             }
         },
         deleteCompletedTasks: function() {

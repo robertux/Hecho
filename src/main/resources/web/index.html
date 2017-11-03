@@ -9,10 +9,16 @@
 </head>
 <body>
 <div id="hecho-app">
-    <el-container>
+    <el-container v-loading="loading">
         <el-header>
-            <el-menu mode="horizontal" default-active="2">
-                <el-menu-item index="1"><i class="el-icon-search"></i></el-menu-item>
+            <el-menu mode="horizontal" default-active="2" @open="focusSearch" menu-trigger="click">
+                <el-submenu index="1">
+                    <template slot="title"><i class="el-icon-search"></i></template>
+                    <el-menu-item index="1-1">
+                        <el-input placeholder="Filter tasks" suffix-icon="el-icon-search" v-model="filterText"
+                                  autofocus></el-input>
+                    </el-menu-item>
+                </el-submenu>
                 <el-menu-item index="2">Hecho</el-menu-item>
                 <el-submenu index="3">
                     <template slot="title"><i class="el-icon-menu"></i></template>
@@ -37,7 +43,7 @@
                 </el-carousel-item>
             </el-carousel>
 
-            <el-table :data="tasks" :row-class-name="taskStyle">
+            <el-table :data="computedTasks" :row-class-name="taskStyle">
                 <el-table-column>
                     <template slot-scope="scope">
                         <p class="taskName">{{scope.row.description}}</p>
@@ -47,7 +53,7 @@
                         </p>
                     </template>
                 </el-table-column>
-                <el-table-column>
+                <el-table-column align="center">
                     <template slot-scope="scope">
                         <el-button-group>
                             <el-button :disabled="isDone(scope.row)" icon="el-icon-edit-outline"></el-button>
