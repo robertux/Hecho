@@ -56,11 +56,3 @@ body {
     margin: 0;
     font-size: 8pt;
 }
-
-.el-dialog .el-form--inline div.el-form-item {
-    margin-bottom: 0;
-}
-
-.el-dialog .el-table__header-wrapper {
-    height: 10px;
-}

@@ -42,10 +42,10 @@ var vueApp = new Vue({
             this.loadTasks();
         },
         manageCategories: function() {
-            this.editCategoriesMode = true;
+            window.location.href = "/categories/";
         },
         doneCategories: function() {
-            this.editCategoriesMode = false;
+            window.location.href = "/";
         },
         addCategory: function() {
             var self = this;
@@ -57,16 +57,9 @@ var vueApp = new Vue({
             }, "json");
         },
         editCategory: function(cat) {
-            var self = this;
             cat.originalName = cat.name;
+            this.categories.forEach(function(c) { c.beingEdited = false; });
             cat.beingEdited = true;
-            this.$prompt('Enter new name for category' + cat.name, 'Edit Category Name', {
-                    confirmButtonText: 'OK',
-                    cancelButtonText: 'Cancel',
-                }).then(value => {
-                    cat.name = value;
-                    self.saveCategory(cat);
-            });
         },
         saveCategory: function(cat) {
             var self = this;
