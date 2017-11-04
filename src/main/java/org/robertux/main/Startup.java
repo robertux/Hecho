@@ -35,6 +35,10 @@ public class Startup {
     public static void main(String[] args) {
         String port = PORT_DEFAULT;
 
+        for (String arg : args) {
+            System.out.println("\t\t==== arg: " + arg);
+        }
+
         port = Arrays.stream(args).filter(s -> PORT_VAR.equals(s)).findFirst().orElse(PORT_DEFAULT);
 
         configureServer(Integer.parseInt(port));
