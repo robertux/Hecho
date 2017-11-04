@@ -128,6 +128,13 @@ var vueApp = new Vue({
             return task.status == 'D';
         },
         editTask: function(task) {
+            if (task.beingEdited) {
+                this.discardTask(task);
+                return;
+            }
+
+            task.originalDescription = task.description;
+            this.tasks.forEach(function(t) { t.beingEdited = false; });
             task.beingEdited = true;
         },
         saveTask: function(task) {
@@ -139,11 +146,9 @@ var vueApp = new Vue({
             });
         },
         discardTask: function(task) {
+            task.description = task.originalDescription;
             task.beingEdited = false;
-        },
-        editingATask: function() {
-            return (this.tasks.filter(t => t.beingEdited).length > 0);
-        },
+        }
     }
 });
 

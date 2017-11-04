@@ -55,17 +55,24 @@
             <el-table :data="computedTasks" :row-class-name="taskStyle">
                 <el-table-column>
                     <template slot-scope="scope">
-                        <p class="taskName">{{scope.row.description}}</p>
-                        <p class="taskTime">
-                            <i class="el-icon-time"></i>
-                            <span>{{scope.row.date}}</span>
-                        </p>
+                        <span v-show="scope.row.beingEdited">
+                            <el-input v-model="scope.row.description"
+                                      @keyup.native.enter="saveTask(scope.row)"></el-input>
+                        </span>
+                        <span v-show="!scope.row.beingEdited">
+                            <p class="taskName">{{scope.row.description}}</p>
+                            <p class="taskTime">
+                                <i class="el-icon-time"></i>
+                                <span>{{scope.row.date}}</span>
+                            </p>
+                        </span>
                     </template>
                 </el-table-column>
                 <el-table-column align="center">
                     <template slot-scope="scope">
                         <el-button-group>
-                            <el-button :disabled="isDone(scope.row)" icon="el-icon-edit-outline"></el-button>
+                            <el-button :disabled="isDone(scope.row)" icon="el-icon-edit-outline"
+                                       @click="editTask(scope.row)"></el-button>
                             <el-button :disabled="isDone(scope.row)" icon="el-icon-date"></el-button>
                             <el-button :disabled="isDone(scope.row)" :icon="priorityIcon(scope.row)"
                                        @click="changePriority(scope.row)"></el-button>

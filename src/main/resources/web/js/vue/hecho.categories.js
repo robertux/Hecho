@@ -53,7 +53,7 @@ var vueApp = new Vue({
         },
         editCategory: function(cat) {
             if (cat.beingEdited) {
-                cat.beingEdited = false;
+                this.discardCategory(cat);
                 return;
             }
             cat.originalName = cat.name;
