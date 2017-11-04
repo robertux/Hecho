@@ -16,7 +16,6 @@ import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,21 +26,11 @@ import static spark.Spark.*;
  * Created by robertux on 9/9/17.
  */
 public class Startup {
-    private static final String PORT_DEFAULT = "8082";
-    private static final String PORT_VAR = "server.port";
     private static Logger logger;
     private static DateFormat inputDFmt = new SimpleDateFormat("yyyy/MM/dd");
 
     public static void main(String[] args) {
-        String port = PORT_DEFAULT;
-
-        for (String arg : args) {
-            System.out.println("\t\t==== arg: " + arg);
-        }
-
-        port = Arrays.stream(args).filter(s -> PORT_VAR.equals(s)).findFirst().orElse(PORT_DEFAULT);
-
-        configureServer(Integer.parseInt(port));
+        configureServer(getEnvironmentPort());
         configureFilters();
         configureRoutes();
     }
@@ -53,6 +42,18 @@ public class Startup {
         staticFiles.expireTime(600L);
 
         init();
+    }
+
+    /**
+     * Configuración para leer el valor del puerto de una variable de entorno (Ej. Heroku)
+     * http://sparkjava.com/tutorials/heroku
+     */
+    public static int getEnvironmentPort() {
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        if (processBuilder.environment().get("PORT") != null) {
+            return Integer.parseInt(processBuilder.environment().get("PORT"));
+        }
+        return 8082; //return default port if env-port isn't set (i.e. on localhost)
     }
 
     public static void configureFilters() {
