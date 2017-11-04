@@ -9,7 +9,7 @@
 </head>
 <body>
 <div id="hecho-app">
-    <el-container v-loading="loading">
+    <el-container>
         <el-header>
             <el-menu mode="horizontal" default-active="2" @open="focusSearch" menu-trigger="click">
                 <el-submenu index="1">
@@ -50,6 +50,8 @@
                 </el-carousel-item>
             </el-carousel>
 
+            <el-input v-model="newTaskName" placeholder="New Task"
+                      @keyup.native.enter="addTask()"></el-input>
             <el-table :data="computedTasks" :row-class-name="taskStyle">
                 <el-table-column>
                     <template slot-scope="scope">

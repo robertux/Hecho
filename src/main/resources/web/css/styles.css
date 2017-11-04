@@ -56,3 +56,15 @@ body {
     margin: 0;
     font-size: 8pt;
 }
+
+.el-table__header-wrapper {
+    height: 5px;
+}
+
+.el-carousel {
+    margin-bottom: 30px;
+}
+
+footer {
+    text-align: center;
+}
