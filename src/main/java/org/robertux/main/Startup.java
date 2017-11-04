@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,18 +27,24 @@ import static spark.Spark.*;
  * Created by robertux on 9/9/17.
  */
 public class Startup {
+    private static final String PORT_DEFAULT = "8082";
+    private static final String PORT_VAR = "server.port";
     private static Logger logger;
     private static DateFormat inputDFmt = new SimpleDateFormat("yyyy/MM/dd");
 
     public static void main(String[] args) {
-        configureServer();
+        String port = PORT_DEFAULT;
+
+        port = Arrays.stream(args).filter(s -> PORT_VAR.equals(s)).findFirst().orElse(PORT_DEFAULT);
+
+        configureServer(Integer.parseInt(port));
         configureFilters();
         configureRoutes();
     }
 
-    public static void configureServer() {
+    public static void configureServer(int port) {
         logger = LogManager.getLogger(Startup.class);
-        port(8082);
+        port(port);
         staticFiles.location("/web");
         staticFiles.expireTime(600L);
 
