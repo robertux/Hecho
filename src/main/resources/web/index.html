@@ -74,32 +74,6 @@
                 </el-table-column>
             </el-table>
 
-            <el-dialog title="Manage Categories" :visible.sync="editCategoriesMode" width="80%">
-                <el-form :inline="true">
-                    <el-form-item>
-                        <el-input placeholder="Add new category" v-model="newCategoryName" maxlength="30"></el-input>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-button @click="addCategory()">Add</el-button>
-                    </el-form-item>
-                </el-form>
-                <el-table :data="categories">
-                    <el-table-column property="name"></el-table-column>
-                    <el-table-column align="right">
-                        <template slot-scope="scope">
-                            <el-button-group>
-                                <el-button :disabled="!scope.row.editable" icon="el-icon-edit-outline"
-                                           @click="editCategory(scope.row)"></el-button>
-                                <el-button :disabled="!scope.row.editable" icon="el-icon-delete"
-                                           @click="deleteCategory(scope.row)"></el-button>
-                            </el-button-group>
-                        </template>
-                    </el-table-column>
-                </el-table>
-                <span slot="footer" class="dialog-footer">
-                    <el-button @click="doneCategories()">Close</el-button>
-                </span>
-            </el-dialog>
         </el-main>
     </el-container>
 </div>

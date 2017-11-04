@@ -10,11 +10,9 @@ var vueApp = new Vue({
         tasks: [],
         currentCategory: 0,
         newTaskName: '',
-        newCategoryName: '',
         currentTask: {},
         filterText: '',
-        sortMethod: SORT_BY_DATE,
-        editCategoriesMode: false
+        sortMethod: SORT_BY_DATE
     },
     computed: {
         computedTasks: function() {
@@ -44,48 +42,6 @@ var vueApp = new Vue({
         manageCategories: function() {
             window.location.href = "/categories/";
         },
-        doneCategories: function() {
-            window.location.href = "/";
-        },
-        addCategory: function() {
-            var self = this;
-            $.post("/api/categories/" + this.newCategoryName, {}, function(data) {
-                if (data.code === 0) {
-                    self.newCategoryName = '';
-                    self.loadCategories();
-                }
-            }, "json");
-        },
-        editCategory: function(cat) {
-            cat.originalName = cat.name;
-            this.categories.forEach(function(c) { c.beingEdited = false; });
-            cat.beingEdited = true;
-        },
-        saveCategory: function(cat) {
-            var self = this;
-            $.ajax({url: "/api/categories/" + cat.id + "/" + cat.name, method: "PUT", dataType: "json"}).done(function(data) {
-                if (data.code === 0) {
-                    cat.beingEdited = false;
-                    self.loadCategories();
-                }
-            });
-        },
-        discardCategory: function(cat) {
-            cat.name = cat.originalName;
-            cat.beingEdited = false;
-        },
-        deleteCategory: function(cat) {
-            var self = this;
-            $.ajax({url: "/api/categories/" + cat.id, method: "DELETE", dataType: "json"}).done(function(data) {
-                if (data.code === 0) {
-                    self.loadCategories();
-                }
-            });
-        },
-        editingOtherCategory: function(cat) {
-            return (!cat.beingEdited && this.categories.filter(cat => cat.beingEdited).length > 0);
-        },
-
         /** Tasks **/
         loadTasks: function() {
             var self = this;

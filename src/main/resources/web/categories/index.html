@@ -9,10 +9,16 @@
 </head>
 <body>
 <div id="hecho-app">
-    <el-container v-loading="loading">
+    <el-container>
         <el-header>
             <el-menu mode="horizontal" default-active="2" @open="focusSearch" menu-trigger="click">
-                <el-menu-item><i class="el-icon-search"></i></el-menu-item>
+                <el-submenu index="1">
+                    <template slot="title"><i class="el-icon-search"></i></template>
+                    <el-menu-item index="1-1">
+                        <el-input placeholder="Filter categories" suffix-icon="el-icon-search" v-model="filterText"
+                                  autofocus></el-input>
+                    </el-menu-item>
+                </el-submenu>
                 <el-menu-item index="2">Hecho</el-menu-item>
                 <el-submenu index="3">
                     <template slot="title"><i class="el-icon-menu"></i></template>
@@ -31,11 +37,12 @@
         <el-main>
             <el-input v-model="newCategoryName" placeholder="New Category"
                       @keyup.native.enter="addCategory()"></el-input>
-            <el-table :data="categories">
+            <el-table :data="computedCategories">
                 <el-table-column>
                     <template slot-scope="scope">
                         <span v-show="!scope.row.beingEdited">{{scope.row.name}}</span>
-                        <span v-show="scope.row.beingEdited"><el-input v-model="scope.row.name"></el-input></span>
+                        <span v-show="scope.row.beingEdited"><el-input v-model="scope.row.name"
+                                                                       @keyup.native.enter="saveCategory(scope.row)"></el-input></span>
                     </template>
                 </el-table-column>
                 <el-table-column align="right">
@@ -49,7 +56,12 @@
                     </template>
                 </el-table-column>
             </el-table>
+
         </el-main>
+
+        <el-footer>
+            <el-button type="primary" @click="doneCategories">Done editing categories</el-button>
+        </el-footer>
     </el-container>
 </div>
 
@@ -58,6 +70,6 @@
 <script type="text/javascript" src="../js/element/element-locale-en.js"></script>
 <script type="text/javascript">ELEMENT.locale(ELEMENT.lang.en); </script>
 <script type="text/javascript" src="../js/jquery/jquery-2.2.4.min.js"></script>
-<script type="text/javascript" src="../js/vue/hecho.app.js"></script>
+<script type="text/javascript" src="../js/vue/hecho.categories.js"></script>
 </body>
 </html>
