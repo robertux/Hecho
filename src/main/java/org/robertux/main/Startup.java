@@ -15,6 +15,7 @@ import spark.Response;
 import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
@@ -104,7 +105,11 @@ public class Startup {
 
             String taskTime = params.getOrDefault("date", null);
             if (taskTime != null) {
-                task.set(Task.TASK.TIME, taskTime.isEmpty() ? null : new BigDecimal(inputDFmt.parse(taskTime).getTime()));
+                try {
+                    task.set(Task.TASK.TIME, taskTime.isEmpty() ? null : new BigDecimal(inputDFmt.parse(taskTime).getTime()));
+                } catch (ParseException e) {
+                    logger.error("No se pudo formatear la fecha " + taskTime, e);
+                }
             }
 
             return controller.edit(task).toJson();
