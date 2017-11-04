@@ -12,7 +12,10 @@ import org.robertux.web.controllers.TasksController;
 import spark.Request;
 import spark.Response;
 
+import java.math.BigDecimal;
 import java.nio.charset.Charset;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +27,7 @@ import static spark.Spark.*;
  */
 public class Startup {
     private static Logger logger;
+    private static DateFormat inputDFmt = new SimpleDateFormat("yyyy/MM/dd");
 
     public static void main(String[] args) {
         configureServer();
@@ -85,6 +89,11 @@ public class Startup {
             task.set(Task.TASK.DESCRIPTION, params.getOrDefault("description", task.getDescription()));
             task.set(Task.TASK.PRIORITY, Integer.parseInt(params.getOrDefault("priority", String.valueOf(task.getPriority()))));
             task.set(Task.TASK.STATUS, params.getOrDefault("status", task.getStatus()));
+
+            String taskTime = params.getOrDefault("date", null);
+            if (taskTime != null) {
+                task.set(Task.TASK.TIME, taskTime.isEmpty() ? null : new BigDecimal(inputDFmt.parse(taskTime).getTime()));
+            }
 
             return controller.edit(task).toJson();
         });

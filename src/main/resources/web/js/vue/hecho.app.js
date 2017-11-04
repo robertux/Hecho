@@ -139,7 +139,7 @@ var vueApp = new Vue({
         },
         saveTask: function(task) {
             var self = this;
-            $.ajax({url: "/api/categories/" + self.categories[self.currentCategory].id + "/tasks/" + task.id, method: "PUT", data: {description: task.description}, dataType: "json"}).done(function(data) {
+            $.ajax({url: "/api/categories/" + self.categories[self.currentCategory].id + "/tasks/" + task.id, method: "PUT", data: {description: task.description, date: task.date}, dataType: "json"}).done(function(data) {
                 if (data.code === 0) {
                     self.loadTasks();
                 }
@@ -148,6 +148,9 @@ var vueApp = new Vue({
         discardTask: function(task) {
             task.description = task.originalDescription;
             task.beingEdited = false;
+        },
+        setTaskDate: function(index) {
+            setTimeout("$('div.el-date-editor input.el-input__inner')[" + index + "].focus();", 300);
         }
     }
 });
