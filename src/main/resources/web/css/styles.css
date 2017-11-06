@@ -66,9 +66,24 @@ body {
 }
 
 /* Para ocultar el date picker inputText y que la selección de fecha se dispare con el botón: */
-.el-date-editor {
+.el-date-editor, .el-date-editor input {
     opacity: 0;
     height: 0;
+    width: 0;
+}
+
+/* Para el funcionamiento del componente Card: */
+.box-card {
+    width: 480px;
+    text-align: center;
+}
+
+.clearfix:before, .clearfix:after {
+    display: table;
+    content: "";
+}
+.clearfix:after {
+    clear: both
 }
 
 footer {
