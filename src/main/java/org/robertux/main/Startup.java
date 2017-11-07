@@ -39,7 +39,7 @@ public class Startup {
         configureServer(getEnvironmentPort());
         configureFilters();
         configureRoutes();
-        configureSyncControllers();
+        configureSyncProviders();
     }
 
     public static void configureServer(int port) {
@@ -49,18 +49,6 @@ public class Startup {
         staticFiles.expireTime(600L);
 
         init();
-    }
-
-    /**
-     * Configuración para leer el valor del puerto de una variable de entorno (Ej. Heroku)
-     * http://sparkjava.com/tutorials/heroku
-     */
-    public static int getEnvironmentPort() {
-        ProcessBuilder processBuilder = new ProcessBuilder();
-        if (processBuilder.environment().get("PORT") != null) {
-            return Integer.parseInt(processBuilder.environment().get("PORT"));
-        }
-        return 8082; //return default port if env-port isn't set (i.e. on localhost)
     }
 
     public static void configureFilters() {
@@ -75,7 +63,7 @@ public class Startup {
     }
 
     public static void configureRoutes() {
-        redirect.get("/categories/", "categories.html");
+        redirect.get("/categories/", "/categories.html");
         redirect.get("/login/", "/login.html");
 
         post("/api/:syncProvider/validate", (req, resp) -> {
@@ -150,7 +138,8 @@ public class Startup {
         });
     }
 
-    public static void configureSyncControllers() {
+    public static void configureSyncProviders() {
+        dataSyncProviders = new HashMap<>();
         dataSyncProviders.put("dropbox", new DropboxController());
     }
 
@@ -170,5 +159,17 @@ public class Startup {
         }
 
         return params;
+    }
+
+    /**
+     * Configuración para leer el valor del puerto de una variable de entorno (Ej. Heroku)
+     * http://sparkjava.com/tutorials/heroku
+     */
+    public static int getEnvironmentPort() {
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        if (processBuilder.environment().get("PORT") != null) {
+            return Integer.parseInt(processBuilder.environment().get("PORT"));
+        }
+        return 8082; //return default port if env-port isn't set (i.e. on localhost)
     }
 }

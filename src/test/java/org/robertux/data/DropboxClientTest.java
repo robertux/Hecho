@@ -20,7 +20,7 @@ public class DropboxClientTest {
 
     @Before
     public void setUp() throws Exception {
-        this.client = new DropboxClient();
+        this.client = new DropboxClient("");
         this.logger = LogManager.getLogger(this.getClass());
     }
 

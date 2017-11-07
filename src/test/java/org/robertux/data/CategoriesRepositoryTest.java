@@ -13,7 +13,7 @@ public class CategoriesRepositoryTest {
 
     @Before
     public void setUp() throws Exception {
-        repo = new CategoriesRepository();
+        repo = new CategoriesRepository("_");
     }
 
     @Test

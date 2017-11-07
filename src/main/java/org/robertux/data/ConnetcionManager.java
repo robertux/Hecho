@@ -19,6 +19,7 @@ import java.sql.SQLException;
  */
 public class ConnetcionManager {
     public static final String DATABASE_NAME = "hecho.db";
+    private static final char[] ILLEGAL_CHARACTERS = {'/', '\n', '\r', '\t', '\0', '\f', '`', '?', '*', '\\', '<', '>', '|', '\"', ':'};
     public static Logger logger = LogManager.getLogger(ConnetcionManager.class);
 
     public static Connection getConnection(String sessionId) throws ClassNotFoundException, SQLException, IOException {
@@ -34,13 +35,25 @@ public class ConnetcionManager {
             tmpDir += File.separator;
         }
 
-        String dbPath = tmpDir + sessionId + File.separator + DATABASE_NAME;
+        String validSessionId = filterInvalidChars(sessionId);
+        logger.debug("sessionID: " + sessionId + "\t\tfiltrado: " + validSessionId);
+
+        String sessionPath = tmpDir + File.separator + validSessionId;
+        File sPath = new File(sessionPath);
+
+        if (!sPath.exists() && !sPath.mkdir()) {
+            throw new IOException("No se pudo crear directorio " + sessionPath);
+        }
+
+        String dbPath = sessionPath + File.separator + DATABASE_NAME;
         File fPath = new File(dbPath);
 
         if (!fPath.exists()) {
             logger.debug("Archivo en ruta {} no existe. Creando a partir de recurso interno...", dbPath);
             InputStream iStream = ConnetcionManager.class.getResourceAsStream("/hecho.db");
-            Files.copy(iStream, fPath.toPath());
+            if (Files.copy(iStream, fPath.toPath()) == 0) {
+                throw new IOException("No se pudo crear archivo en la ruta " + dbPath);
+            }
         }
 
         logger.debug("Devolviendo ruta {}", dbPath);
@@ -53,5 +66,15 @@ public class ConnetcionManager {
 
     public static DSLContext getContext(Connection cn) throws SQLException, IOException, ClassNotFoundException {
         return DSL.using(cn, SQLDialect.SQLITE);
+    }
+
+    public static String filterInvalidChars(String path) {
+        for (char c : ILLEGAL_CHARACTERS) {
+            String s = String.valueOf(c);
+            if (path.contains(s)) {
+                path = path.replaceAll(s, "");
+            }
+        }
+        return path;
     }
 }

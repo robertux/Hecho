@@ -18,7 +18,7 @@ public class TasksRepositoryTest {
 
     @Before
     public void setUp() throws Exception {
-        this.repo = new TasksRepository();
+        this.repo = new TasksRepository("_");
     }
 
     @Test

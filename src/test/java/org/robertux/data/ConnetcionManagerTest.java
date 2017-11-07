@@ -23,11 +23,11 @@ public class ConnetcionManagerTest {
 
     @Test
     public void getConnection() throws Exception {
-        String dbPath = ConnetcionManager.getDatabasePath();
+        String dbPath = ConnetcionManager.getDatabasePath("_");
         this.logger.debug("dbPath: {}", dbPath);
         Assert.assertTrue("Ruta debe apuntar a carpeta temporal del sistema", dbPath.contains(System.getProperty("java.io.tmpdir")));
 
-        Connection cn = ConnetcionManager.getConnection();
+        Connection cn = ConnetcionManager.getConnection("_");
         Assert.assertNotNull("Conexión no debe ser nula", cn);
         Assert.assertFalse("Conexión no debe estar cerrada", cn.isClosed());
     }
