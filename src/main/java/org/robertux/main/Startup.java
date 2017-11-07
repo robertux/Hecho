@@ -65,6 +65,7 @@ public class Startup {
     public static void configureRoutes() {
         redirect.get("/categories/", "/categories.html");
         redirect.get("/login/", "/login.html");
+        redirect.get("/providers/", "/chooseProvider.html");
 
         post("/api/:syncProvider/validate", (req, resp) -> {
             if (dataSyncProviders.containsKey(req.params(":syncProvider"))) {

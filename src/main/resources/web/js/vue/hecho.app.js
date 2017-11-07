@@ -151,6 +151,9 @@ var vueApp = new Vue({
         },
         setTaskDate: function(index) {
             setTimeout("$('div.el-date-editor input.el-input__inner')[" + index + "].focus();", 300);
+        },
+        chooseProvider: function() {
+            window.location.href ="/chooseProvider/";
         }
     }
 });

@@ -24,10 +24,7 @@
                 <el-menu-item index="2">Hecho</el-menu-item>
                 <el-submenu index="3">
                     <template slot="title"><i class="el-icon-menu"></i></template>
-                    <el-menu-item index="3-1">
-                        <img class="profile-image"
-                             src="https://dl-web.dropbox.com/account_photo/get/dbid%3AAAAQUQG6HFeGFKyHZ0xhcwWmxoagkcqMufQ?size=128x128&vers=1504760275526"/>
-                        <span>robertux</span>
+                    <el-menu-item index="3-1" @click="chooseProvider()"><i class="el-icon-upload"></i>Sync to cloud
                     </el-menu-item>
                     <el-menu-item index="3-2" @click="manageCategories()"><i class="el-icon-setting"></i>Manage
                         Categories
@@ -40,7 +37,6 @@
                     <el-menu-item index="3-5" @click="deleteCompletedTasks()"><i class="el-icon-delete"></i>Delete
                         Completed Tasks
                     </el-menu-item>
-                    <el-menu-item index="3-6"><i class="el-icon-circle-close-outline"></i>Logout</el-menu-item>
                 </el-submenu>
             </el-menu>
         </el-header>

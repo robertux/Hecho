@@ -7,17 +7,6 @@ body {
     font-family: 'open-sans', Arial, sans-serif;
 }
 
-.profile-image {
-    border: 4px solid lightblue;
-    height: 55px;
-}
-
-
-/* Para hacer que la opción del menú que muestra la imagen sea más alta que las otras opciones del menú: */
-.el-menu .el-submenu .el-menu .el-menu-item:first-child {
-    height: 70px;
-}
-
 /*  Para que los elementos del menú abarquen el ancho completo de la página: */
 .el-menu.el-menu--horizontal {
     display: flex;
