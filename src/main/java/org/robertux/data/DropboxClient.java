@@ -24,19 +24,18 @@ import java.util.List;
  */
 public class DropboxClient {
     public static final String CLIENT_IDENTIFIER = "HECHO/1";
-    public static final String ACCESS_TOKEN = "EvAnuSj8cuMAAAAAAAABfu09nbbb8Ey3DYQlw83oUgw1XPUVqs3QZoL8JNQwjmCO";
 
     private DbxClientV2 client;
     private Logger logger;
 
-    public DropboxClient() {
+    public DropboxClient(String accessToken) {
         logger = LogManager.getLogger(this.getClass());
-        this.connect();
+        this.connect(accessToken);
     }
 
-    public void connect() {
+    public void connect(String accessToken) {
         DbxRequestConfig config = new DbxRequestConfig(CLIENT_IDENTIFIER);
-        this.client = new DbxClientV2(config, ACCESS_TOKEN);
+        this.client = new DbxClientV2(config, accessToken);
     }
 
     public DropboxAccount getAccountInfo() throws DbxException {

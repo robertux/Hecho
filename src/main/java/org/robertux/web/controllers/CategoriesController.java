@@ -16,9 +16,9 @@ public class CategoriesController {
     private CategoriesRepository repo;
     private Logger logger;
 
-    public CategoriesController() {
+    public CategoriesController(String sessionId) {
         this.logger = LogManager.getLogger(this.getClass());
-        this.repo = new CategoriesRepository();
+        this.repo = new CategoriesRepository(sessionId);
     }
 
     public JsonResponse get() {

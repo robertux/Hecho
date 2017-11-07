@@ -20,9 +20,9 @@ public class TasksController {
     private TasksRepository repo;
     private Logger logger;
 
-    public TasksController() {
+    public TasksController(String sessionId) {
         this.logger = LogManager.getLogger(this.getClass());
-        this.repo = new TasksRepository();
+        this.repo = new TasksRepository(sessionId);
     }
 
     public TasksRepository getRepo() {

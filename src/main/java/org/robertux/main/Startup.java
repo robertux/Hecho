@@ -7,7 +7,10 @@ import org.apache.logging.log4j.Logger;
 import org.robertux.data.jooq.tables.Task;
 import org.robertux.data.jooq.tables.records.CategoryRecord;
 import org.robertux.data.jooq.tables.records.TaskRecord;
+import org.robertux.data.model.JsonResponse;
 import org.robertux.web.controllers.CategoriesController;
+import org.robertux.web.controllers.DataSyncController;
+import org.robertux.web.controllers.DropboxController;
 import org.robertux.web.controllers.TasksController;
 import spark.Request;
 import spark.Response;
@@ -30,10 +33,13 @@ public class Startup {
     private static Logger logger;
     private static DateFormat inputDFmt = new SimpleDateFormat("yyyy/MM/dd");
 
+    private static Map<String, DataSyncController> dataSyncProviders;
+
     public static void main(String[] args) {
         configureServer(getEnvironmentPort());
         configureFilters();
         configureRoutes();
+        configureSyncControllers();
     }
 
     public static void configureServer(int port) {
@@ -69,33 +75,53 @@ public class Startup {
     }
 
     public static void configureRoutes() {
+        redirect.get("/categories/", "categories.html");
+        redirect.get("/login/", "/login.html");
+
+        post("/api/:syncProvider/validate", (req, resp) -> {
+            if (dataSyncProviders.containsKey(req.params(":syncProvider"))) {
+                resp.redirect(dataSyncProviders.get(req.params(":syncProvider")).getSyncUrl());
+                return new JsonResponse();
+            } else {
+                return JsonResponse.fromError(1201).toJson();
+            }
+        });
+
+        post("/api/:syncProvider/save", (req, resp) -> {
+            if (dataSyncProviders.containsKey(req.params(":syncProvider"))) {
+                Map<String, String> params = getBodyParams(req.body());
+                return dataSyncProviders.get(req.params(":syncProvider")).sync(req.session().id(), params.get("token"));
+            } else {
+                return JsonResponse.fromError(1201).toJson();
+            }
+        });
 
         get("/api/categories", (req, resp) -> {
-            return new CategoriesController().get().toJson();
+            return new CategoriesController(req.session().id()).get().toJson();
         });
 
         post("/api/categories/:categoryName", (req, resp) -> {
-            return new CategoriesController().add(new CategoryRecord(-1, req.params(":categoryName"))).toJson();
+            return new CategoriesController(req.session().id()).add(new CategoryRecord(-1, req.params(":categoryName"))).toJson();
         });
 
         put("/api/categories/:categoryId/:categoryName", (req, resp) -> {
-            return new CategoriesController().edit(new CategoryRecord(Integer.parseInt(req.params(":categoryId")), req.params(":categoryName"))).toJson();
+            return new CategoriesController(req.session().id()).edit(new CategoryRecord(Integer.parseInt(req.params(":categoryId")), req.params(":categoryName"))).toJson();
         });
 
         delete("/api/categories/:categoryId", (req, resp) -> {
-            return new CategoriesController().delete(new CategoryRecord(Integer.parseInt(req.params(":categoryId")), "")).toJson();
+            return new CategoriesController(req.session().id()).delete(new CategoryRecord(Integer.parseInt(req.params(":categoryId")), "")).toJson();
         });
 
         get("/api/categories/:categoryId/tasks/:sortBy", (req, resp) -> {
-            return new TasksController().getTasks(Integer.parseInt(req.params(":categoryId")), Integer.parseInt(req.params(":sortBy"))).toJson();
+            return new TasksController(req.session().id()).getTasks(Integer.parseInt(req.params(":categoryId")), Integer.parseInt(req.params(":sortBy"))).toJson();
         });
 
         post("/api/categories/:categoryId/tasks/:taskName", (req, resp) -> {
-            return new TasksController().add(new TaskRecord(req.params(":taskName"), Integer.parseInt(req.params(":categoryId")))).toJson();
+            return new TasksController(req.session().id()).add(new TaskRecord(req.params(":taskName"), Integer.parseInt(req.params(":categoryId")))).toJson();
         });
 
         put("/api/categories/:categoryId/tasks/:taskId", (req, resp) -> {
-            TasksController controller = new TasksController();
+            TasksController controller = new TasksController(req.session().id());
             TaskRecord task = controller.getRepo().getTask(Integer.parseInt(req.params(":taskId")));
             Map<String, String> params = getBodyParams(req.body());
 
@@ -116,12 +142,16 @@ public class Startup {
         });
 
         delete("/api/categories/:categoryId/doneTasks/", (req, resp) -> {
-            return new TasksController().deleteDoneTasks().toJson();
+            return new TasksController(req.session().id()).deleteDoneTasks().toJson();
         });
 
         delete("/api/categories/:categoryId/tasks/:taskId", (req, resp) -> {
-            return new TasksController().delete(new TaskRecord(Integer.parseInt(req.params(":taskId")))).toJson();
+            return new TasksController(req.session().id()).delete(new TaskRecord(Integer.parseInt(req.params(":taskId")))).toJson();
         });
+    }
+
+    public static void configureSyncControllers() {
+        dataSyncProviders.put("dropbox", new DropboxController());
     }
 
     protected static void logRequest(Request req) {

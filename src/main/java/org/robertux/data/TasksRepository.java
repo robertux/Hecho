@@ -19,15 +19,17 @@ import java.util.List;
  */
 public class TasksRepository {
     private Logger logger;
+    private String sessionId;
 
-    public TasksRepository() {
+    public TasksRepository(String sessionId) {
         this.logger = LogManager.getLogger(this.getClass());
+        this.sessionId = sessionId;
     }
 
     public List<TaskRecord> getTasks(TableField<TaskRecord, ?> orderBy) {
         List<TaskRecord> tasks = new ArrayList<>(0);
 
-        try (Connection cn = ConnetcionManager.getConnection()) {
+        try (Connection cn = ConnetcionManager.getConnection(sessionId)) {
             DSLContext context = ConnetcionManager.getContext(cn);
             tasks.addAll(context.selectFrom(Task.TASK).orderBy(orderBy).fetch());
 
@@ -45,7 +47,7 @@ public class TasksRepository {
     public List<TaskRecord> getTasks(TableField<TaskRecord, ?> orderBy, int categoryId) {
         List<TaskRecord> tasks = new ArrayList<>(0);
 
-        try (Connection cn = ConnetcionManager.getConnection()) {
+        try (Connection cn = ConnetcionManager.getConnection(sessionId)) {
             DSLContext context = ConnetcionManager.getContext(cn);
             tasks.addAll(context.selectFrom(Task.TASK).where(Task.TASK.CATEGORYID.eq(categoryId)).orderBy(Task.TASK.STATUS.desc(), orderBy.desc()).fetch());
 
@@ -63,7 +65,7 @@ public class TasksRepository {
     public TaskRecord getTask(int taskId) {
         TaskRecord task = null;
 
-        try (Connection cn = ConnetcionManager.getConnection()) {
+        try (Connection cn = ConnetcionManager.getConnection(sessionId)) {
             DSLContext context = ConnetcionManager.getContext(cn);
             task = context.selectFrom(Task.TASK).where(Task.TASK.ID.eq(taskId)).fetchOne();
         } catch (SQLException | IOException | ClassNotFoundException ex) {
@@ -74,7 +76,7 @@ public class TasksRepository {
     }
 
     public int addTask(TaskRecord task) {
-        try (Connection cn = ConnetcionManager.getConnection()) {
+        try (Connection cn = ConnetcionManager.getConnection(sessionId)) {
             DSLContext context = ConnetcionManager.getContext(cn);
             return context.insertInto(Task.TASK)
                     .set(Task.TASK.DESCRIPTION, task.getDescription())
@@ -91,7 +93,7 @@ public class TasksRepository {
     }
 
     public int updateTask(TaskRecord task) {
-        try (Connection cn = ConnetcionManager.getConnection()) {
+        try (Connection cn = ConnetcionManager.getConnection(sessionId)) {
             DSLContext context = ConnetcionManager.getContext(cn);
             return context.update(Task.TASK)
                     .set(Task.TASK.DESCRIPTION, task.getDescription())
@@ -109,7 +111,7 @@ public class TasksRepository {
     }
 
     public int deleteTask(TaskRecord task) {
-        try (Connection cn = ConnetcionManager.getConnection()) {
+        try (Connection cn = ConnetcionManager.getConnection(sessionId)) {
             DSLContext context = ConnetcionManager.getContext(cn);
             return context.deleteFrom(Task.TASK)
                     .where(Task.TASK.ID.eq(task.getId())).execute();
@@ -122,7 +124,7 @@ public class TasksRepository {
     }
 
     public int deleteDoneTasks() {
-        try (Connection cn = ConnetcionManager.getConnection()) {
+        try (Connection cn = ConnetcionManager.getConnection(sessionId)) {
             DSLContext context = ConnetcionManager.getContext(cn);
             return context.deleteFrom(Task.TASK)
                     .where(Task.TASK.STATUS.eq(Status.DONE.getValue())).execute();

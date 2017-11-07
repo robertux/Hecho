@@ -21,20 +21,20 @@ public class ConnetcionManager {
     public static final String DATABASE_NAME = "hecho.db";
     public static Logger logger = LogManager.getLogger(ConnetcionManager.class);
 
-    public static Connection getConnection() throws ClassNotFoundException, SQLException, IOException {
+    public static Connection getConnection(String sessionId) throws ClassNotFoundException, SQLException, IOException {
         Class.forName("org.sqlite.JDBC");
-        String dbPath = getDatabasePath();
+        String dbPath = getDatabasePath(sessionId);
 
         return DriverManager.getConnection("jdbc:sqlite:" + dbPath);
     }
 
-    public static String getDatabasePath() throws IOException {
+    public static String getDatabasePath(String sessionId) throws IOException {
         String tmpDir = System.getProperty("java.io.tmpdir");
         if (!tmpDir.endsWith(File.separator)) {
             tmpDir += File.separator;
         }
 
-        String dbPath = tmpDir + DATABASE_NAME;
+        String dbPath = tmpDir + sessionId + File.separator + DATABASE_NAME;
         File fPath = new File(dbPath);
 
         if (!fPath.exists()) {
@@ -47,8 +47,8 @@ public class ConnetcionManager {
         return dbPath;
     }
 
-    public static DSLContext getContext() throws SQLException, IOException, ClassNotFoundException {
-        return DSL.using(ConnetcionManager.getConnection(), SQLDialect.SQLITE);
+    public static DSLContext getContext(String sessionId) throws SQLException, IOException, ClassNotFoundException {
+        return DSL.using(ConnetcionManager.getConnection(sessionId), SQLDialect.SQLITE);
     }
 
     public static DSLContext getContext(Connection cn) throws SQLException, IOException, ClassNotFoundException {
