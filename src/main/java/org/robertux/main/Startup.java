@@ -69,7 +69,7 @@ public class Startup {
 
         get("/api/providers", (req, resp) -> providersController.getProviders().toJson());
 
-        get("/api/:syncProvider/save", (req, resp) -> {
+        get("/api/:syncProvider/save*", (req, resp) -> {
             if (providersController.getProvider(req.params(":syncProvider")) != null) {
                 logger.debug("parámetros de request: {}", req.params());
                 logger.debug("atributos de request: {}", req.attributes());
