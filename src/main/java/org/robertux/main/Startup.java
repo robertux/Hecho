@@ -71,7 +71,9 @@ public class Startup {
 
         get("/api/:syncProvider/save", (req, resp) -> {
             if (providersController.getProvider(req.params(":syncProvider")) != null) {
-                logger.debug("parámetros de retorno: {}", req.params());
+                logger.debug("parámetros de request: {}", req.params());
+                logger.debug("atributos de request: {}", req.attributes());
+                logger.debug("atributos de query:", req.queryParams());
                 return providersController.getProvider(req.params(":syncProvider")).sync(req.session().id(), req.params(":access_token"));
             } else {
                 return JsonResponse.fromError(1201).toJson();
