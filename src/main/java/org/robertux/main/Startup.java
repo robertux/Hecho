@@ -74,6 +74,8 @@ public class Startup {
                 logger.debug("parámetros de request: {}", req.params());
                 logger.debug("atributos de request: {}", req.attributes());
                 logger.debug("atributos de query:", req.queryParams());
+                logger.debug("url: {}", req.uri());
+                logger.debug("queryString: {}", req.queryString());
                 return providersController.getProvider(req.params(":syncProvider")).sync(req.session().id(), req.params(":access_token"));
             } else {
                 return JsonResponse.fromError(1201).toJson();
