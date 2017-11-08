@@ -14,8 +14,13 @@ import org.robertux.web.controllers.TasksController;
 import spark.Request;
 import spark.Response;
 
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -59,15 +64,13 @@ public class Startup {
     }
 
     public static void configureRoutes() {
-        redirect.get("/categories/", "/categories.html");
-        redirect.get("/login/", "/login.html");
-        redirect.get("/providers/", "/chooseProvider.html");
+        get("/categories/", (req, res) -> getFileContent("/web/categories.html"));
+        get("/login/", (rq, res) -> getFileContent("/web/login.html"));
+        get("/providers/", (req, res) -> getFileContent("/web/chooseProvider.html"));
 
         CloudProvidersController providersController = new CloudProvidersController();
 
-        get("/api/providers", (req, resp) -> {
-            return providersController.getProviders().toJson();
-        });
+        get("/api/providers", (req, resp) -> providersController.getProviders().toJson());
 
         post("/api/:syncProvider/validate", (req, resp) -> {
             if (providersController.getProvider(req.params(":syncProvider")) != null) {
@@ -169,5 +172,16 @@ public class Startup {
             return Integer.parseInt(processBuilder.environment().get("PORT"));
         }
         return 8082; //return default port if env-port isn't set (i.e. on localhost)
+    }
+
+    private static String getFileContent(String fileName) {
+        try {
+            URL url = Startup.class.getResource(fileName);
+            logger.debug("URL: {}", url);
+            return new String(Files.readAllBytes(Paths.get(url.toURI())), Charset.defaultCharset());
+        } catch (IOException | URISyntaxException | NullPointerException e) {
+            logger.error("Excepción tratando de obtener el contenido del archivo " + fileName, e);
+        }
+        return null;
     }
 }
