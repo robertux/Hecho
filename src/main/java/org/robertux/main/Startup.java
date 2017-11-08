@@ -14,19 +14,17 @@ import org.robertux.web.controllers.TasksController;
 import spark.Request;
 import spark.Response;
 
-import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static spark.Spark.*;
 
@@ -166,10 +164,10 @@ public class Startup {
 
     private static String getFileContent(String fileName) {
         try {
-            URL url = Startup.class.getResource(fileName);
-            logger.debug("URL: {}", url);
-            return new String(Files.readAllBytes(Paths.get(url.toURI())), Charset.defaultCharset());
-        } catch (IOException | URISyntaxException | NullPointerException e) {
+            return new BufferedReader(new InputStreamReader(Startup.class.getResourceAsStream(fileName)))
+                    .lines().collect(Collectors.joining("\n"));
+
+        } catch (Exception e) {
             logger.error("Excepción tratando de obtener el contenido del archivo " + fileName, e);
         }
         return null;
