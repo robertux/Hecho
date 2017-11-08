@@ -64,27 +64,17 @@ public class Startup {
     }
 
     public static void configureRoutes() {
-        get("/categories/", (req, res) -> getFileContent("/web/categories.html"));
-        get("/login/", (rq, res) -> getFileContent("/web/login.html"));
-        get("/providers/", (req, res) -> getFileContent("/web/chooseProvider.html"));
-
         CloudProvidersController providersController = new CloudProvidersController();
+
+        get("/categories/", (req, res) -> getFileContent("/web/categories.html"));
+        get("/providers/", (req, res) -> getFileContent("/web/chooseProvider.html"));
 
         get("/api/providers", (req, resp) -> providersController.getProviders().toJson());
 
-        post("/api/:syncProvider/validate", (req, resp) -> {
+        get("/api/:syncProvider/save", (req, resp) -> {
             if (providersController.getProvider(req.params(":syncProvider")) != null) {
-                resp.redirect(providersController.getProvider(req.params(":syncProvider")).getSyncUrl());
-                return new JsonResponse();
-            } else {
-                return JsonResponse.fromError(1201).toJson();
-            }
-        });
-
-        post("/api/:syncProvider/save", (req, resp) -> {
-            if (providersController.getProvider(req.params(":syncProvider")) != null) {
-                Map<String, String> params = getBodyParams(req.body());
-                return providersController.getProvider(req.params(":syncProvider")).sync(req.session().id(), params.get("token"));
+                logger.debug("parámetros de retorno: {}", req.params());
+                return providersController.getProvider(req.params(":syncProvider")).sync(req.session().id(), req.params(":access_token"));
             } else {
                 return JsonResponse.fromError(1201).toJson();
             }
