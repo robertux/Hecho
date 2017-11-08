@@ -153,7 +153,7 @@ var vueApp = new Vue({
             setTimeout("$('div.el-date-editor input.el-input__inner')[" + index + "].focus();", 300);
         },
         chooseProvider: function() {
-            window.location.href ="/chooseProvider/";
+            window.location.href = "/providers/";
         }
     }
 });

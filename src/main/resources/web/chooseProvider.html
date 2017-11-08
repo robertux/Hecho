@@ -2,9 +2,55 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="/css/element-ui-2.0.2.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+    <title>Choose Provider</title>
 </head>
 <body>
+<div id="hecho-app">
+    <el-container>
+        <el-header>
+            <el-menu mode="horizontal" default-active="2" menu-trigger="click">
+                <el-menu-item index="1"><i class="el-icon-search"></i></el-menu-item>
+                <el-menu-item index="2">Hecho</el-menu-item>
+                <el-submenu index="3">
+                    <template slot="title"><i class="el-icon-menu"></i></template>
+                    <el-menu-item index="3-2" @click="cancelSync()"><i class="el-icon-setting"></i>Cancel Sync
+                    </el-menu-item>
+                </el-submenu>
+            </el-menu>
+        </el-header>
+        <el-main>
+            <el-row type="flex" justify="center">
+                <el-col><h2 class="choose-provider-title">Choose a provider</h2></el-col>
+            </el-row>
+            <el-row type="flex" justify="center" :gutter="20">
+                <el-col :span="8" v-for="prv in providers">
+                    <el-card>
+                        <div slot="header" class="clearfix">
+                            <a class="provider-title" :href="prv.syncUrl">{{prv.name}}</a>
+                        </div>
+                        <a :href="prv.syncUrl"><img :src="prv.logoUrl" :alt="prv.name" class="image" width="300"></a>
+                    </el-card>
+                </el-col>
+            </el-row>
 
+        </el-main>
+
+        <el-footer>
+            <el-button type="primary" @click="cancelSync()">Cancel Sync</el-button>
+        </el-footer>
+    </el-container>
+</div>
+
+<script type="text/javascript" src="/js/vue/vue.min.js"></script>
+<script type="text/javascript" src="/js/element/element-ui-2.0.2.js"></script>
+<script type="text/javascript" src="/js/element/element-locale-en.js"></script>
+<script type="text/javascript">ELEMENT.locale(ELEMENT.lang.en); </script>
+<script type="text/javascript" src="/js/jquery/jquery-2.2.4.min.js"></script>
+<script type="text/javascript" src="/js/vue/hecho.providers.js"></script>
 </body>
 </html>

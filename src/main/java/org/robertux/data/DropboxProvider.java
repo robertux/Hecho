@@ -11,7 +11,7 @@ import java.io.IOException;
  */
 public class DropboxProvider extends CloudSyncProvider {
     private static final String PROVIDER_NAME = "Dropbox";
-    private static final String APP_ID = "0n9qkarqmul4ub";
+    private static final String APP_ID = "0n9qkarqmul4ub0";
     private static final String LOGO_URL = "/img/providers/Dropbox.png";
     private static final String REDIRECT_URL = "https://hecho.herokuapp.com/login/";
     private static final String URL = "https://www.dropbox.com/oauth2/authorize?client_id=" + APP_ID + "&redirect_uri=" + REDIRECT_URL + "&response_type=token";
@@ -23,7 +23,7 @@ public class DropboxProvider extends CloudSyncProvider {
 
     @Override
     public String getLogoUrl() {
-        return "";
+        return LOGO_URL;
     }
 
     @Override

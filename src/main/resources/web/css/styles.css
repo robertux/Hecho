@@ -75,6 +75,22 @@ body {
     clear: both
 }
 
+div.el-card__body {
+    height: 150px;
+    vertical-align: middle;
+    display: table-cell;
+}
+
+.choose-provider-title {
+    text-align: center;
+}
+
+.provider-title {
+    text-decoration: none;
+    color: black;
+}
+
 footer {
+    margin-top: 50px;
     text-align: center;
 }
