@@ -9,8 +9,7 @@ import org.robertux.data.jooq.tables.records.CategoryRecord;
 import org.robertux.data.jooq.tables.records.TaskRecord;
 import org.robertux.data.model.JsonResponse;
 import org.robertux.web.controllers.CategoriesController;
-import org.robertux.web.controllers.DataSyncController;
-import org.robertux.web.controllers.DropboxController;
+import org.robertux.web.controllers.CloudProvidersController;
 import org.robertux.web.controllers.TasksController;
 import spark.Request;
 import spark.Response;
@@ -33,13 +32,10 @@ public class Startup {
     private static Logger logger;
     private static DateFormat inputDFmt = new SimpleDateFormat("yyyy/MM/dd");
 
-    private static Map<String, DataSyncController> dataSyncProviders;
-
     public static void main(String[] args) {
         configureServer(getEnvironmentPort());
         configureFilters();
         configureRoutes();
-        configureSyncProviders();
     }
 
     public static void configureServer(int port) {
@@ -67,9 +63,15 @@ public class Startup {
         redirect.get("/login/", "/login.html");
         redirect.get("/providers/", "/chooseProvider.html");
 
+        CloudProvidersController providersController = new CloudProvidersController();
+
+        get("/api/providers", (req, resp) -> {
+            return providersController.getProviders().toJson();
+        });
+
         post("/api/:syncProvider/validate", (req, resp) -> {
-            if (dataSyncProviders.containsKey(req.params(":syncProvider"))) {
-                resp.redirect(dataSyncProviders.get(req.params(":syncProvider")).getSyncUrl());
+            if (providersController.getProvider(req.params(":syncProvider")) != null) {
+                resp.redirect(providersController.getProvider(req.params(":syncProvider")).getSyncUrl());
                 return new JsonResponse();
             } else {
                 return JsonResponse.fromError(1201).toJson();
@@ -77,9 +79,9 @@ public class Startup {
         });
 
         post("/api/:syncProvider/save", (req, resp) -> {
-            if (dataSyncProviders.containsKey(req.params(":syncProvider"))) {
+            if (providersController.getProvider(req.params(":syncProvider")) != null) {
                 Map<String, String> params = getBodyParams(req.body());
-                return dataSyncProviders.get(req.params(":syncProvider")).sync(req.session().id(), params.get("token"));
+                return providersController.getProvider(req.params(":syncProvider")).sync(req.session().id(), params.get("token"));
             } else {
                 return JsonResponse.fromError(1201).toJson();
             }
@@ -139,17 +141,12 @@ public class Startup {
         });
     }
 
-    public static void configureSyncProviders() {
-        dataSyncProviders = new HashMap<>();
-        dataSyncProviders.put("dropbox", new DropboxController());
-    }
-
     protected static void logRequest(Request req) {
         logger.debug("Request received: " + req.requestMethod() + " " + req.url() + " - " + req.body());
     }
 
     protected static void logResponse(Response resp) {
-        logger.debug("Response sent: " + resp.status() + " " + resp.type() + " " + resp.body());
+        //logger.debug("Response sent: " + resp.status() + " " + resp.type() + " " + resp.body());
     }
 
     protected static Map<String, String> getBodyParams(String requestBody) {
