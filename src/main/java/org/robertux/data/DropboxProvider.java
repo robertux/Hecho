@@ -36,12 +36,11 @@ public class DropboxProvider extends CloudSyncProvider {
 
         try {
             DbxRequestConfig requestConfig = new DbxRequestConfig(DropboxClient.CLIENT_IDENTIFIER);
-            logger.debug("API KEY: {}", System.getenv("DROPBOX_API_KEY"));
             DbxAppInfo appInfo = new DbxAppInfo(System.getenv("DROPBOX_API_KEY"), System.getenv("DROPBOX_API_SECRET"));
             DbxWebAuth auth = new DbxWebAuth(requestConfig, appInfo);
 
             DbxAuthFinish authFinish = auth.finishFromCode(code);
-            DropboxClient client = new DropboxClient(authFinish.getAccessToken());
+            DropboxClient client = new DropboxClient(requestConfig, authFinish.getAccessToken());
 
             client.saveFile(new FileInputStream(ConnetcionManager.getDatabasePath(sessionId)), ConnetcionManager.DATABASE_NAME);
         } catch (IOException | DbxException | NullPointerException e) {

@@ -28,14 +28,13 @@ public class DropboxClient {
     private DbxClientV2 client;
     private Logger logger;
 
-    public DropboxClient(String accessToken) {
+    public DropboxClient(DbxRequestConfig requestConfig, String accessToken) {
         logger = LogManager.getLogger(this.getClass());
-        this.connect(accessToken);
+        this.connect(requestConfig, accessToken);
     }
 
-    public void connect(String accessToken) {
-        DbxRequestConfig config = new DbxRequestConfig(CLIENT_IDENTIFIER);
-        this.client = new DbxClientV2(config, accessToken);
+    public void connect(DbxRequestConfig requestConfig, String accessToken) {
+        this.client = new DbxClientV2(requestConfig, accessToken);
     }
 
     public DropboxAccount getAccountInfo() throws DbxException {
