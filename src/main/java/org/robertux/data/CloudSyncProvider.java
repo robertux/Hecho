@@ -17,7 +17,7 @@ public abstract class CloudSyncProvider {
 
     public abstract String getSyncUrl();
 
-    public abstract JsonResponse sync(String sessionId, String token);
+    public abstract JsonResponse sync(String sessionId, String code);
 
     public JsonObject toJson() {
         JsonObject obj = new JsonObject();

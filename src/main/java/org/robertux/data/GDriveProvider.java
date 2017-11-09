@@ -25,7 +25,7 @@ public class GDriveProvider extends CloudSyncProvider {
     }
 
     @Override
-    public JsonResponse sync(String sessionId, String token) {
+    public JsonResponse sync(String sessionId, String code) {
         return new JsonResponse();
     }
 }

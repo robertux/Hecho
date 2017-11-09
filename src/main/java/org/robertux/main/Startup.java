@@ -69,14 +69,10 @@ public class Startup {
 
         get("/api/providers", (req, resp) -> providersController.getProviders().toJson());
 
-        get("/api/:syncProvider/save*", (req, resp) -> {
+        get("/api/:syncProvider/save", (req, resp) -> {
             if (providersController.getProvider(req.params(":syncProvider")) != null) {
-                logger.debug("parámetros de request: {}", req.params());
-                logger.debug("atributos de request: {}", req.attributes());
-                logger.debug("atributos de query:", req.queryParams());
-                logger.debug("url: {}", req.url());
-                logger.debug("queryString: {}", req.queryString());
-                return providersController.getProvider(req.params(":syncProvider")).sync(req.session().id(), req.params(":access_token"));
+                logger.debug("auth code: {}", req.queryParams("code"));
+                return providersController.getProvider(req.params(":syncProvider")).sync(req.session().id(), req.queryParams("code"));
             } else {
                 return JsonResponse.fromError(1201).toJson();
             }
