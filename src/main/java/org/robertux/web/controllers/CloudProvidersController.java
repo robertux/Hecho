@@ -6,6 +6,7 @@ import org.robertux.data.DropboxProvider;
 import org.robertux.data.GDriveProvider;
 import org.robertux.data.model.JsonResponse;
 
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,11 +25,11 @@ public class CloudProvidersController {
         return dataSyncProviders.get(name);
     }
 
-    public JsonResponse getProviders() {
+    public JsonResponse getProviders(HttpSession session) {
         JsonResponse resp = new JsonResponse();
         JsonArray arr = new JsonArray();
         for (CloudSyncProvider prov : dataSyncProviders.values()) {
-            arr.add(prov.toJson());
+            arr.add(prov.toJson(session));
         }
 
         resp.getContent().add("providers", arr);

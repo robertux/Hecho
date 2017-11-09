@@ -2,6 +2,8 @@ package org.robertux.data;
 
 import org.robertux.data.model.JsonResponse;
 
+import javax.servlet.http.HttpSession;
+
 /**
  * Created by robertux on 11/7/17.
  */
@@ -20,7 +22,7 @@ public class GDriveProvider extends CloudSyncProvider {
     }
 
     @Override
-    public String getSyncUrl() {
+    public String getSyncUrl(HttpSession session) {
         return "";
     }
 
