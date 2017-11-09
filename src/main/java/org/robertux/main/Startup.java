@@ -67,7 +67,7 @@ public class Startup {
 
         get("/categories/", (req, res) -> getFileContent("/web/categories.html"));
         get("/providers/", (req, res) -> getFileContent("/web/chooseProvider.html"));
-        get("/providers/:syncProvider/auth", (req, resp) -> getFileContent("/" + req.params(":syncProvider") + "/authorize.html"));
+        get("/providers/:syncProvider/auth", (req, resp) -> getFileContent("/web/" + req.params(":syncProvider") + "/authorize.html"));
 
         get("/api/providers", (req, resp) -> providersController.getProviders().toJson());
 
