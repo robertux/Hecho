@@ -2,10 +2,10 @@ package org.robertux.data;
 
 import com.dropbox.core.*;
 import org.robertux.data.model.JsonResponse;
+import spark.Request;
 
 import javax.servlet.http.HttpSession;
 import java.io.FileInputStream;
-import java.io.IOException;
 
 /**
  * Created by robertux on 11/6/17.
@@ -15,7 +15,7 @@ public class DropboxProvider extends CloudSyncProvider {
     private static final String LOGO_URL = "/img/providers/Dropbox.png";
     private static final String REDIRECT_URL = "https://hecho.herokuapp.com/providers/dropbox/auth";
     private static final String URL = "https://www.dropbox.com/oauth2/authorize?client_id=" + System.getenv("DROPBOX_API_KEY") + "&redirect_uri=" + REDIRECT_URL + "&response_type=token";
-    private HttpSession session;
+    String SESSION_KEY = "dropbox-auth-csrf-token";
 
     private DbxRequestConfig requestConfig;
     private DbxAppInfo appInfo;
@@ -25,9 +25,7 @@ public class DropboxProvider extends CloudSyncProvider {
         this.requestConfig = new DbxRequestConfig(DropboxClient.CLIENT_IDENTIFIER);
         this.appInfo = new DbxAppInfo(System.getenv("DROPBOX_API_KEY"), System.getenv("DROPBOX_API_SECRET"));
         this.auth = new DbxWebAuth(requestConfig, appInfo);
-        this.session = session;
     }
-
 
     @Override
     public String getName() {
@@ -41,8 +39,8 @@ public class DropboxProvider extends CloudSyncProvider {
 
     @Override
     public String getSyncUrl(HttpSession session) {
-        String sessionKey = "dropbox-auth-csrf-token";
-        DbxSessionStore csrfTokenStore = new DbxStandardSessionStore(this.session, sessionKey);
+
+        DbxSessionStore csrfTokenStore = new DbxStandardSessionStore(session, SESSION_KEY);
         DbxWebAuth.Request authRequest = DbxWebAuth.newRequestBuilder()
                 .withRedirectUri(REDIRECT_URL, csrfTokenStore)
                 .build();
@@ -51,15 +49,18 @@ public class DropboxProvider extends CloudSyncProvider {
     }
 
     @Override
-    public JsonResponse sync(String sessionId, String accessToken) {
+    public JsonResponse sync(Request req, String code) {
         JsonResponse ok = new JsonResponse();
 
         try {
-            DbxRequestConfig requestConfig = new DbxRequestConfig(DropboxClient.CLIENT_IDENTIFIER);
-            DropboxClient client = new DropboxClient(requestConfig, accessToken);
+            DbxSessionStore csrfTokenStore = new DbxStandardSessionStore(req.session().raw(), SESSION_KEY);
+            DbxAuthFinish authFinish = auth.finishFromRedirect(REDIRECT_URL, csrfTokenStore, req.raw().getParameterMap());
 
-            client.saveFile(new FileInputStream(ConnetcionManager.getDatabasePath(sessionId)), ConnetcionManager.DATABASE_NAME);
-        } catch (IOException | DbxException | NullPointerException e) {
+            //DbxRequestConfig requestConfig = new DbxRequestConfig(DropboxClient.CLIENT_IDENTIFIER);
+            DropboxClient client = new DropboxClient(requestConfig, authFinish.getAccessToken());
+
+            client.saveFile(new FileInputStream(ConnetcionManager.getDatabasePath(req.session().id())), ConnetcionManager.DATABASE_NAME);
+        } catch (Exception e) {
             logger.error("Error tratando de guardar la base de datos en Dropbox: " + e.getMessage(), e);
             return JsonResponse.fromError(1202);
         }

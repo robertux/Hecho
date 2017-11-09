@@ -1,6 +1,7 @@
 package org.robertux.data;
 
 import org.robertux.data.model.JsonResponse;
+import spark.Request;
 
 import javax.servlet.http.HttpSession;
 
@@ -27,7 +28,7 @@ public class GDriveProvider extends CloudSyncProvider {
     }
 
     @Override
-    public JsonResponse sync(String sessionId, String code) {
+    public JsonResponse sync(Request req, String code) {
         return new JsonResponse();
     }
 }

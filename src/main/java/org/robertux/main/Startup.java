@@ -67,16 +67,17 @@ public class Startup {
 
         get("/categories/", (req, res) -> getFileContent("/web/categories.html"));
         get("/providers/", (req, res) -> getFileContent("/web/chooseProvider.html"));
-        get("/providers/:syncProvider/auth", (req, resp) -> getFileContent("/web/" + req.params(":syncProvider") + "/authorize.html"));
+        //get("/providers/:syncProvider/auth", (req, resp) -> getFileContent("/web/" + req.params(":syncProvider") + "/authorize.html"));
 
         get("/api/providers", (req, resp) -> providersController.getProviders(req.session().raw()).toJson());
 
-        get("/api/:syncProvider/sync", (req, resp) -> {
+        //get("/api/:syncProvider/sync", (req, resp) -> {
+        get("/providers/:syncProvider/auth", (req, resp) -> {
             if (providersController.getProvider(req.params(":syncProvider")) != null) {
                 Map<String, String> params = getBodyParams(req.body());
                 CloudSyncProvider provider = providersController.getProvider(req.params(":syncProvider"));
 
-                return provider.sync(req.session().id(), params.get("token")).toJson();
+                return provider.sync(req.session().raw(), params.get("token")).toJson();
             } else {
                 return JsonResponse.fromError(1201).toJson();
             }

@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.robertux.data.model.JsonResponse;
+import spark.Request;
 
 import javax.servlet.http.HttpSession;
 
@@ -19,7 +20,7 @@ public abstract class CloudSyncProvider {
 
     public abstract String getSyncUrl(HttpSession session);
 
-    public abstract JsonResponse sync(String sessionId, String code);
+    public abstract JsonResponse sync(Request req, String code);
 
     public JsonObject toJson(HttpSession session) {
         JsonObject obj = new JsonObject();
