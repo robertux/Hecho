@@ -39,6 +39,9 @@ public class DropboxProvider extends CloudSyncProvider {
             DbxAppInfo appInfo = new DbxAppInfo(System.getenv("DROPBOX_API_KEY"), System.getenv("DROPBOX_API_SECRET"));
             DbxWebAuth auth = new DbxWebAuth(requestConfig, appInfo);
 
+            DbxWebAuth.Request authRequest = DbxWebAuth.newRequestBuilder().withNoRedirect().build();
+            auth.authorize(authRequest);
+
             DbxAuthFinish authFinish = auth.finishFromCode(code);
             DropboxClient client = new DropboxClient(requestConfig, authFinish.getAccessToken());
 
