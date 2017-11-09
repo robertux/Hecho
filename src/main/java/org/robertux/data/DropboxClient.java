@@ -23,7 +23,7 @@ import java.util.List;
  * Created by robertux on 9/8/17.
  */
 public class DropboxClient {
-    public static final String CLIENT_IDENTIFIER = "HECHO/1";
+    public static final String CLIENT_IDENTIFIER = "HECHO/1.0";
 
     private DbxClientV2 client;
     private Logger logger;

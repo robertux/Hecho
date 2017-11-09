@@ -72,7 +72,7 @@ public class Startup {
         get("/api/:syncProvider/save", (req, resp) -> {
             if (providersController.getProvider(req.params(":syncProvider")) != null) {
                 logger.debug("auth code: {}", req.queryParams("code"));
-                return providersController.getProvider(req.params(":syncProvider")).sync(req.session().id(), req.queryParams("code"));
+                return providersController.getProvider(req.params(":syncProvider")).sync(req.session().id(), req.queryParams("code")).toJson();
             } else {
                 return JsonResponse.fromError(1201).toJson();
             }
