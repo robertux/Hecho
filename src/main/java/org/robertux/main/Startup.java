@@ -77,7 +77,7 @@ public class Startup {
                 Map<String, String> params = getBodyParams(req.body());
                 CloudSyncProvider provider = providersController.getProvider(req.params(":syncProvider"));
 
-                return provider.sync(req.session().raw(), params.get("token")).toJson();
+                return provider.sync(req, params.get("token")).toJson();
             } else {
                 return JsonResponse.fromError(1201).toJson();
             }
