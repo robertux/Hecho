@@ -1,6 +1,7 @@
 package org.robertux.data;
 
-import com.dropbox.core.*;
+import com.dropbox.core.DbxException;
+import com.dropbox.core.DbxRequestConfig;
 import org.robertux.data.model.JsonResponse;
 
 import java.io.FileInputStream;
@@ -13,7 +14,7 @@ public class DropboxProvider extends CloudSyncProvider {
     private static final String PROVIDER_NAME = "Dropbox";
     private static final String LOGO_URL = "/img/providers/Dropbox.png";
     private static final String REDIRECT_URL = "https://hecho.herokuapp.com/api/dropbox/save";
-    private static final String URL = "https://www.dropbox.com/oauth2/authorize?client_id=" + System.getenv("DROPBOX_API_KEY") + "&redirect_uri=" + REDIRECT_URL + "&response_type=code";
+    private static final String URL = "https://www.dropbox.com/oauth2/authorize?client_id=" + System.getenv("DROPBOX_API_KEY") + "&redirect_uri=" + REDIRECT_URL + "&response_type=token";
 
     @Override
     public String getName() {
@@ -31,19 +32,12 @@ public class DropboxProvider extends CloudSyncProvider {
     }
 
     @Override
-    public JsonResponse sync(String sessionId, String code) {
+    public JsonResponse sync(String sessionId, String accessToken) {
         JsonResponse ok = new JsonResponse();
 
         try {
             DbxRequestConfig requestConfig = new DbxRequestConfig(DropboxClient.CLIENT_IDENTIFIER);
-            DbxAppInfo appInfo = new DbxAppInfo(System.getenv("DROPBOX_API_KEY"), System.getenv("DROPBOX_API_SECRET"));
-            DbxWebAuth auth = new DbxWebAuth(requestConfig, appInfo);
-
-            DbxWebAuth.Request authRequest = DbxWebAuth.newRequestBuilder().withNoRedirect().build();
-            auth.authorize(authRequest);
-
-            DbxAuthFinish authFinish = auth.finishFromCode(code);
-            DropboxClient client = new DropboxClient(requestConfig, authFinish.getAccessToken());
+            DropboxClient client = new DropboxClient(requestConfig, accessToken);
 
             client.saveFile(new FileInputStream(ConnetcionManager.getDatabasePath(sessionId)), ConnetcionManager.DATABASE_NAME);
         } catch (IOException | DbxException | NullPointerException e) {

@@ -4,6 +4,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.robertux.data.CloudSyncProvider;
 import org.robertux.data.jooq.tables.Task;
 import org.robertux.data.jooq.tables.records.CategoryRecord;
 import org.robertux.data.jooq.tables.records.TaskRecord;
@@ -66,13 +67,16 @@ public class Startup {
 
         get("/categories/", (req, res) -> getFileContent("/web/categories.html"));
         get("/providers/", (req, res) -> getFileContent("/web/chooseProvider.html"));
+        get("/providers/:syncProvider/auth", (req, resp) -> getFileContent("/" + req.params(":syncProvider") + "/authorize.html"));
 
         get("/api/providers", (req, resp) -> providersController.getProviders().toJson());
 
-        get("/api/:syncProvider/save", (req, resp) -> {
+        get("/api/:syncProvider/sync", (req, resp) -> {
             if (providersController.getProvider(req.params(":syncProvider")) != null) {
-                logger.debug("auth code: {}", req.queryParams("code"));
-                return providersController.getProvider(req.params(":syncProvider")).sync(req.session().id(), req.queryParams("code")).toJson();
+                Map<String, String> params = getBodyParams(req.body());
+                CloudSyncProvider provider = providersController.getProvider(req.params(":syncProvider"));
+
+                return provider.sync(req.session().id(), params.get("token")).toJson();
             } else {
                 return JsonResponse.fromError(1201).toJson();
             }
