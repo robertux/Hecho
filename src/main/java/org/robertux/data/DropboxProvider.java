@@ -58,7 +58,7 @@ public class DropboxProvider extends CloudSyncProvider {
      */
     @Override
     public JsonResponse sync(Request req, String code) {
-        JsonResponse ok = new JsonResponse(0, "Sincronización realizada");
+        JsonResponse ok = new JsonResponse(0, "Sincronizacion realizada");
 
         try {
             DbxSessionStore csrfTokenStore = new DbxStandardSessionStore(req.session().raw(), SESSION_KEY);
