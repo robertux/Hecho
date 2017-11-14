@@ -54,7 +54,7 @@
                 <el-table-column>
                     <template slot-scope="scope">
                         <span v-show="scope.row.beingEdited">
-                            <el-input v-model="scope.row.description"
+                            <el-input v-model="scope.row.description" class=""
                                       @keyup.native.enter="saveTask(scope.row)"></el-input>
                         </span>
                         <span v-show="!scope.row.beingEdited">
@@ -72,7 +72,7 @@
                     <template slot-scope="scope">
                         <el-button-group>
                             <el-button :disabled="isDone(scope.row)" icon="el-icon-edit-outline"
-                                       @click="editTask(scope.row)"></el-button>
+                                       @click="editTask(scope.row, scope.$index)"></el-button>
                             <el-button :disabled="isDone(scope.row)" icon="el-icon-date"
                                        @click="setTaskDate(scope.$index)"></el-button>
                             <el-button :disabled="isDone(scope.row)" :icon="priorityIcon(scope.row)"
@@ -93,6 +93,7 @@
 <script type="text/javascript" src="/js/element/element-locale-en.js"></script>
 <script type="text/javascript">ELEMENT.locale(ELEMENT.lang.en); </script>
 <script type="text/javascript" src="/js/jquery/jquery-2.2.4.min.js"></script>
+<script type="text/javascript" src="/js/jquery/jquery.queryString.js"></script>
 <script type="text/javascript" src="/js/vue/hecho.app.js"></script>
 </body>
 </html>

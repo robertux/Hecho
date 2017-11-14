@@ -127,7 +127,7 @@ var vueApp = new Vue({
         isDone: function(task) {
             return task.status == 'D';
         },
-        editTask: function(task) {
+        editTask: function(task, index) {
             if (task.beingEdited) {
                 this.discardTask(task);
                 return;
@@ -136,6 +136,8 @@ var vueApp = new Vue({
             task.originalDescription = task.description;
             this.tasks.forEach(function(t) { t.beingEdited = false; });
             task.beingEdited = true;
+
+            setTimeout("$('tr.el-table__row div.el-input input.el-input__inner')[" + index + "].focus();", 300);
         },
         saveTask: function(task) {
             var self = this;
@@ -154,8 +156,20 @@ var vueApp = new Vue({
         },
         chooseProvider: function() {
             window.location.href = "/providers/";
+        },
+        checkUrlMessages: function() {
+            var code = $.QueryString["code"];
+            var reason = $.QueryString["reason"];
+
+            if (code && reason) {
+                this.$message({
+                    message: reason,
+                    type: code == 0?'success': 'error'
+                });
+            }
         }
     }
 });
 
+vueApp.checkUrlMessages();
 vueApp.loadCategories();

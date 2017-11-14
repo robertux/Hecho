@@ -59,6 +59,8 @@ var vueApp = new Vue({
             cat.originalName = cat.name;
             this.categories.forEach(function(c) { c.beingEdited = false; });
             cat.beingEdited = true;
+
+            setTimeout("$('tr.el-table__row div.el-input input.el-input__inner')[" + index + "].focus();", 300);
         },
         saveCategory: function(cat) {
             var self = this;

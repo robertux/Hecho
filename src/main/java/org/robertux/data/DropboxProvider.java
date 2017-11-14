@@ -37,6 +37,9 @@ public class DropboxProvider extends CloudSyncProvider {
         return LOGO_URL;
     }
 
+    /**
+     * Basado en: https://dropbox.github.io/dropbox-sdk-java/api-docs/v2.1.x/com/dropbox/core/DbxWebAuth.html
+     */
     @Override
     public String getSyncUrl(HttpSession session) {
 
@@ -48,6 +51,13 @@ public class DropboxProvider extends CloudSyncProvider {
         return this.auth.authorize(authRequest);
     }
 
+    /**
+     * Basado en: https://dropbox.github.io/dropbox-sdk-java/api-docs/v2.1.x/com/dropbox/core/DbxWebAuth.html
+     *
+     * @param req
+     * @param code
+     * @return
+     */
     @Override
     public JsonResponse sync(Request req, String code) {
         JsonResponse ok = new JsonResponse();
