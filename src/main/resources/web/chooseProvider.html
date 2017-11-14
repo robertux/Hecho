@@ -27,16 +27,12 @@
             <el-row type="flex" justify="center">
                 <el-col><h2 class="choose-provider-title">Choose a provider</h2></el-col>
             </el-row>
-            <el-row type="flex" justify="center" :gutter="20">
-                <el-col :span="8" v-for="prv in providers">
-                    <el-card>
-                        <div slot="header" class="clearfix">
-                            <a class="provider-title" :href="prv.syncUrl">{{prv.name}}</a>
-                        </div>
-                        <a :href="prv.syncUrl"><img :src="prv.logoUrl" :alt="prv.name" class="image" width="300"></a>
-                    </el-card>
-                </el-col>
-            </el-row>
+            <el-card v-for="prv in providers">
+                <div slot="header" class="clearfix">
+                    <a class="provider-title" :href="prv.syncUrl">{{prv.name}}</a>
+                </div>
+                <a :href="prv.syncUrl"><img :src="prv.logoUrl" :alt="prv.name" class="image" width="300"></a>
+            </el-card>
 
         </el-main>
 

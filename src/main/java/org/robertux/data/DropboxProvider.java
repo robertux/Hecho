@@ -14,8 +14,7 @@ public class DropboxProvider extends CloudSyncProvider {
     private static final String PROVIDER_NAME = "Dropbox";
     private static final String LOGO_URL = "/img/providers/Dropbox.png";
     private static final String REDIRECT_URL = "https://hecho.herokuapp.com/providers/dropbox/auth";
-    private static final String URL = "https://www.dropbox.com/oauth2/authorize?client_id=" + System.getenv("DROPBOX_API_KEY") + "&redirect_uri=" + REDIRECT_URL + "&response_type=token";
-    String SESSION_KEY = "dropbox-auth-csrf-token";
+    private static final String SESSION_KEY = "dropbox-auth-csrf-token";
 
     private DbxRequestConfig requestConfig;
     private DbxAppInfo appInfo;
@@ -42,7 +41,6 @@ public class DropboxProvider extends CloudSyncProvider {
      */
     @Override
     public String getSyncUrl(HttpSession session) {
-
         DbxSessionStore csrfTokenStore = new DbxStandardSessionStore(session, SESSION_KEY);
         DbxWebAuth.Request authRequest = DbxWebAuth.newRequestBuilder()
                 .withRedirectUri(REDIRECT_URL, csrfTokenStore)
@@ -66,9 +64,7 @@ public class DropboxProvider extends CloudSyncProvider {
             DbxSessionStore csrfTokenStore = new DbxStandardSessionStore(req.session().raw(), SESSION_KEY);
             DbxAuthFinish authFinish = auth.finishFromRedirect(REDIRECT_URL, csrfTokenStore, req.raw().getParameterMap());
 
-            //DbxRequestConfig requestConfig = new DbxRequestConfig(DropboxClient.CLIENT_IDENTIFIER);
             DropboxClient client = new DropboxClient(requestConfig, authFinish.getAccessToken());
-
             client.saveFile(new FileInputStream(ConnetcionManager.getDatabasePath(req.session().id())), ConnetcionManager.DATABASE_NAME);
         } catch (Exception e) {
             logger.error("Error tratando de guardar la base de datos en Dropbox: " + e.getMessage(), e);

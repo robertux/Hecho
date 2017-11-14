@@ -67,12 +67,9 @@ body {
     text-align: center;
 }
 
-.clearfix:before, .clearfix:after {
-    display: table;
-    content: "";
-}
-.clearfix:after {
-    clear: both
+div.el-card {
+    float: left;
+    margin: 10px;
 }
 
 div.el-card__body {

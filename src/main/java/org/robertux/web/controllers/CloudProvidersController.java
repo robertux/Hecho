@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import org.robertux.data.CloudSyncProvider;
 import org.robertux.data.DropboxProvider;
 import org.robertux.data.GDriveProvider;
+import org.robertux.data.ICloudProvider;
 import org.robertux.data.model.JsonResponse;
 
 import javax.servlet.http.HttpSession;
@@ -19,6 +20,7 @@ public class CloudProvidersController {
     static {
         dataSyncProviders.put("dropbox", new DropboxProvider());
         dataSyncProviders.put("gdrive", new GDriveProvider());
+        dataSyncProviders.put("icloud", new ICloudProvider());
     }
 
     public CloudSyncProvider getProvider(String name) {
