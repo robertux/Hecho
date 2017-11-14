@@ -22,8 +22,8 @@ public class DropboxProvider extends CloudSyncProvider {
 
     public DropboxProvider() {
         this.requestConfig = new DbxRequestConfig(DropboxClient.CLIENT_IDENTIFIER);
-        //this.appInfo = new DbxAppInfo(System.getenv("DROPBOX_API_KEY"), System.getenv("DROPBOX_API_SECRET"));
-        //this.auth = new DbxWebAuth(requestConfig, appInfo);
+        this.appInfo = new DbxAppInfo(System.getenv("DROPBOX_API_KEY"), System.getenv("DROPBOX_API_SECRET"));
+        this.auth = new DbxWebAuth(requestConfig, appInfo);
     }
 
     @Override
@@ -41,13 +41,12 @@ public class DropboxProvider extends CloudSyncProvider {
      */
     @Override
     public String getSyncUrl(HttpSession session) {
-        return "";
-        /*DbxSessionStore csrfTokenStore = new DbxStandardSessionStore(session, SESSION_KEY);
+        DbxSessionStore csrfTokenStore = new DbxStandardSessionStore(session, SESSION_KEY);
         DbxWebAuth.Request authRequest = DbxWebAuth.newRequestBuilder()
                 .withRedirectUri(REDIRECT_URL, csrfTokenStore)
                 .build();
 
-        return this.auth.authorize(authRequest);*/
+        return this.auth.authorize(authRequest);
     }
 
     /**
