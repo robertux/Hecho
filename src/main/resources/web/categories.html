@@ -37,15 +37,15 @@
                 <el-table-column>
                     <template slot-scope="scope">
                         <span v-show="!scope.row.beingEdited">{{scope.row.name}}</span>
-                        <span v-show="scope.row.beingEdited"><el-input v-model="scope.row.name"
-                                                                       @keyup.native.enter="saveCategory(scope.row)"></el-input></span>
+                        <span class="catEdit" v-show="scope.row.beingEdited"><el-input v-model="scope.row.name"
+                                                                                       @keyup.native.enter="saveCategory(scope.row)"></el-input></span>
                     </template>
                 </el-table-column>
                 <el-table-column align="right">
                     <template slot-scope="scope">
                         <el-button-group>
                             <el-button :disabled="!scope.row.editable" icon="el-icon-edit-outline"
-                                       @click="editCategory(scope.row)"></el-button>
+                                       @click="editCategory(scope.row, scope.$index)"></el-button>
                             <el-button :disabled="!scope.row.editable" icon="el-icon-delete"
                                        @click="deleteCategory(scope.row)"></el-button>
                         </el-button-group>

@@ -53,7 +53,7 @@
             <el-table :data="computedTasks" :row-class-name="taskStyle">
                 <el-table-column>
                     <template slot-scope="scope">
-                        <span v-show="scope.row.beingEdited">
+                        <span class="taskEdit" v-show="scope.row.beingEdited">
                             <el-input v-model="scope.row.description" class=""
                                       @keyup.native.enter="saveTask(scope.row)"></el-input>
                         </span>

@@ -149,7 +149,7 @@ var vueApp = new Vue({
             this.tasks.forEach(function(t) { t.beingEdited = false; });
             task.beingEdited = true;
 
-            setTimeout("$('tr.el-table__row div.el-input input.el-input__inner')[" + index + "].focus();", 300);
+            setTimeout("$('tr.el-table__row span.taskEdit input.el-input__inner')[" + index + "].focus();", 300);
         },
         saveTask: function(task) {
             var self = this;
