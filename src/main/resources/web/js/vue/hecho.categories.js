@@ -23,6 +23,8 @@ var vueApp = new Vue({
             $.get("/api/categories", {}, function(data) {
                 if (data.code === 0) {
                     self.categories = data.content.categories;
+                } else {
+                    this.$message({ message: data.reason, type: 'error'});
                 }
                 self.loading = false;
             }, "json");
@@ -48,6 +50,8 @@ var vueApp = new Vue({
                 if (data.code === 0) {
                     self.newCategoryName = '';
                     self.loadCategories();
+                } else {
+                    this.$message({ message: data.reason, type: 'error'});
                 }
             }, "json");
         },
@@ -68,6 +72,8 @@ var vueApp = new Vue({
                 if (data.code === 0) {
                     cat.beingEdited = false;
                     self.loadCategories();
+                } else {
+                    this.$message({ message: data.reason, type: 'error'});
                 }
             });
         },
@@ -80,6 +86,8 @@ var vueApp = new Vue({
             $.ajax({url: "/api/categories/" + cat.id, method: "DELETE", dataType: "json"}).done(function(data) {
                 if (data.code === 0) {
                     self.loadCategories();
+                } else {
+                    this.$message({ message: data.reason, type: 'error'});
                 }
             });
         }

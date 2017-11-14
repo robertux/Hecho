@@ -15,6 +15,8 @@ var vueApp = new Vue({
             $.get("/api/providers", {}, function(data) {
                 if (data.code === 0) {
                     self.providers = data.content.providers;
+                } else {
+                    this.$message({ message: data.reason, type: 'error'});
                 }
                 self.loading = false;
             }, "json");

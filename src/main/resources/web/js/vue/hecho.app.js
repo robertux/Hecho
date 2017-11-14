@@ -27,6 +27,8 @@ var vueApp = new Vue({
             $.get("/api/categories", {}, function(data) {
                 if (data.code === 0) {
                     self.categories = data.content.categories;
+                } else {
+                    this.$message({ message: data.reason, type: 'error'});
                 }
 
                 if (self.categories.length > 0) {
@@ -49,6 +51,8 @@ var vueApp = new Vue({
             $.get("/api/categories/" + self.categories[self.currentCategory].id + "/tasks/" + self.sortMethod, {}, function(data) {
                 if (data.code === 0) {
                     self.tasks = data.content.tasks;
+                } else {
+                    this.$message({ message: data.reason, type: 'error'});
                 }
                 self.loading = false;
             });
@@ -90,6 +94,8 @@ var vueApp = new Vue({
             $.ajax({url: "/api/categories/" + self.categories[self.currentCategory].id + "/doneTasks/", method: "DELETE", dataType: "json"}).done(function(data) {
                 if (data.code === 0) {
                     self.loadTasks();
+                } else {
+                    this.$message({ message: data.reason, type: 'error'});
                 }
             });
         },
@@ -102,6 +108,8 @@ var vueApp = new Vue({
             $.ajax({url: "/api/categories/" + self.categories[self.currentCategory].id + "/tasks/" + task.id, method: "PUT", data: {"priority": priority}, dataType: "json"}).done(function(data) {
                 if (data.code === 0) {
                     self.loadTasks();
+                } else {
+                    this.$message({ message: data.reason, type: 'error'});
                 }
             });
         },
@@ -112,6 +120,8 @@ var vueApp = new Vue({
                     if (data.code === 0) {
                         self.newTaskName = '';
                         self.loadTasks();
+                    } else {
+                        this.$message({ message: data.reason, type: 'error'});
                     }
                 })
             }
@@ -121,6 +131,8 @@ var vueApp = new Vue({
             $.ajax({url: "/api/categories/" + self.categories[self.currentCategory].id + "/tasks/" + task.id, method: "PUT", data: {status: "D"}, dataType: "json"}).done(function(data) {
                 if (data.code === 0) {
                     self.loadTasks();
+                } else {
+                    this.$message({ message: data.reason, type: 'error'});
                 }
             });
         },
@@ -144,6 +156,8 @@ var vueApp = new Vue({
             $.ajax({url: "/api/categories/" + self.categories[self.currentCategory].id + "/tasks/" + task.id, method: "PUT", data: {description: task.description, date: task.date}, dataType: "json"}).done(function(data) {
                 if (data.code === 0) {
                     self.loadTasks();
+                } else {
+                    this.$message({ message: data.reason, type: 'error'});
                 }
             });
         },
@@ -162,10 +176,7 @@ var vueApp = new Vue({
             var reason = $.QueryString["reason"];
 
             if (code && reason) {
-                this.$message({
-                    message: reason,
-                    type: code == 0?'success': 'error'
-                });
+                this.$message({ message: reason, type: code == 0?'success': 'error'});
             }
         }
     }
