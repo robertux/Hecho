@@ -1,11 +1,11 @@
 package org.robertux.web.controllers;
 
 import com.google.gson.JsonArray;
-import org.robertux.data.CloudSyncProvider;
-import org.robertux.data.DropboxProvider;
-import org.robertux.data.GDriveProvider;
-import org.robertux.data.ICloudProvider;
 import org.robertux.data.model.JsonResponse;
+import org.robertux.data.syncProviders.CloudSyncProvider;
+import org.robertux.data.syncProviders.DropboxProvider;
+import org.robertux.data.syncProviders.GDriveProvider;
+import org.robertux.data.syncProviders.ICloudProvider;
 
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
@@ -18,9 +18,9 @@ public class CloudProvidersController {
     private static Map<String, CloudSyncProvider> dataSyncProviders = new HashMap<>();
 
     static {
-        dataSyncProviders.put("dropbox", new DropboxProvider());
-        dataSyncProviders.put("gdrive", new GDriveProvider());
-        dataSyncProviders.put("icloud", new ICloudProvider());
+        dataSyncProviders.put(DropboxProvider.PROVIDER_NAME, new DropboxProvider());
+        dataSyncProviders.put(GDriveProvider.PROVIDER_NAME, new GDriveProvider());
+        dataSyncProviders.put(ICloudProvider.PROVIDER_NAME, new ICloudProvider());
     }
 
     public CloudSyncProvider getProvider(String name) {

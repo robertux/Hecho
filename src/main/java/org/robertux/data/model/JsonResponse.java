@@ -34,7 +34,7 @@ public class JsonResponse {
         this.content = content;
     }
 
-    public static JsonResponse fromError(int errorCode) {
+    public static JsonResponse fromCode(int errorCode) {
         Logger logger = LogManager.getLogger(JsonResponse.class);
         JsonResponse r = new JsonResponse(999, "Error general");
         Properties props = new Properties();

@@ -59,7 +59,7 @@ public class TasksController {
         if (task != null) {
             resp.getContent().add("task", task.toJson());
         } else {
-            resp = JsonResponse.fromError(1104);
+            resp = JsonResponse.fromCode(1104);
         }
 
         return resp;
@@ -70,7 +70,7 @@ public class TasksController {
         this.logger.debug("Agregando tarea " + task);
 
         if (this.repo.addTask(task) == 0) {
-            resp = JsonResponse.fromError(1101);
+            resp = JsonResponse.fromCode(1101);
         }
 
         return resp;
@@ -81,7 +81,7 @@ public class TasksController {
         this.logger.debug("Actualizando tarea " + task);
 
         if (this.repo.updateTask(task) == 0) {
-            resp = JsonResponse.fromError(1102);
+            resp = JsonResponse.fromCode(1102);
         }
 
         return resp;
@@ -92,7 +92,7 @@ public class TasksController {
         this.logger.debug("Eliminando tarea " + task);
 
         if (this.repo.deleteTask(task) == 0) {
-            resp = JsonResponse.fromError(1103);
+            resp = JsonResponse.fromCode(1103);
         }
 
         return resp;
@@ -103,7 +103,7 @@ public class TasksController {
         this.logger.debug("Eliminando tareas finalizadas");
 
         if (this.repo.deleteDoneTasks() == 0) {
-            resp = JsonResponse.fromError(1105);
+            resp = JsonResponse.fromCode(1105);
         }
 
         return resp;

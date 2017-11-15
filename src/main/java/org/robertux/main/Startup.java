@@ -4,11 +4,11 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.robertux.data.CloudSyncProvider;
 import org.robertux.data.jooq.tables.Task;
 import org.robertux.data.jooq.tables.records.CategoryRecord;
 import org.robertux.data.jooq.tables.records.TaskRecord;
 import org.robertux.data.model.JsonResponse;
+import org.robertux.data.syncProviders.CloudSyncProvider;
 import org.robertux.web.controllers.CategoriesController;
 import org.robertux.web.controllers.CloudProvidersController;
 import org.robertux.web.controllers.TasksController;
@@ -79,7 +79,7 @@ public class Startup {
                 resp.redirect("/?code=" + result.getCode() + "&reason=" + result.getReason());
                 return null;
             } else {
-                return JsonResponse.fromError(1201).toJson();
+                return JsonResponse.fromCode(1201).toJson();
             }
         });
 

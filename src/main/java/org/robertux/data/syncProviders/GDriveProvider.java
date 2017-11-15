@@ -1,4 +1,4 @@
-package org.robertux.data;
+package org.robertux.data.syncProviders;
 
 import org.robertux.data.model.JsonResponse;
 import spark.Request;
@@ -6,11 +6,11 @@ import spark.Request;
 import javax.servlet.http.HttpSession;
 
 /**
- * Created by robertux on 11/13/17.
+ * Created by robertux on 11/7/17.
  */
-public class ICloudProvider extends CloudSyncProvider {
-    private static final String PROVIDER_NAME = "Apple iCloud";
-    private static final String LOGO_URL = "/img/providers/iCloud-Drive.png";
+public class GDriveProvider extends CloudSyncProvider {
+    public static final String PROVIDER_NAME = "Google Drive";
+    public static final String LOGO_URL = "/img/providers/Drive Lockup - with gray Google.png";
 
     @Override
     public String getName() {

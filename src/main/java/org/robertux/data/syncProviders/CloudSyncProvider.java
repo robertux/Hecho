@@ -1,4 +1,4 @@
-package org.robertux.data;
+package org.robertux.data.syncProviders;
 
 import com.google.gson.JsonObject;
 import org.apache.logging.log4j.LogManager;

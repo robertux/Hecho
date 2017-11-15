@@ -67,13 +67,13 @@ public class DropboxClient {
     }
 
     public void loadFile(OutputStream stream, String fileName) throws DbxException, IOException {
-        this.logger.debug("Cargando archivo {}", fileName);
+        this.logger.debug("Cargando archivo {} de dropbox", fileName);
         DbxDownloader<FileMetadata> downloader = client.files().download("/" + fileName);
         downloader.download(stream);
     }
 
     public void saveFile(InputStream stream, String fileName) throws IOException, DbxException {
-        this.logger.debug("Guardando archivo {}", fileName);
+        this.logger.debug("Guardando archivo {} en dropbox", fileName);
         FileMetadata metadata = client.files().uploadBuilder("/" + fileName)
                 .withMode(WriteMode.OVERWRITE)
                 .uploadAndFinish(stream);
