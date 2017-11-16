@@ -29,10 +29,6 @@ public class ConnetcionManager {
     }
 
     public static String getDatabasePath(String sessionId) throws IOException {
-        return getDatabasePath(sessionId, false);
-    }
-
-    public static String getDatabasePath(String sessionId, boolean remote) throws IOException {
         String tmpDir = System.getProperty("java.io.tmpdir");
         if (!tmpDir.endsWith(File.separator)) {
             tmpDir += File.separator;
@@ -48,7 +44,7 @@ public class ConnetcionManager {
             throw new IOException("No se pudo crear directorio " + sessionPath);
         }
 
-        String dbPath = sessionPath + File.separator + (remote ? "remote" + File.separator : "") + DATABASE_NAME;
+        String dbPath = sessionPath + File.separator + DATABASE_NAME;
         File fPath = new File(dbPath);
 
         if (!fPath.exists()) {
