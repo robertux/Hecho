@@ -65,19 +65,18 @@ public class Startup {
     }
 
     public static void configureRoutes() {
-        CloudProvidersController providersController = new CloudProvidersController();
-
         get("/categories/", (req, res) -> getFileContent("/web/categories.html"));
         get("/providers/", (req, res) -> getFileContent("/web/chooseProvider.html"));
 
-        get("/api/providers", (req, resp) -> providersController.getProviders(req.session().attribute(SELECTED_PROVIDER)).toJson());
+        get("/api/providers", (req, resp) -> new CloudProvidersController().getProviders(req.session().attribute(SELECTED_PROVIDER)).toJson());
 
         get("/api/providers/:syncProvider/sync", (req, resp) -> {
-            if (providersController.getProvider(req.params(":syncProvider")) == null) {
+            CloudProvidersController controller = new CloudProvidersController();
+            if (controller.getProvider(req.params(":syncProvider")) == null) {
                 return JsonResponse.fromCode(1201).toJson();
             }
 
-            CloudSyncProvider provider = providersController.getProvider(req.params(":syncProvider"));
+            CloudSyncProvider provider = controller.getProvider(req.params(":syncProvider"));
             req.session().attribute(SELECTED_PROVIDER, provider.getName());
 
             if (req.session().attribute(SYNC_SESSION) == null) {
@@ -90,7 +89,8 @@ public class Startup {
         });
 
         get("/api/providers/:syncProvider/auth", (req, resp) -> {
-            if (providersController.getProvider(req.params(":syncProvider")) != null) {
+            CloudProvidersController controller = new CloudProvidersController();
+            if (controller.getProvider(req.params(":syncProvider")) != null) {
                 return JsonResponse.fromCode(1201).toJson();
             }
 
@@ -99,7 +99,7 @@ public class Startup {
             }
 
             Map<String, String> params = getBodyParams(req.body());
-            CloudSyncProvider provider = providersController.getProvider(req.params(":syncProvider"));
+            CloudSyncProvider provider = controller.getProvider(req.params(":syncProvider"));
 
             JsonResponse result = provider.sync(req, params.get("token"), req.session().attribute(SYNC_SESSION));
             resp.redirect("/?code=" + result.getCode() + "&reason=" + result.getReason());

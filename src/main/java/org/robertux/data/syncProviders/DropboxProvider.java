@@ -58,7 +58,6 @@ public class DropboxProvider extends CloudSyncProvider {
     @Override
     public JsonResponse sync(Request req, String code, CloudSyncSessionData sessionData) {
         JsonResponse ok = new JsonResponse(0, "Sincronizacion realizada");
-        boolean firstSync = (req.session() == null || req.session().isNew() || req.session().attribute("synced") == null);
 
         try {
             DbxSessionStore csrfTokenStore = new DbxStandardSessionStore(req.session().raw(), SESSION_KEY);
@@ -66,9 +65,6 @@ public class DropboxProvider extends CloudSyncProvider {
             ((DropboxSessionData) sessionData).setAccessToken(authFinish.getAccessToken());
             sessionData.setInSync(true);
 
-            //this.client = new DropboxClient(requestConfig, authFinish.getAccessToken());
-            //String dbPath = ConnetcionManager.getDatabasePath(req.session().id());
-            //client.saveFile(new FileInputStream(dbPath), ConnetcionManager.DATABASE_NAME);
         } catch (Exception e) {
             sessionData.setInSync(false);
             logger.error("Error tratando de sincronizar la cuenta de Dropbox: " + e.getMessage(), e);
