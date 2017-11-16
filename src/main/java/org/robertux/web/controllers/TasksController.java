@@ -66,7 +66,7 @@ public class TasksController {
     }
 
     public JsonResponse add(TaskRecord task) {
-        JsonResponse resp = new JsonResponse();
+        JsonResponse resp = JsonResponse.OK;
         this.logger.debug("Agregando tarea " + task);
 
         if (this.repo.addTask(task) == 0) {
@@ -77,7 +77,7 @@ public class TasksController {
     }
 
     public JsonResponse edit(TaskRecord task) {
-        JsonResponse resp = new JsonResponse();
+        JsonResponse resp = JsonResponse.OK;
         this.logger.debug("Actualizando tarea " + task);
 
         if (this.repo.updateTask(task) == 0) {
@@ -88,7 +88,7 @@ public class TasksController {
     }
 
     public JsonResponse delete(TaskRecord task) {
-        JsonResponse resp = new JsonResponse();
+        JsonResponse resp = JsonResponse.OK;
         this.logger.debug("Eliminando tarea " + task);
 
         if (this.repo.deleteTask(task) == 0) {
@@ -99,7 +99,7 @@ public class TasksController {
     }
 
     public JsonResponse deleteDoneTasks() {
-        JsonResponse resp = new JsonResponse();
+        JsonResponse resp = JsonResponse.OK;
         this.logger.debug("Eliminando tareas finalizadas");
 
         if (this.repo.deleteDoneTasks() == 0) {

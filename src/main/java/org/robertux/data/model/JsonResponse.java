@@ -13,6 +13,7 @@ import java.util.Properties;
  */
 @Data
 public class JsonResponse {
+    public static final JsonResponse OK = new JsonResponse(0, "OK");
     private int code;
     private String reason;
     private JsonObject content;

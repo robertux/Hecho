@@ -41,7 +41,7 @@ public class CategoriesController {
     }
 
     public JsonResponse add(CategoryRecord cat) {
-        JsonResponse resp = new JsonResponse();
+        JsonResponse resp = JsonResponse.OK;
         this.logger.debug("Agregando categoría " + cat);
 
         if (this.repo.addCategory(cat) == 0) {
@@ -52,7 +52,7 @@ public class CategoriesController {
     }
 
     public JsonResponse edit(CategoryRecord cat) {
-        JsonResponse resp = new JsonResponse();
+        JsonResponse resp = JsonResponse.OK;
         this.logger.debug("Actualizando categoría " + cat);
 
         if (this.repo.updateCategory(cat) == 0) {
@@ -63,7 +63,7 @@ public class CategoriesController {
     }
 
     public JsonResponse delete(CategoryRecord cat) {
-        JsonResponse resp = new JsonResponse();
+        JsonResponse resp = JsonResponse.OK;
         this.logger.debug("Eliminando categoría " + cat);
 
         if (this.repo.deleteCategory(cat) == 0) {

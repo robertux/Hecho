@@ -12,7 +12,6 @@ public class DropboxSessionData extends CloudSyncSessionData {
     private DbxRequestConfig requestConfig;
     private DbxAppInfo appInfo;
     private DbxWebAuth auth;
-    private DropboxClient client;
     private String accessToken;
 
     public DropboxSessionData() {

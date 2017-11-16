@@ -1,13 +1,12 @@
 package org.robertux.data.syncProviders;
 
-import com.dropbox.core.DbxAuthFinish;
-import com.dropbox.core.DbxSessionStore;
-import com.dropbox.core.DbxStandardSessionStore;
-import com.dropbox.core.DbxWebAuth;
+import com.dropbox.core.*;
+import org.robertux.data.DropboxClient;
 import org.robertux.data.model.JsonResponse;
 import spark.Request;
 
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -72,7 +71,7 @@ public class DropboxProvider extends CloudSyncProvider {
             //client.saveFile(new FileInputStream(dbPath), ConnetcionManager.DATABASE_NAME);
         } catch (Exception e) {
             sessionData.setInSync(false);
-            logger.error("Error tratando de guardar la base de datos en Dropbox: " + e.getMessage(), e);
+            logger.error("Error tratando de sincronizar la cuenta de Dropbox: " + e.getMessage(), e);
             return JsonResponse.fromCode(1202);
         }
 
@@ -81,11 +80,37 @@ public class DropboxProvider extends CloudSyncProvider {
 
     @Override
     public JsonResponse save(InputStream dbContent, String dbName, CloudSyncSessionData sessionData) {
-        return null;
+        if (sessionData == null || !sessionData.isInSync()) {
+            return JsonResponse.fromCode(1205);
+        }
+        try {
+            DropboxSessionData dboxSessionData = (DropboxSessionData) sessionData;
+
+            DropboxClient client = new DropboxClient(dboxSessionData.getRequestConfig(), dboxSessionData.getAccessToken());
+            client.saveFile(dbContent, dbName);
+            return JsonResponse.OK;
+
+        } catch (IOException | DbxException e) {
+            this.logger.error("Error tratando de guardar los datos en Dropbox: " + e.getMessage(), e);
+            return JsonResponse.fromCode(1206);
+        }
     }
 
     @Override
     public JsonResponse load(OutputStream dbContent, String dbName, CloudSyncSessionData sessionData) {
-        return null;
+        if (sessionData == null || !sessionData.isInSync()) {
+            return JsonResponse.fromCode(1205);
+        }
+        try {
+            DropboxSessionData dboxSessionData = (DropboxSessionData) sessionData;
+
+            DropboxClient client = new DropboxClient(dboxSessionData.getRequestConfig(), dboxSessionData.getAccessToken());
+            client.loadFile(dbContent, dbName);
+            return JsonResponse.OK;
+
+        } catch (IOException | DbxException e) {
+            this.logger.error("Error tratando de cargar los datos de Dropbox: " + e.getMessage(), e);
+            return JsonResponse.fromCode(1209);
+        }
     }
 }

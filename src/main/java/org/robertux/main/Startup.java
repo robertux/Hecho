@@ -9,7 +9,6 @@ import org.robertux.data.jooq.tables.records.CategoryRecord;
 import org.robertux.data.jooq.tables.records.TaskRecord;
 import org.robertux.data.model.JsonResponse;
 import org.robertux.data.syncProviders.CloudSyncProvider;
-import org.robertux.data.syncProviders.CloudSyncSessionData;
 import org.robertux.web.controllers.CategoriesController;
 import org.robertux.web.controllers.CloudProvidersController;
 import org.robertux.web.controllers.TasksController;
@@ -81,15 +80,11 @@ public class Startup {
             CloudSyncProvider provider = providersController.getProvider(req.params(":syncProvider"));
             req.session().attribute(SELECTED_PROVIDER, provider.getName());
 
-            CloudSyncSessionData sessionData = null;
-            if (req.session().attribute(SYNC_SESSION) != null) {
-                sessionData = req.session().attribute(SYNC_SESSION);
-            } else {
-                sessionData = provider.createSessionData();
-                req.session().attribute(SYNC_SESSION, sessionData);
+            if (req.session().attribute(SYNC_SESSION) == null) {
+                req.session().attribute(SYNC_SESSION, provider.createSessionData());
             }
 
-            String syncUrl = provider.getSyncUrl(req.session().raw(), sessionData);
+            String syncUrl = provider.getSyncUrl(req.session().raw(), req.session().attribute(SYNC_SESSION));
             resp.redirect(syncUrl);
             return null;
         });
