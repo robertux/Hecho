@@ -24,6 +24,9 @@ var vueApp = new Vue({
                 self.loading = false;
             }, "json");
         },
+        getSyncUrl: function(prv) {
+            return "/api/providers/" + prv.name + "/sync";
+        },
         cancelSync: function() {
             window.location.href = "/";
         }

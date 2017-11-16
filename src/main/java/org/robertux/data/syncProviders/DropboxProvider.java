@@ -106,7 +106,7 @@ public class DropboxProvider extends CloudSyncProvider {
 
         } catch (IOException | DbxException e) {
             this.logger.error("Error tratando de cargar los datos de Dropbox: " + e.getMessage(), e);
-            return JsonResponse.fromCode(1209);
+            return JsonResponse.fromCode(1207);
         }
     }
 }

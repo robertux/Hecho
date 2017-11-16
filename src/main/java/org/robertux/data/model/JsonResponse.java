@@ -64,4 +64,12 @@ public class JsonResponse {
 
         return obj;
     }
+
+    public String toUrlParams(String baseUrl) {
+        StringBuilder url = new StringBuilder(baseUrl).append(baseUrl.contains("?") ? "&" : "?");
+        url.append("code=").append(this.code);
+        url.append("&reason=").append(this.reason);
+
+        return url.toString();
+    }
 }
