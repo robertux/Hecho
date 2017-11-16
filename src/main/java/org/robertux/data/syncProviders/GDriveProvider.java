@@ -11,12 +11,18 @@ import java.io.OutputStream;
  * Created by robertux on 11/7/17.
  */
 public class GDriveProvider extends CloudSyncProvider {
-    public static final String PROVIDER_NAME = "Google Drive";
+    public static final String PROVIDER_NAME = "gdrive";
+    public static final String PROVIDER_DISPLAY_NAME = "Google Drive";
     public static final String LOGO_URL = "/img/providers/Drive Lockup - with gray Google.png";
 
     @Override
     public String getName() {
         return PROVIDER_NAME;
+    }
+
+    @Override
+    public String getDisplayName() {
+        return PROVIDER_DISPLAY_NAME;
     }
 
     @Override

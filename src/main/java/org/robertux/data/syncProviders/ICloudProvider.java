@@ -11,12 +11,18 @@ import java.io.OutputStream;
  * Created by robertux on 11/13/17.
  */
 public class ICloudProvider extends CloudSyncProvider {
-    public static final String PROVIDER_NAME = "Apple iCloud";
+    public static final String PROVIDER_NAME = "icloud";
+    public static final String PROVIDER_DISPLAY_NAME = "Apple iCloud";
     public static final String LOGO_URL = "/img/providers/iCloud-Drive.png";
 
     @Override
     public String getName() {
         return PROVIDER_NAME;
+    }
+
+    @Override
+    public String getDisplayName() {
+        return PROVIDER_DISPLAY_NAME;
     }
 
     @Override

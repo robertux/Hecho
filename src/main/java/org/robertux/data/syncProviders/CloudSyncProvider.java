@@ -18,6 +18,8 @@ public abstract class CloudSyncProvider {
 
     public abstract String getName();
 
+    public abstract String getDisplayName();
+
     public abstract String getLogoUrl();
 
     public abstract CloudSyncSessionData createSessionData();
@@ -33,6 +35,7 @@ public abstract class CloudSyncProvider {
     public JsonObject toJson() {
         JsonObject obj = new JsonObject();
         obj.addProperty("name", this.getName());
+        obj.addProperty("displayName", this.getDisplayName());
         obj.addProperty("logoUrl", this.getLogoUrl());
 
         return obj;

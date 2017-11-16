@@ -14,7 +14,8 @@ import java.io.OutputStream;
  * Created by robertux on 11/6/17.
  */
 public class DropboxProvider extends CloudSyncProvider {
-    public static final String PROVIDER_NAME = "Dropbox";
+    public static final String PROVIDER_NAME = "dropbox";
+    public static final String PROVIDER_DISPLAY_NAME = "Dropbox";
     public static final String LOGO_URL = "/img/providers/Dropbox.png";
 
     private static final String REDIRECT_URL = "https://hecho.herokuapp.com/api/providers/dropbox/auth";
@@ -23,6 +24,11 @@ public class DropboxProvider extends CloudSyncProvider {
     @Override
     public String getName() {
         return PROVIDER_NAME;
+    }
+
+    @Override
+    public String getDisplayName() {
+        return PROVIDER_DISPLAY_NAME;
     }
 
     @Override

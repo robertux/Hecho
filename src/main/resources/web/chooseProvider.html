@@ -29,7 +29,7 @@
             </el-row>
             <el-card v-for="prv in providers">
                 <div slot="header" class="clearfix">
-                    <a class="provider-title" :href="getSyncUrl(prv)">{{prv.name}}</a>
+                    <a class="provider-title" :href="getSyncUrl(prv)">{{prv.displayName}}</a>
                 </div>
                 <a :href="getSyncUrl(prv)"><img :src="prv.logoUrl" :alt="prv.name" class="image" width="300"></a>
             </el-card>
