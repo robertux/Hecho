@@ -7,6 +7,8 @@ import org.robertux.data.model.JsonResponse;
 import spark.Request;
 
 import javax.servlet.http.HttpSession;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * Created by robertux on 11/6/17.
@@ -23,6 +25,10 @@ public abstract class CloudSyncProvider {
     public abstract String getSyncUrl(HttpSession session, CloudSyncSessionData sessionData);
 
     public abstract JsonResponse sync(Request req, String code, CloudSyncSessionData sessionData);
+
+    public abstract JsonResponse save(InputStream dbContent, String dbName, CloudSyncSessionData sessionData);
+
+    public abstract JsonResponse load(OutputStream dbContent, String dbName, CloudSyncSessionData sessionData);
 
     public JsonObject toJson() {
         JsonObject obj = new JsonObject();

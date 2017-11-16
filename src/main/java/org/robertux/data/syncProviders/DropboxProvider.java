@@ -8,6 +8,8 @@ import org.robertux.data.model.JsonResponse;
 import spark.Request;
 
 import javax.servlet.http.HttpSession;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * Created by robertux on 11/6/17.
@@ -75,5 +77,15 @@ public class DropboxProvider extends CloudSyncProvider {
         }
 
         return ok;
+    }
+
+    @Override
+    public JsonResponse save(InputStream dbContent, String dbName, CloudSyncSessionData sessionData) {
+        return null;
+    }
+
+    @Override
+    public JsonResponse load(OutputStream dbContent, String dbName, CloudSyncSessionData sessionData) {
+        return null;
     }
 }
