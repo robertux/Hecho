@@ -16,6 +16,7 @@ import spark.Request;
 import spark.Response;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.nio.charset.Charset;
@@ -41,6 +42,7 @@ public class Startup {
         configureServer(getEnvironmentPort());
         configureFilters();
         configureRoutes();
+        configureExceptions();
     }
 
     public static void configureServer(int port) {
@@ -151,6 +153,22 @@ public class Startup {
 
         delete("/api/categories/:categoryId/tasks/:taskId", (req, resp) -> {
             return new TasksController(req.session().id()).delete(new TaskRecord(Integer.parseInt(req.params(":taskId")))).toJson();
+        });
+    }
+
+    public static void configureExceptions() {
+        exception(IOException.class, (e, req, resp) -> {
+            logger.error("Excepción ocurrida durante la ejecución de una ruta: " + e.getMessage(), e);
+        });
+
+        internalServerError((req, res) -> {
+            if (req.url().contains("/api/")) {
+                res.type("application/json");
+                return JsonResponse.fromCode(1000).toJson();
+            } else {
+                res.redirect(JsonResponse.fromCode(1000).toUrlParams("/"));
+                return null;
+            }
         });
     }
 

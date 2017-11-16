@@ -3,11 +3,13 @@ package org.robertux.web.controllers;
 import com.google.gson.JsonArray;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.robertux.data.ConnetcionManager;
 import org.robertux.data.TasksRepository;
 import org.robertux.data.jooq.tables.Task;
 import org.robertux.data.jooq.tables.records.TaskRecord;
 import org.robertux.data.model.JsonResponse;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,9 +22,9 @@ public class TasksController {
     private TasksRepository repo;
     private Logger logger;
 
-    public TasksController(String sessionId) {
+    public TasksController(String sessionId) throws IOException {
         this.logger = LogManager.getLogger(this.getClass());
-        this.repo = new TasksRepository(sessionId);
+        this.repo = new TasksRepository(ConnetcionManager.getDatabasePath(sessionId));
     }
 
     public TasksRepository getRepo() {

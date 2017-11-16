@@ -22,14 +22,17 @@ public class ConnetcionManager {
     private static final char[] ILLEGAL_CHARACTERS = {'/', '\n', '\r', '\t', '\0', '\f', '`', '?', '*', '\\', '<', '>', '|', '\"', ':'};
     public static Logger logger = LogManager.getLogger(ConnetcionManager.class);
 
-    public static Connection getConnection(String sessionId) throws ClassNotFoundException, SQLException, IOException {
-        Class.forName("org.sqlite.JDBC");
-        String dbPath = getDatabasePath(sessionId);
 
+    public static Connection getConnection(String dbPath) throws ClassNotFoundException, SQLException, IOException {
+        Class.forName("org.sqlite.JDBC");
         return DriverManager.getConnection("jdbc:sqlite:" + dbPath);
     }
 
     public static String getDatabasePath(String sessionId) throws IOException {
+        return getDatabasePath(sessionId, false);
+    }
+
+    public static String getDatabasePath(String sessionId, boolean remote) throws IOException {
         String tmpDir = System.getProperty("java.io.tmpdir");
         if (!tmpDir.endsWith(File.separator)) {
             tmpDir += File.separator;
@@ -45,7 +48,7 @@ public class ConnetcionManager {
             throw new IOException("No se pudo crear directorio " + sessionPath);
         }
 
-        String dbPath = sessionPath + File.separator + DATABASE_NAME;
+        String dbPath = sessionPath + File.separator + (remote ? "remote" + File.separator : "") + DATABASE_NAME;
         File fPath = new File(dbPath);
 
         if (!fPath.exists()) {

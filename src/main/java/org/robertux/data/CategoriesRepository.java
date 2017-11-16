@@ -17,17 +17,17 @@ import java.util.List;
  */
 public class CategoriesRepository {
     private Logger logger;
-    private String sessionId;
+    private String dbPath;
 
-    public CategoriesRepository(String sessionId) {
+    public CategoriesRepository(String dbPath) {
         this.logger = LogManager.getLogger(this.getClass());
-        this.sessionId = sessionId;
+        this.dbPath = dbPath;
     }
 
     public List<CategoryRecord> getCategories() {
         List<CategoryRecord> categories = new ArrayList<>(0);
 
-        try (Connection cn = ConnetcionManager.getConnection(sessionId)) {
+        try (Connection cn = ConnetcionManager.getConnection(dbPath)) {
             DSLContext context = ConnetcionManager.getContext(cn);
             categories.addAll(context.selectFrom(Category.CATEGORY).fetch());
 
@@ -39,7 +39,7 @@ public class CategoriesRepository {
     }
 
     public int addCategory(CategoryRecord cat) {
-        try (Connection cn = ConnetcionManager.getConnection(sessionId)) {
+        try (Connection cn = ConnetcionManager.getConnection(dbPath)) {
             DSLContext context = ConnetcionManager.getContext(cn);
             return context.insertInto(Category.CATEGORY)
                     .set(Category.CATEGORY.NAME, cat.getName()).execute();
@@ -52,7 +52,7 @@ public class CategoriesRepository {
     }
 
     public int updateCategory(CategoryRecord cat) {
-        try (Connection cn = ConnetcionManager.getConnection(sessionId)) {
+        try (Connection cn = ConnetcionManager.getConnection(dbPath)) {
             DSLContext context = ConnetcionManager.getContext(cn);
             return context.update(Category.CATEGORY)
                     .set(Category.CATEGORY.NAME, cat.getName())
@@ -66,7 +66,7 @@ public class CategoriesRepository {
     }
 
     public int deleteCategory(CategoryRecord cat) {
-        try (Connection cn = ConnetcionManager.getConnection(sessionId)) {
+        try (Connection cn = ConnetcionManager.getConnection(dbPath)) {
             DSLContext context = ConnetcionManager.getContext(cn);
             return context.deleteFrom(Category.CATEGORY)
                     .where(Category.CATEGORY.ID.eq(cat.getId())).execute();

@@ -10,6 +10,7 @@ import spark.Request;
 import spark.Session;
 
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -77,7 +78,15 @@ public class CloudProvidersController {
                 return JsonResponse.fromCode(1206);
             }
         } else {
-            return JsonResponse.OK;
+            try {
+                String remoteDbPath = ConnetcionManager.getDatabasePath(req.session().id(), true);
+                dataSyncProviders.get(providerName).load(new FileOutputStream(remoteDbPath), ConnetcionManager.DATABASE_NAME, req.session().attribute(SYNC_SESSION));
+
+
+            } catch (IOException e) {
+                this.logger.error("Error tratando de cargar datos de la nube: " + e.getMessage(), e);
+                return JsonResponse.fromCode(1207);
+            }
         }
 
         return JsonResponse.OK;

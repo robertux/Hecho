@@ -4,9 +4,11 @@ import com.google.gson.JsonArray;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.robertux.data.CategoriesRepository;
+import org.robertux.data.ConnetcionManager;
 import org.robertux.data.jooq.tables.records.CategoryRecord;
 import org.robertux.data.model.JsonResponse;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -16,9 +18,9 @@ public class CategoriesController {
     private CategoriesRepository repo;
     private Logger logger;
 
-    public CategoriesController(String sessionId) {
+    public CategoriesController(String sessionId) throws IOException {
         this.logger = LogManager.getLogger(this.getClass());
-        this.repo = new CategoriesRepository(sessionId);
+        this.repo = new CategoriesRepository(ConnetcionManager.getDatabasePath(sessionId));
     }
 
     public JsonResponse get() {
