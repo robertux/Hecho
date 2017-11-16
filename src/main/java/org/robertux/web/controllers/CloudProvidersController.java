@@ -31,6 +31,10 @@ public class CloudProvidersController {
 
     private Logger logger = LogManager.getLogger(this.getClass());
 
+    public static boolean isFisrtSync(Session session) {
+        return (session == null || session.isNew() || session.attribute(SYNCED_FLAG) == null);
+    }
+
     public CloudSyncProvider getProvider(String name) {
         return dataSyncProviders.get(name);
     }
@@ -67,9 +71,9 @@ public class CloudProvidersController {
         result = dataSyncProviders.get(providerName).sync(req, code, sessionData);
         if (result.getCode() != 0) return result;
 
-        boolean firstSync = (req.session() == null || req.session().isNew() || req.session().attribute(SYNCED_FLAG) == null);
-        this.logger.debug("firstSync? {}", firstSync);
-        if (firstSync) {
+
+        this.logger.debug("firstSync? {}", isFisrtSync(req.session()));
+        if (isFisrtSync(req.session())) {
             // Si es la primera vez que se realiza una sincronización en la base, desde que inició la sesión del usuario, se carga lo que hay en el servidor de sincronización.
             // Si no hay nada cargado, se mostrará una base de datos vacía
             try {
