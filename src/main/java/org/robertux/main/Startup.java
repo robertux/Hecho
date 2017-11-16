@@ -70,22 +70,35 @@ public class Startup {
         get("/categories/", (req, res) -> getFileContent("/web/categories.html"));
         get("/providers/", (req, res) -> getFileContent("/web/chooseProvider.html"));
 
-        get("/api/providers", (req, resp) -> new CloudProvidersController().getProviders(req.session().attribute(SELECTED_PROVIDER)).toJson());
+        get("/api/providers", (req, resp) -> {
+            String providerName = req.session().attribute(SELECTED_PROVIDER);
+            if (providerName != null) {
+                resp.redirect("/api/providers/" + providerName + "/sync");
+                return null;
+            } else {
+                return new CloudProvidersController().getProviders().toJson();
+            }
+        });
 
         get("/api/providers/:syncProvider/sync", (req, resp) -> {
             CloudProvidersController controller = new CloudProvidersController();
 
-            CloudSyncProvider provider = controller.getProvider(req.params(":syncProvider"));
-            req.session().attribute(SELECTED_PROVIDER, provider.getName());
+            if (!CloudProvidersController.isFisrtSync(req.session())) {
+                resp.redirect(controller.save(req.params(":syncProvider"), req).toUrlParams("/"));
+                return null;
+            } else {
+                CloudSyncProvider provider = controller.getProvider(req.params(":syncProvider"));
+                req.session().attribute(SELECTED_PROVIDER, provider.getName());
 
-            if (req.session().attribute(CloudProvidersController.SYNC_SESSION) == null) {
-                req.session().attribute(CloudProvidersController.SYNC_SESSION, provider.createSessionData());
+                if (req.session().attribute(CloudProvidersController.SYNC_SESSION) == null) {
+                    req.session().attribute(CloudProvidersController.SYNC_SESSION, provider.createSessionData());
+                }
+
+                String syncUrl = controller.getSyncUrl(req.params(":syncProvider"), req.session());
+                logger.debug("Redireccionando a URL {} del proveedor {}", syncUrl, provider.getName());
+                resp.redirect(syncUrl);
+                return null;
             }
-
-            String syncUrl = controller.getSyncUrl(req.params(":syncProvider"), req.session());
-            logger.debug("Redireccionando a URL {} del proveedor {}", syncUrl, provider.getName());
-            resp.redirect(syncUrl);
-            return null;
         });
 
         get("/api/providers/:syncProvider/auth", (req, resp) -> {

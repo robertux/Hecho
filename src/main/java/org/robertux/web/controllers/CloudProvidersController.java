@@ -42,13 +42,11 @@ public class CloudProvidersController {
         return dataSyncProviders.get(name);
     }
 
-    public JsonResponse getProviders(String providerNameFilter) {
+    public JsonResponse getProviders() {
         JsonResponse resp = new JsonResponse();
         JsonArray arr = new JsonArray();
         for (CloudSyncProvider prov : dataSyncProviders.values()) {
-            if (providerNameFilter == null || providerNameFilter.trim().length() == 0 || prov.getName().equals(providerNameFilter)) {
-                arr.add(prov.toJson());
-            }
+            arr.add(prov.toJson());
         }
 
         resp.getContent().add("providers", arr);
@@ -77,32 +75,44 @@ public class CloudProvidersController {
         if (isFisrtSync(req.session())) {
             // Si es la primera vez que se realiza una sincronización en la base, desde que inició la sesión del usuario, se carga lo que hay en el servidor de sincronización.
             // Si no hay nada cargado, se mostrará una base de datos vacía
-            try {
-                dbPath = ConnectionManager.getDatabasePath(req.session().id());
-                dbPath = ConnectionManager.getDatabasePath(req.session().id());
-                result = dataSyncProviders.get(providerName).load(new FileOutputStream(dbPath), ConnectionManager.DATABASE_NAME, req.session().attribute(SYNC_SESSION));
-                if (result.getCode() != 0) return result;
-
-
-            } catch (IOException e) {
-                this.logger.error("Error tratando de cargar datos de la nube: " + e.getMessage(), e);
-                return JsonResponse.fromCode(1207);
-            }
+            result = load(providerName, req);
         } else {
             // Si es una sincronización posterior, se asume que ya se había realizado una carga incial, por lo que ya se cargó a la base local lo que está en el servidor de sincronización
             // por lo que se procede a guardar la base local en el servidor de sincronización
-            try {
-                dbPath = ConnectionManager.getDatabasePath(req.session().id());
-                result = dataSyncProviders.get(providerName).save(new FileInputStream(dbPath), ConnectionManager.DATABASE_NAME, req.session().attribute(SYNC_SESSION));
-                if (result.getCode() != 0) return result;
-
-                req.session().attribute(SYNCED_FLAG, true);
-            } catch (IOException e) {
-                this.logger.error("Error tratando de guardar la información en la nube: " + e.getMessage(), e);
-                return JsonResponse.fromCode(1206);
-            }
+            result = save(providerName, req);
         }
 
-        return JsonResponse.OK;
+        return result;
+    }
+
+    public JsonResponse save(String providerName, Request req) {
+        String dbPath;
+        JsonResponse result = JsonResponse.OK;
+        try {
+            dbPath = ConnectionManager.getDatabasePath(req.session().id());
+            result = dataSyncProviders.get(providerName).save(new FileInputStream(dbPath), ConnectionManager.DATABASE_NAME, req.session().attribute(SYNC_SESSION));
+            if (result.getCode() != 0) return result;
+
+            req.session().attribute(SYNCED_FLAG, true);
+        } catch (IOException e) {
+            this.logger.error("Error tratando de guardar la información en la nube: " + e.getMessage(), e);
+            return JsonResponse.fromCode(1206);
+        }
+        return result;
+    }
+
+    public JsonResponse load(String providerName, Request req) {
+        String dbPath;
+        JsonResponse result = JsonResponse.OK;
+        try {
+            dbPath = ConnectionManager.getDatabasePath(req.session().id());
+            dbPath = ConnectionManager.getDatabasePath(req.session().id());
+            result = dataSyncProviders.get(providerName).load(new FileOutputStream(dbPath), ConnectionManager.DATABASE_NAME, req.session().attribute(SYNC_SESSION));
+
+        } catch (IOException e) {
+            this.logger.error("Error tratando de cargar datos de la nube: " + e.getMessage(), e);
+            return JsonResponse.fromCode(1207);
+        }
+        return result;
     }
 }
