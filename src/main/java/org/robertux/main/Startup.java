@@ -66,7 +66,7 @@ public class Startup {
     }
 
     public static void configureRoutes() {
-        get("/", (req, res) -> getFileContent(CloudProvidersController.isFisrtSync(req.session()) ? "/web/index.html" : "/web/chooseProvider.html"));
+        get("/", (req, res) -> getFileContent(CloudProvidersController.isFisrtSync(req.session()) ? "/web/chooseProvider.html" : "/web/index.html"));
         get("/categories/", (req, res) -> getFileContent("/web/categories.html"));
         get("/providers/", (req, res) -> getFileContent("/web/chooseProvider.html"));
 
