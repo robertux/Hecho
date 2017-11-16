@@ -36,7 +36,7 @@ public class DropboxClientTest {
 
     @Test
     public void addFile() throws IOException, DbxException {
-        //client.saveFile(ConnetcionManager.class.getResourceAsStream("/hecho.db"), "hecho.db");
+        //client.saveFile(ConnectionManager.class.getResourceAsStream("/hecho.db"), "hecho.db");
         //Assert.assertTrue("Archivo hecho.db debe estar cargado en Dropbox", client.getFileNames("").contains("hecho.db"));
     }
 

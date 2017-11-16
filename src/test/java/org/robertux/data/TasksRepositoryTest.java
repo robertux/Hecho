@@ -18,7 +18,7 @@ public class TasksRepositoryTest {
 
     @Before
     public void setUp() throws Exception {
-        this.repo = new TasksRepository("_");
+        this.repo = new TasksRepository(ConnectionManager.getDatabasePath("_"));
     }
 
     @Test

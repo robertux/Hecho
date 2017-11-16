@@ -29,8 +29,8 @@ public class TasksRepository {
     public List<TaskRecord> getTasks(TableField<TaskRecord, ?> orderBy) {
         List<TaskRecord> tasks = new ArrayList<>(0);
 
-        try (Connection cn = ConnetcionManager.getConnection(dbPath)) {
-            DSLContext context = ConnetcionManager.getContext(cn);
+        try (Connection cn = ConnectionManager.getConnection(dbPath)) {
+            DSLContext context = ConnectionManager.getContext(cn);
             tasks.addAll(context.selectFrom(Task.TASK).orderBy(orderBy).fetch());
 
         } catch (SQLException | IOException | ClassNotFoundException ex) {
@@ -47,8 +47,8 @@ public class TasksRepository {
     public List<TaskRecord> getTasks(TableField<TaskRecord, ?> orderBy, int categoryId) {
         List<TaskRecord> tasks = new ArrayList<>(0);
 
-        try (Connection cn = ConnetcionManager.getConnection(dbPath)) {
-            DSLContext context = ConnetcionManager.getContext(cn);
+        try (Connection cn = ConnectionManager.getConnection(dbPath)) {
+            DSLContext context = ConnectionManager.getContext(cn);
             tasks.addAll(context.selectFrom(Task.TASK).where(Task.TASK.CATEGORYID.eq(categoryId)).orderBy(Task.TASK.STATUS.desc(), orderBy.desc()).fetch());
 
         } catch (SQLException | IOException | ClassNotFoundException ex) {
@@ -65,8 +65,8 @@ public class TasksRepository {
     public TaskRecord getTask(int taskId) {
         TaskRecord task = null;
 
-        try (Connection cn = ConnetcionManager.getConnection(dbPath)) {
-            DSLContext context = ConnetcionManager.getContext(cn);
+        try (Connection cn = ConnectionManager.getConnection(dbPath)) {
+            DSLContext context = ConnectionManager.getContext(cn);
             task = context.selectFrom(Task.TASK).where(Task.TASK.ID.eq(taskId)).fetchOne();
         } catch (SQLException | IOException | ClassNotFoundException ex) {
             this.logger.error("Error tratando de obtener la tarea con ID " + taskId + " +: " + ex.getMessage(), ex);
@@ -76,8 +76,8 @@ public class TasksRepository {
     }
 
     public int addTask(TaskRecord task) {
-        try (Connection cn = ConnetcionManager.getConnection(dbPath)) {
-            DSLContext context = ConnetcionManager.getContext(cn);
+        try (Connection cn = ConnectionManager.getConnection(dbPath)) {
+            DSLContext context = ConnectionManager.getContext(cn);
             return context.insertInto(Task.TASK)
                     .set(Task.TASK.DESCRIPTION, task.getDescription())
                     .set(Task.TASK.TIME, task.getTime())
@@ -93,8 +93,8 @@ public class TasksRepository {
     }
 
     public int updateTask(TaskRecord task) {
-        try (Connection cn = ConnetcionManager.getConnection(dbPath)) {
-            DSLContext context = ConnetcionManager.getContext(cn);
+        try (Connection cn = ConnectionManager.getConnection(dbPath)) {
+            DSLContext context = ConnectionManager.getContext(cn);
             return context.update(Task.TASK)
                     .set(Task.TASK.DESCRIPTION, task.getDescription())
                     .set(Task.TASK.TIME, task.getTime())
@@ -111,8 +111,8 @@ public class TasksRepository {
     }
 
     public int deleteTask(TaskRecord task) {
-        try (Connection cn = ConnetcionManager.getConnection(dbPath)) {
-            DSLContext context = ConnetcionManager.getContext(cn);
+        try (Connection cn = ConnectionManager.getConnection(dbPath)) {
+            DSLContext context = ConnectionManager.getContext(cn);
             return context.deleteFrom(Task.TASK)
                     .where(Task.TASK.ID.eq(task.getId())).execute();
 
@@ -124,8 +124,8 @@ public class TasksRepository {
     }
 
     public int deleteDoneTasks() {
-        try (Connection cn = ConnetcionManager.getConnection(dbPath)) {
-            DSLContext context = ConnetcionManager.getContext(cn);
+        try (Connection cn = ConnectionManager.getConnection(dbPath)) {
+            DSLContext context = ConnectionManager.getContext(cn);
             return context.deleteFrom(Task.TASK)
                     .where(Task.TASK.STATUS.eq(Status.DONE.getValue())).execute();
 

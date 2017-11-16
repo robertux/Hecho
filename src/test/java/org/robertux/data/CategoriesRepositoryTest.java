@@ -13,7 +13,7 @@ public class CategoriesRepositoryTest {
 
     @Before
     public void setUp() throws Exception {
-        repo = new CategoriesRepository("_");
+        repo = new CategoriesRepository(ConnectionManager.getDatabasePath("_"));
     }
 
     @Test

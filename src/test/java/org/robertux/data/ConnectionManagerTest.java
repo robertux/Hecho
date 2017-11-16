@@ -12,7 +12,7 @@ import java.sql.Connection;
 /**
  * Created by robertux on 9/9/17.
  */
-public class ConnetcionManagerTest {
+public class ConnectionManagerTest {
     private Logger logger;
     private Connection cn;
 
@@ -23,11 +23,11 @@ public class ConnetcionManagerTest {
 
     @Test
     public void getConnection() throws Exception {
-        String dbPath = ConnetcionManager.getDatabasePath("_");
+        String dbPath = ConnectionManager.getDatabasePath("_");
         this.logger.debug("dbPath: {}", dbPath);
         Assert.assertTrue("Ruta debe apuntar a carpeta temporal del sistema", dbPath.contains(System.getProperty("java.io.tmpdir")));
 
-        Connection cn = ConnetcionManager.getConnection("_");
+        Connection cn = ConnectionManager.getConnection("_");
         Assert.assertNotNull("Conexión no debe ser nula", cn);
         Assert.assertFalse("Conexión no debe estar cerrada", cn.isClosed());
     }

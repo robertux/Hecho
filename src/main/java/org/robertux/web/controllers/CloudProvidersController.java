@@ -3,7 +3,7 @@ package org.robertux.web.controllers;
 import com.google.gson.JsonArray;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.robertux.data.ConnetcionManager;
+import org.robertux.data.ConnectionManager;
 import org.robertux.data.model.JsonResponse;
 import org.robertux.data.syncProviders.*;
 import spark.Request;
@@ -77,9 +77,9 @@ public class CloudProvidersController {
             // Si es la primera vez que se realiza una sincronización en la base, desde que inició la sesión del usuario, se carga lo que hay en el servidor de sincronización.
             // Si no hay nada cargado, se mostrará una base de datos vacía
             try {
-                dbPath = ConnetcionManager.getDatabasePath(req.session().id());
-                dbPath = ConnetcionManager.getDatabasePath(req.session().id());
-                result = dataSyncProviders.get(providerName).load(new FileOutputStream(dbPath), ConnetcionManager.DATABASE_NAME, req.session().attribute(SYNC_SESSION));
+                dbPath = ConnectionManager.getDatabasePath(req.session().id());
+                dbPath = ConnectionManager.getDatabasePath(req.session().id());
+                result = dataSyncProviders.get(providerName).load(new FileOutputStream(dbPath), ConnectionManager.DATABASE_NAME, req.session().attribute(SYNC_SESSION));
                 if (result.getCode() != 0) return result;
 
 
@@ -91,8 +91,8 @@ public class CloudProvidersController {
             // Si es una sincronización posterior, se asume que ya se había realizado una carga incial, por lo que ya se cargó a la base local lo que está en el servidor de sincronización
             // por lo que se procede a guardar la base local en el servidor de sincronización
             try {
-                dbPath = ConnetcionManager.getDatabasePath(req.session().id());
-                result = dataSyncProviders.get(providerName).save(new FileInputStream(dbPath), ConnetcionManager.DATABASE_NAME, req.session().attribute(SYNC_SESSION));
+                dbPath = ConnectionManager.getDatabasePath(req.session().id());
+                result = dataSyncProviders.get(providerName).save(new FileInputStream(dbPath), ConnectionManager.DATABASE_NAME, req.session().attribute(SYNC_SESSION));
                 if (result.getCode() != 0) return result;
 
                 req.session().attribute(SYNCED_FLAG, true);

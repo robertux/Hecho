@@ -3,7 +3,7 @@ package org.robertux.web.controllers;
 import com.google.gson.JsonArray;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.robertux.data.ConnetcionManager;
+import org.robertux.data.ConnectionManager;
 import org.robertux.data.TasksRepository;
 import org.robertux.data.jooq.tables.Task;
 import org.robertux.data.jooq.tables.records.TaskRecord;
@@ -24,7 +24,7 @@ public class TasksController {
 
     public TasksController(String sessionId) throws IOException {
         this.logger = LogManager.getLogger(this.getClass());
-        this.repo = new TasksRepository(ConnetcionManager.getDatabasePath(sessionId));
+        this.repo = new TasksRepository(ConnectionManager.getDatabasePath(sessionId));
     }
 
     public TasksRepository getRepo() {

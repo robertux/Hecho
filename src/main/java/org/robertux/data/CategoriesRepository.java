@@ -27,8 +27,8 @@ public class CategoriesRepository {
     public List<CategoryRecord> getCategories() {
         List<CategoryRecord> categories = new ArrayList<>(0);
 
-        try (Connection cn = ConnetcionManager.getConnection(dbPath)) {
-            DSLContext context = ConnetcionManager.getContext(cn);
+        try (Connection cn = ConnectionManager.getConnection(dbPath)) {
+            DSLContext context = ConnectionManager.getContext(cn);
             categories.addAll(context.selectFrom(Category.CATEGORY).fetch());
 
         } catch (SQLException | IOException | ClassNotFoundException ex) {
@@ -39,8 +39,8 @@ public class CategoriesRepository {
     }
 
     public int addCategory(CategoryRecord cat) {
-        try (Connection cn = ConnetcionManager.getConnection(dbPath)) {
-            DSLContext context = ConnetcionManager.getContext(cn);
+        try (Connection cn = ConnectionManager.getConnection(dbPath)) {
+            DSLContext context = ConnectionManager.getContext(cn);
             return context.insertInto(Category.CATEGORY)
                     .set(Category.CATEGORY.NAME, cat.getName()).execute();
 
@@ -52,8 +52,8 @@ public class CategoriesRepository {
     }
 
     public int updateCategory(CategoryRecord cat) {
-        try (Connection cn = ConnetcionManager.getConnection(dbPath)) {
-            DSLContext context = ConnetcionManager.getContext(cn);
+        try (Connection cn = ConnectionManager.getConnection(dbPath)) {
+            DSLContext context = ConnectionManager.getContext(cn);
             return context.update(Category.CATEGORY)
                     .set(Category.CATEGORY.NAME, cat.getName())
                     .where(Category.CATEGORY.ID.eq(cat.getId())).execute();
@@ -66,8 +66,8 @@ public class CategoriesRepository {
     }
 
     public int deleteCategory(CategoryRecord cat) {
-        try (Connection cn = ConnetcionManager.getConnection(dbPath)) {
-            DSLContext context = ConnetcionManager.getContext(cn);
+        try (Connection cn = ConnectionManager.getConnection(dbPath)) {
+            DSLContext context = ConnectionManager.getContext(cn);
             return context.deleteFrom(Category.CATEGORY)
                     .where(Category.CATEGORY.ID.eq(cat.getId())).execute();
 

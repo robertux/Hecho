@@ -17,10 +17,10 @@ import java.sql.SQLException;
 /**
  * Created by robertux on 9/9/17.
  */
-public class ConnetcionManager {
+public class ConnectionManager {
     public static final String DATABASE_NAME = "hecho.db";
     private static final char[] ILLEGAL_CHARACTERS = {'/', '\n', '\r', '\t', '\0', '\f', '`', '?', '*', '\\', '<', '>', '|', '\"', ':'};
-    public static Logger logger = LogManager.getLogger(ConnetcionManager.class);
+    public static Logger logger = LogManager.getLogger(ConnectionManager.class);
 
 
     public static Connection getConnection(String dbPath) throws ClassNotFoundException, SQLException, IOException {
@@ -49,7 +49,7 @@ public class ConnetcionManager {
 
         if (!fPath.exists()) {
             logger.debug("Archivo en ruta {} no existe. Creando a partir de recurso interno...", dbPath);
-            InputStream iStream = ConnetcionManager.class.getResourceAsStream("/hecho.db");
+            InputStream iStream = ConnectionManager.class.getResourceAsStream("/hecho.db");
             if (Files.copy(iStream, fPath.toPath()) == 0) {
                 throw new IOException("No se pudo crear archivo en la ruta " + dbPath);
             }
@@ -60,7 +60,7 @@ public class ConnetcionManager {
     }
 
     public static DSLContext getContext(String sessionId) throws SQLException, IOException, ClassNotFoundException {
-        return DSL.using(ConnetcionManager.getConnection(sessionId), SQLDialect.SQLITE);
+        return DSL.using(ConnectionManager.getConnection(sessionId), SQLDialect.SQLITE);
     }
 
     public static DSLContext getContext(Connection cn) throws SQLException, IOException, ClassNotFoundException {
