@@ -66,6 +66,7 @@ public class CloudProvidersController {
         }
 
         boolean firstSync = (req.session() == null || req.session().isNew() || req.session().attribute(SYNCED_FLAG) == null);
+        this.logger.debug("firstSync? {}", firstSync);
         if (firstSync) {
             try {
                 String dbPath = ConnetcionManager.getDatabasePath(req.session().id());

@@ -38,7 +38,7 @@ public class ConnetcionManager {
         String validSessionId = filterInvalidChars(sessionId);
         logger.debug("sessionID: " + sessionId + "\t\tfiltrado: " + validSessionId);
 
-        String sessionPath = tmpDir + File.separator + validSessionId;
+        String sessionPath = tmpDir + validSessionId;
         File sPath = new File(sessionPath);
 
         if (!sPath.exists() && !sPath.mkdir()) {

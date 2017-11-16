@@ -80,6 +80,7 @@ public class Startup {
             }
 
             String syncUrl = controller.getSyncUrl(req.params(":syncProvider"), req.session());
+            logger.debug("Redireccionando a URL {} del proveedor {}", syncUrl, provider.getName());
             resp.redirect(syncUrl);
             return null;
         });
@@ -94,6 +95,7 @@ public class Startup {
             Map<String, String> params = getBodyParams(req.body());
 
             JsonResponse result = controller.sync(req.params(":syncProvider"), req, params.get("token"), req.session().attribute(CloudProvidersController.SYNC_SESSION));
+            logger.debug("Redireccionando a URL {} del proveedor {}", result.toUrlParams("/"), req.params(":syncProvider"));
             resp.redirect(result.toUrlParams("/"));
             return null;
         });

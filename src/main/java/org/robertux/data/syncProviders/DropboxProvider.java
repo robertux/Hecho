@@ -70,6 +70,7 @@ public class DropboxProvider extends CloudSyncProvider {
             DbxAuthFinish authFinish = ((DropboxSessionData) sessionData).getAuth().finishFromRedirect(REDIRECT_URL, csrfTokenStore, req.raw().getParameterMap());
             ((DropboxSessionData) sessionData).setAccessToken(authFinish.getAccessToken());
             sessionData.setInSync(true);
+            this.logger.debug("Sincronización autorizada");
 
         } catch (Exception e) {
             sessionData.setInSync(false);
