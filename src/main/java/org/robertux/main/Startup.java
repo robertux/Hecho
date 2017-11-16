@@ -9,6 +9,7 @@ import org.robertux.data.jooq.tables.records.CategoryRecord;
 import org.robertux.data.jooq.tables.records.TaskRecord;
 import org.robertux.data.model.JsonResponse;
 import org.robertux.data.syncProviders.CloudSyncProvider;
+import org.robertux.data.syncProviders.CloudSyncSessionData;
 import org.robertux.web.controllers.CategoriesController;
 import org.robertux.web.controllers.CloudProvidersController;
 import org.robertux.web.controllers.TasksController;
@@ -33,8 +34,10 @@ import static spark.Spark.*;
  * Created by robertux on 9/9/17.
  */
 public class Startup {
+    private static final DateFormat inputDFmt = new SimpleDateFormat("yyyy/MM/dd");
+    private static final String SYNC_SESSION = "syncSession";
+    private static final String SELECTED_PROVIDER = "provider";
     private static Logger logger;
-    private static DateFormat inputDFmt = new SimpleDateFormat("yyyy/MM/dd");
 
     public static void main(String[] args) {
         configureServer(getEnvironmentPort());
@@ -68,19 +71,44 @@ public class Startup {
         get("/categories/", (req, res) -> getFileContent("/web/categories.html"));
         get("/providers/", (req, res) -> getFileContent("/web/chooseProvider.html"));
 
-        get("/api/providers", (req, resp) -> providersController.getProviders(req.session().raw()).toJson());
+        get("/api/providers", (req, resp) -> providersController.getProviders(req.session().attribute(SELECTED_PROVIDER)).toJson());
 
-        get("/providers/:syncProvider/auth", (req, resp) -> {
-            if (providersController.getProvider(req.params(":syncProvider")) != null) {
-                Map<String, String> params = getBodyParams(req.body());
-                CloudSyncProvider provider = providersController.getProvider(req.params(":syncProvider"));
-
-                JsonResponse result = provider.sync(req, params.get("token"));
-                resp.redirect("/?code=" + result.getCode() + "&reason=" + result.getReason());
-                return null;
-            } else {
+        get("/api/providers/:syncProvider/sync", (req, resp) -> {
+            if (providersController.getProvider(req.params(":syncProvider")) == null) {
                 return JsonResponse.fromCode(1201).toJson();
             }
+
+            CloudSyncProvider provider = providersController.getProvider(req.params(":syncProvider"));
+            req.session().attribute(SELECTED_PROVIDER, provider.getName());
+
+            CloudSyncSessionData sessionData = null;
+            if (req.session().attribute(SYNC_SESSION) != null) {
+                sessionData = req.session().attribute(SYNC_SESSION);
+            } else {
+                sessionData = provider.createSessionData();
+                req.session().attribute(SYNC_SESSION, sessionData);
+            }
+
+            String syncUrl = provider.getSyncUrl(req.session().raw(), sessionData);
+            resp.redirect(syncUrl);
+            return null;
+        });
+
+        get("/api/providers/:syncProvider/auth", (req, resp) -> {
+            if (providersController.getProvider(req.params(":syncProvider")) != null) {
+                return JsonResponse.fromCode(1201).toJson();
+            }
+
+            if (req.session().attribute(SYNC_SESSION) == null) {
+                return JsonResponse.fromCode(2013);
+            }
+
+            Map<String, String> params = getBodyParams(req.body());
+            CloudSyncProvider provider = providersController.getProvider(req.params(":syncProvider"));
+
+            JsonResponse result = provider.sync(req, params.get("token"), req.session().attribute(SYNC_SESSION));
+            resp.redirect("/?code=" + result.getCode() + "&reason=" + result.getReason());
+            return null;
         });
 
         get("/api/categories", (req, resp) -> {

@@ -18,15 +18,16 @@ public abstract class CloudSyncProvider {
 
     public abstract String getLogoUrl();
 
-    public abstract String getSyncUrl(HttpSession session);
+    public abstract CloudSyncSessionData createSessionData();
 
-    public abstract JsonResponse sync(Request req, String code);
+    public abstract String getSyncUrl(HttpSession session, CloudSyncSessionData sessionData);
 
-    public JsonObject toJson(HttpSession session) {
+    public abstract JsonResponse sync(Request req, String code, CloudSyncSessionData sessionData);
+
+    public JsonObject toJson() {
         JsonObject obj = new JsonObject();
         obj.addProperty("name", this.getName());
         obj.addProperty("logoUrl", this.getLogoUrl());
-        obj.addProperty("syncUrl", this.getSyncUrl(session));
 
         return obj;
     }

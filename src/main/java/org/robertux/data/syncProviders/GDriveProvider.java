@@ -23,12 +23,17 @@ public class GDriveProvider extends CloudSyncProvider {
     }
 
     @Override
-    public String getSyncUrl(HttpSession session) {
+    public CloudSyncSessionData createSessionData() {
+        return null;
+    }
+
+    @Override
+    public String getSyncUrl(HttpSession session, CloudSyncSessionData sessionData) {
         return "";
     }
 
     @Override
-    public JsonResponse sync(Request req, String code) {
+    public JsonResponse sync(Request req, String code, CloudSyncSessionData sessionData) {
         return new JsonResponse();
     }
 }

@@ -15,6 +15,9 @@ var vueApp = new Vue({
             $.get("/api/providers", {}, function(data) {
                 if (data.code === 0) {
                     self.providers = data.content.providers;
+                    if (self.providers.length == 1) {
+                        window.location.href = "/api/providers/" + self.providers[0].name + "/sync";
+                    }
                 } else {
                     this.$message({ message: data.reason, type: 'error'});
                 }
