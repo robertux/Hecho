@@ -8,7 +8,6 @@ import org.robertux.data.jooq.tables.Task;
 import org.robertux.data.jooq.tables.records.CategoryRecord;
 import org.robertux.data.jooq.tables.records.TaskRecord;
 import org.robertux.data.model.JsonResponse;
-import org.robertux.data.syncProviders.CloudSyncProvider;
 import org.robertux.web.controllers.CategoriesController;
 import org.robertux.web.controllers.CloudProvidersController;
 import org.robertux.web.controllers.TasksController;
@@ -35,7 +34,6 @@ import static spark.Spark.*;
  */
 public class Startup {
     private static final DateFormat inputDFmt = new SimpleDateFormat("yyyy/MM/dd");
-    private static final String SELECTED_PROVIDER = "provider";
     private static Logger logger;
 
     public static void main(String[] args) {
@@ -66,51 +64,61 @@ public class Startup {
     }
 
     public static void configureRoutes() {
-        get("/", (req, res) -> getFileContent(CloudProvidersController.isFisrtSync(req.session()) ? "/web/chooseProvider.html" : "/web/index.html"));
-        get("/categories/", (req, res) -> getFileContent("/web/categories.html"));
-        get("/providers/", (req, res) -> getFileContent("/web/chooseProvider.html"));
-
-        get("/api/providers", (req, resp) -> {
-            String providerName = req.session().attribute(SELECTED_PROVIDER);
-            if (providerName != null) {
-                resp.redirect("/api/providers/" + providerName + "/sync");
-                return null;
+        get("/", (req, resp) -> {
+            CloudProvidersController controller = new CloudProvidersController();
+            if (req.session().attribute(CloudProvidersController.SELECTED_PROVIDER) == null || !controller.isInSync(req.session())) {
+                return getFileContent("/web/chooseProvider.html");
             } else {
-                return new CloudProvidersController().getProviders().toJson();
+                return getFileContent("/web/index.html");
             }
         });
+
+        get("/categories/", (req, resp) -> getFileContent("/web/categories.html"));
+
+        get("/providers/", (req, resp) -> {
+            CloudProvidersController controller = new CloudProvidersController();
+
+            if (req.session().attribute(CloudProvidersController.SELECTED_PROVIDER) != null && controller.isInSync(req.session())) {
+                resp.redirect(controller.save(req.session().attribute(CloudProvidersController.SELECTED_PROVIDER), req).toUrlParams("/"));
+                return null;
+            } else {
+                return getFileContent("/web/chooseProvider.html");
+            }
+        });
+
+        get("/api/providers", (req, resp) -> new CloudProvidersController().getProviders().toJson());
 
         get("/api/providers/:syncProvider/sync", (req, resp) -> {
             CloudProvidersController controller = new CloudProvidersController();
 
-            if (!CloudProvidersController.isFisrtSync(req.session())) {
+            if (controller.isInSync(req.session())) {
                 resp.redirect(controller.save(req.params(":syncProvider"), req).toUrlParams("/"));
-                return null;
             } else {
-                CloudSyncProvider provider = controller.getProvider(req.params(":syncProvider"));
-                req.session().attribute(SELECTED_PROVIDER, provider.getName());
-
-                if (req.session().attribute(CloudProvidersController.SYNC_SESSION) == null) {
-                    req.session().attribute(CloudProvidersController.SYNC_SESSION, provider.createSessionData());
-                }
-
                 String syncUrl = controller.getSyncUrl(req.params(":syncProvider"), req.session());
-                logger.debug("Redireccionando a URL {} del proveedor {}", syncUrl, provider.getName());
+                logger.debug("Redireccionando a URL {} del proveedor {}", syncUrl, req.params(":syncProvider"));
                 resp.redirect(syncUrl);
-                return null;
             }
+            return null;
         });
 
         get("/api/providers/:syncProvider/auth", (req, resp) -> {
             CloudProvidersController controller = new CloudProvidersController();
-
-            if (req.session().attribute(CloudProvidersController.SYNC_SESSION) == null) {
-                return JsonResponse.fromCode(2013);
-            }
-
             Map<String, String> params = getBodyParams(req.body());
 
-            JsonResponse result = controller.sync(req.params(":syncProvider"), req, params.get("token"), req.session().attribute(CloudProvidersController.SYNC_SESSION));
+            boolean isFirstSync = !controller.isInSync(req.session());
+
+            JsonResponse result = controller.sync(req.params(":syncProvider"), req, params.get("token"), req.session());
+            if (result.getCode() != 0) {
+                resp.redirect(result.toUrlParams("/"));
+                return null;
+            }
+
+            if (isFirstSync) {
+                controller.load(req.params(":syncProvider"), req);
+            } else {
+                controller.save(req.params(":syncProvider"), req);
+            }
+
             logger.debug("Redireccionando a URL {} del proveedor {}", result.toUrlParams("/"), req.params(":syncProvider"));
             resp.redirect(result.toUrlParams("/"));
             return null;
