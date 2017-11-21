@@ -69,7 +69,7 @@ public class Startup {
             if (req.session().attribute(CloudProvidersController.SELECTED_PROVIDER) == null || !controller.isInSync(req.session())) {
                 return getFileContent("/web/chooseProvider.html");
             } else {
-                return getFileContent("/web/index.html");
+                return getFileContent("/web/home.html");
             }
         });
 
