@@ -71,6 +71,7 @@ div.el-card {
     float: left;
     margin: 10px;
     width: 30%;
+    min-width: 250px;
 }
 
 div.el-card__body {
