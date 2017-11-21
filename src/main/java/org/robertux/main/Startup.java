@@ -114,9 +114,9 @@ public class Startup {
             }
 
             if (isFirstSync) {
-                controller.load(req.params(":syncProvider"), req);
+                result = controller.load(req.params(":syncProvider"), req);
             } else {
-                controller.save(req.params(":syncProvider"), req);
+                result = controller.save(req.params(":syncProvider"), req);
             }
 
             logger.debug("Redireccionando a URL {} del proveedor {}", result.toUrlParams("/"), req.params(":syncProvider"));

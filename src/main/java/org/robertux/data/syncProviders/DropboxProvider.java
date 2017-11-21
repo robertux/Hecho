@@ -91,7 +91,7 @@ public class DropboxProvider extends CloudSyncProvider {
 
             DropboxClient client = new DropboxClient(dboxSessionData.getRequestConfig(), dboxSessionData.getAccessToken());
             client.saveFile(dbContent, dbName);
-            return JsonResponse.OK;
+            return new JsonResponse(0, "Datos guardados exitosamente");
 
         } catch (IOException | DbxException e) {
             this.logger.error("Error tratando de guardar los datos en Dropbox: " + e.getMessage(), e);
@@ -109,7 +109,7 @@ public class DropboxProvider extends CloudSyncProvider {
 
             DropboxClient client = new DropboxClient(dboxSessionData.getRequestConfig(), dboxSessionData.getAccessToken());
             client.loadFile(dbContent, dbName);
-            return JsonResponse.OK;
+            return new JsonResponse(0, "Datos cargados exitosamente");
 
         } catch (IOException | DbxException e) {
             this.logger.error("Error tratando de cargar los datos de Dropbox: " + e.getMessage(), e);
