@@ -70,12 +70,17 @@ body {
 div.el-card {
     float: left;
     margin: 10px;
+    width: 30%;
 }
 
 div.el-card__body {
     height: 150px;
     vertical-align: middle;
     display: table-cell;
+}
+
+div.el-card__body img {
+    width: 100%;
 }
 
 .choose-provider-title {
