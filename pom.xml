@@ -4,9 +4,9 @@
     <groupId>robertux</groupId>
     <artifactId>hecho</artifactId>
     <packaging>jar</packaging>
-    <version>1.0-SNAPSHOT</version>
-    <name>hecho Maven Webapp</name>
-    <url>http://maven.apache.org</url>
+    <version>1.0</version>
+    <name>hecho</name>
+    <url>https://hecho.herokuapp.com/</url>
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -18,6 +18,11 @@
             <groupId>com.dropbox.core</groupId>
             <artifactId>dropbox-core-sdk</artifactId>
             <version>3.0.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.api-client</groupId>
+            <artifactId>google-api-client</artifactId>
+            <version>1.23.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
