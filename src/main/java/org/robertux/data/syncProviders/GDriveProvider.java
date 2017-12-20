@@ -42,7 +42,7 @@ public class GDriveProvider extends CloudSyncProvider {
     @Override
     public String getSyncUrl(HttpSession session, CloudSyncSessionData sessionData) {
         return new GoogleBrowserClientRequestUrl("696464267146-tik0vr1bnql2hdqppo0k73ennnj4819o.apps.googleusercontent.com",
-                REDIRECT_URL, Arrays.asList("", "")).build();
+                REDIRECT_URL, Arrays.asList("https://www.googleapis.com/auth/drive", "https://www.googleapis.com/auth/drive.file")).build();
     }
 
     @Override
