@@ -18,7 +18,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -65,12 +65,7 @@ public class Startup {
 
     public static void configureRoutes() {
         get("/", (req, resp) -> {
-            CloudProvidersController controller = new CloudProvidersController();
-            if (req.session().attribute(CloudProvidersController.SELECTED_PROVIDER) == null || !controller.isInSync(req.session())) {
-                return getFileContent("/web/chooseProvider.html");
-            } else {
-                return getFileContent("/web/home.html");
-            }
+            return getFileContent("/web/home.html");
         });
 
         get("/categories/", (req, resp) -> getFileContent("/web/categories.html"));
@@ -203,7 +198,7 @@ public class Startup {
     }
 
     protected static Map<String, String> getBodyParams(String requestBody) {
-        List<NameValuePair> URLparams = URLEncodedUtils.parse(requestBody, Charset.forName("UTF-8"));
+        List<NameValuePair> URLparams = URLEncodedUtils.parse(requestBody, StandardCharsets.UTF_8);
         Map<String, String> params = new HashMap<>(0);
         for (NameValuePair param : URLparams) {
             params.put(param.getName(), param.getValue());
